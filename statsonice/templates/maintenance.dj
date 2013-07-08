@@ -1,0 +1,12 @@
+{% extends "page.dj" %}
+{% block main %}
+
+<div class="hero-unit">
+	<h2>Stats on Ice</h2>
+	<p>We're sorry, but the website is currently down while we're uploading an update.  </p>
+	<p>We'll be back in a minute</p>
+	<p>Who knows?  It might be your new favorite feature.</p>
+</div>
+
+
+{% endblock %}

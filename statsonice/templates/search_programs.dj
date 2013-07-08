@@ -1,0 +1,84 @@
+{% extends "page.dj" %}
+{% block main %}
+<script type="text/javascript">
+var search_url = '/search_programs/';
+</script>
+<script  type="text/javascript" src="{{ STATIC_PREFIX }}js/search.js"></script>
+
+<legend><h3>Search Programs</h3></legend>
+<div class="row-fluid">
+	<div class="span7">
+	<div class="form-horizontal">
+	  <div class="control-group">
+		<label class="control-label" for="competitor">Competitor</label>
+		<div class="controls">
+		  {% include "search/autocomplete.dj" with input_id="competitor" options=skaters%}
+		</div>
+	  </div>
+	  <div class="control-group">
+		<label class="control-label" for="competition">Competition</label>
+		<div class="controls">
+		  {% include "search/autocomplete.dj" with input_id="competition" options=competitions %}
+		</div>
+	  </div>
+	  <div class="control-group">
+		<label class="control-label" for="category">Category</label>
+		<div class="controls">
+		  {% include "search/option.dj" with input_id="category" options=categories %}
+		</div>
+	  </div>
+	  <div class="control-group">
+		<label class="control-label" for="segment">Segment</label>
+		<div class="controls">
+		  {% include "search/option.dj" with input_id="segment" options=segment %}
+		</div>
+	  </div>
+	  <div class="control-group">
+		<label class="control-label" for="level">Level</label>
+		<div class="controls">
+		  {% include "search/option.dj" with input_id="level" options=level %}
+		</div>
+	  </div>
+	  <div class="control-group">
+		<label class="control-label" for="starting_number">Starting Number</label>
+		<div class="controls">
+		  {% include "search/text.dj" with input_id="starting_number" %}
+		</div>
+	  </div>
+	  <div class="control-group">
+		<label class="control-label" for="rank">Rank</label>
+		<div class="controls">
+		  {% include "search/text.dj" with input_id="rank" %}
+		  <a href="javascript:range_toggle('rank_range_div')" id="rank_range_div_toggle">add a range</a>
+		  <label class="control-label" for="rank_range" style="display:none"></label>
+		  <div id="rank_range_div" style="display:none">to<br />
+            {% include "search/text.dj" with input_id="rank_range"%}
+		  </div>
+		</div>
+	  </div>
+	</div> <!-- form-horizontal -->
+
+	<button onclick="javascript:search()">Search</button>
+
+	</div>
+
+	<div class="span5">
+
+		<div class="row-fluid">
+			<div class="span8">
+				<h3>Results</h3>
+			</div>
+			<div class="span4">
+				{% include "include/spinner.dj" %}
+			</div>
+		</div>
+
+		<div id="search_timer"></div>
+		<div id="search_results">
+
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

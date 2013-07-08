@@ -1,0 +1,41 @@
+{% if flag == 'PC' %}
+  <span title="The Perfect Consensus flag appears where all the GOEs assigned are the same and not -3.">
+    <img
+    {% if center %}
+      class = "center"
+    {% else %}
+      style="float:left"
+    {% endif %}
+    src="{{ STATIC_PREFIX }}img/green_flag.png">
+  </span>
+{% elif flag == 'NC' %}
+  <span title="The No Consensus flag appears where the standard deviation of the GOEs exceeds 0.8.">
+    <img
+    {% if center %}
+      class = "center"
+    {% else %}
+      style="float:left"
+    {% endif %}
+    src="{{ STATIC_PREFIX }}img/red_flag.png">
+  </span>
+{% elif flag == 'TO' %}
+  <span title="The Three and One flag appears when the standard deviation is not enough for it to be a No Consensus flag but both a +1 and +3 (or -1 and -3) are assigned to an element.">
+    <img
+    {% if center %}
+      class = "center"
+    {% else %}
+      style="float:left"
+    {% endif %}
+    src="{{ STATIC_PREFIX }}img/blue_flag.png">
+  </span>
+{% elif flag == 'OL' %}
+  <span title="The Outlier flag is assigned to an element that has a small standard deviation but a large range in assigned GOEs.">
+    <img
+    {% if center %}
+      class = "center"
+    {% else %}
+      style="float:left"
+    {% endif %}
+    src="{{ STATIC_PREFIX }}img/yellow_flag.png">
+  </span>
+{% endif %}

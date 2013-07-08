@@ -1,0 +1,13 @@
+{% extends "page.dj" %}
+{% block main %}
+<h4>Skater Result</h4>
+
+{% for skater_result, programs in skater_results.skater_results.items %}
+  {% for programresult in programs %}
+    {% include "include/program.dj" with programresult=programresult %}
+    <br />
+    <br />
+  {% endfor %}
+{% endfor %}
+
+{% endblock %}

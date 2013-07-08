@@ -1,0 +1,5 @@
+<select id="{{ input_id }}">
+{% for option in options %}
+    <option value="{{ option }}">{{ option }}</option>
+{% endfor %}
+</select>

@@ -1,0 +1,7 @@
+{% extends "page.dj" %}
+{% block main %}
+
+<legend><h3>Change Account Settings</h3></legend>
+<p>Change account settings functionality forthcoming</p>
+
+{% endblock %}

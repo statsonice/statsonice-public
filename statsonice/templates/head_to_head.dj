@@ -1,0 +1,194 @@
+{% extends "page.dj" %}
+{% block main %}
+<h4>
+<div class="center">
+<a href="{{ hth.competitor1.get_participants.url }}">
+{{ hth.competitor1.get_participants.view_name }}
+</a>
+vs.
+<a href="{{ hth.competitor2.get_participants.url }}">
+{{ hth.competitor2.get_participants.view_name }}
+</a>
+({{ s1_count }} - {{ s2_count }})
+</div>
+</h4>
+
+<br>
+
+<h4><div class="center">Results Table</div></h4>
+
+<hr>
+
+{% if s1_count > 0 or s2_count > 0 %}
+<table class="table table-condensed table-bordered">
+	<thead>
+		<tr>
+			<th>Rank</th>
+			<th>Score</th>
+			<th>Competition</th>
+			<th>Score</th>
+			<th>Rank</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for competition, s1_res, s2_res, diff in hth_results %}
+			<tr>
+				{% if s1_res.total_score > s2_res.total_score %}
+					<td class="success">{{s1_res.final_rank}}</td>
+					<td>{{ s1_res.total_score }} <span class="pairs">(+ {{ diff }})</span></td>
+					<td>
+					<a href="{{ competition.url }}">
+					{{ competition.name }}
+					</a>
+					({{ competition.start_date.year }})
+					</td>
+					<td>{{ s2_res.total_score }} <span class="ladies">(- {{ diff }})</span></td>
+					<td>{{s2_res.final_rank}}</td>
+				{% else %}
+					<td>{{s1_res.final_rank}}</td>
+					<td>{{ s1_res.total_score }} <span class="ladies">(- {{ diff }})</span></td>
+					<td>
+					<a href="{{ competition.url }}">
+					{{ competition.name }}
+					</a>
+					({{ competition.start_date.year }})
+					</td>
+					<td>{{ s2_res.total_score }} <span class="pairs">(+ {{ diff }})</span></td>
+					<td class="success">{{s2_res.final_rank}}</td>
+				{% endif %}
+				
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+{% else %}
+<b>No head to head statistics available.</b>
+{% endif %}
+
+<h4><div class="center">Graphs and Statistics</div></h4>
+      
+<hr>
+
+{% if s1_count > 1 or s2_count > 1 or s1_count == 1 and s2_count == 1 %}
+<p class="pull-left"><b style="color:rgba(192,42,42,1)">{{ hth_results.0.1.competitor.get_participants.view_name }}</b></p>
+<p class="pull-right"><b style="color:rgba(0,102,51,1)">{{ hth_results.0.2.competitor.get_participants.view_name }}</b></p>
+<div class="row">
+    <div class="span12">
+    
+      <canvas id="canvas" height="400" width="800"></canvas>
+      
+
+      <script>
+
+        var lineChartData = {
+          labels : {{num}},
+          datasets : [
+            // short program scores
+            {
+              fillColor : "rgba(192,42,42,0.00)",
+              strokeColor : "rgba(192,42,42,1)",
+              pointColor : "rgba(192,42,42,1)",
+              pointStrokeColor : "#fff",
+              data : {{s1_scores}}
+            },
+            // free skating scores
+            {
+              fillColor : "rgba(0,102,51,0.00)",
+              strokeColor : "rgba(0,102,51,1)",
+              pointColor : "rgba(0,102,51,1)",
+              pointStrokeColor : "#fff",
+              data : {{s2_scores}}
+            }
+          ]
+
+        }
+
+      var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
+
+      </script>
+    </div>
+  </div>
+  
+{% else %}
+<b>More than one head to head is required for the graph feature to display.</b>
+{% endif %}
+<br>
+
+<hr>
+
+<br>
+
+<table class="table table-bordered">
+	<thead>
+		<th>Metric</th>
+		<th>{{ hth.competitor1.get_participants.view_name }}</th>
+		<th>{{ hth.competitor2.get_participants.view_name }}</th>
+	</thead>
+	<tbody>
+		<tr>
+			<td>Chance Win Next Encounter</td>
+			{% if hth_table_stats.chance_win.0 > hth_table_stats.chance_win.1 %}
+				<td class="success">{{ hth_table_stats.chance_win.0 }}%</td>
+				<td>{{ hth_table_stats.chance_win.1 }}%</td>
+			{% else %}
+				<td>{{ hth_table_stats.chance_win.0 }}%</td>
+				<td class="success">{{ hth_table_stats.chance_win.1 }}%</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<!-- average margin that one beats the other by -->
+			<td>Average Win Margin</td>
+			{% if hth_table_stats.ave_win.0 == '-' and hth_table_stats.ave_win.1 == '-'%}
+				<td>-</td>
+				<td>-</td>
+			{% elif hth_table_stats.ave_win.0 > hth_table_stats.ave_win.1 or hth_table_stats.ave_win.1 == '-'%}
+				{% if hth_table_stats.ave_win.0 != '-' %}
+					<td class="success">{{ hth_table_stats.ave_win.0 }}</td>
+					<td>{{ hth_table_stats.ave_win.1 }}</td>
+				{% else %}
+					<td>{{ hth_table_stats.ave_win.0 }}</td>
+					<td class="success">{{ hth_table_stats.ave_win.1 }}</td>
+				{% endif %}
+			{% else %}
+				<td>{{ hth_table_stats.ave_win.0 }}</td>
+				<td class="success">{{ hth_table_stats.ave_win.1 }}</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<td>Total Point Gap (all time)</td>
+			{% if hth_table_stats.pt_gap.1 == 0%}
+				<td>-</td>
+				<td>-</td>
+			{% elif hth_table_stats.pt_gap.0 == 1 %}
+				<td class="success">{{ hth_table_stats.pt_gap.1 }}</td>
+				<td>- {{ hth_table_stats.pt_gap.1 }}</td>
+			{% else %}
+				<td>- {{ hth_table_stats.pt_gap.1 }}</td>
+				<td class="success">{{ hth_table_stats.pt_gap.1 }}</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<!-- increasing or decreasing in improvement (slope of last few scores) -->
+			<td>Recent Trend</td>
+			{% if hth_table_stats.recent_trend.0 > hth_table_stats.recent_trend.1  %}
+				<td class="success">{{ hth_table_stats.recent_trend.0 }}</td>
+				<td>{{ hth_table_stats.recent_trend.1 }}</td>
+			{% else %}
+				<td>{{ hth_table_stats.recent_trend.0 }}</td>
+				<td class="success">{{ hth_table_stats.recent_trend.1 }}</td>
+			{% endif %}
+		</tr>
+		<tr>
+			<td>Highest Total Score</td>
+			{% if hth_table_stats.max_score.0 > hth_table_stats.max_score.1  %}
+				<td class="success">{{ hth_table_stats.max_score.0 }}</td>
+				<td>{{ hth_table_stats.max_score.1 }}</td>
+			{% else %}
+				<td>{{ hth_table_stats.max_score.0 }}</td>
+				<td class="success">{{ hth_table_stats.max_score.1 }}</td>
+			{% endif %}
+		</tr>
+	</tbody>
+</table>
+
+{% endblock %}

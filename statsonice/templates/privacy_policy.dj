@@ -1,0 +1,79 @@
+{% extends "page.dj" %}
+{% block main %}
+
+<legend><h3>Privacy Policy</h3></legend>
+
+<p>Our privacy policy explains what information we collect from users, why we
+collect it, how we use that information, and the choices we offer for accessing
+and updating your information.</p>
+
+<h4>Information we collect</h4>
+
+<p>We may collect information about your log information. We may automatically
+collect and store information including how you used our services, what search
+queries you used, your internet protocol address, and cookies that may uniquely
+identify your browser or your StatsOnIce account.</p>
+
+<h4>How we use information we collect</h4>
+<p>We use the information we collect to tailor user experience and to maintain,
+protect, and improve our services. </p>
+<p>When you contact StatsOnIce, we may keep a record of your communication with
+us in order to assist us in solving any issues you may be facing. We may use
+your email address to inform you about our services, such as letting you know
+about upcoming changes or improvements.</p>
+<p>We use information collected from cookies to improve your user experience.</p>
+<p>We will ask for your consent before using information for any purpose that
+is not set out in this Privacy Policy.</p>
+
+<h4>Transparency and choice</h4>
+<p>We aim to be clear about the information we collect so that users, since
+people have different privacy concerns. </p>
+<p>You may choose to set your browser to block all cookies, including cookies
+associated with StatsOnIce. However, it is important to remember that doing so
+may cause some of our features to not work properly.</p>
+
+<h4>Information you share</h4>
+<p>Our account page allows your username and some of your user statistics to be
+publically available. This information may be indexable by search engines,
+including Google. Please be aware of this fact when choosing a username and the
+titles for your saved program layouts.</p>
+
+<h4>Accessing and updating your personal information</h4>
+<p>StatsOnIce strives to give you ways to quickly update or to delete your
+personal information (name, username, password, or other such information).
+When updating your personal information, we may ask you to verify your identity
+before we can act on your request. We aim to protect your information from
+accidental or malicious destruction.</p>
+
+<h4>Information we share</h4>
+<p>We do not share personal user information with companies, organizations, or
+individuals outside StatsOnIce.</p>
+<p>We may share aggregated, non-personal information publicly. For example, we
+may share information publicly about the general use of our services.</p>
+
+<h4>Information security</h4>
+<p>We work hard to ensure that the information of our users is secure. We use
+Django's built in <a href="https://docs.djangoproject.com/en/dev/topics/auth/">
+user authentication system</a> to validate user information </p>
+<p>For payments, we use stripe.com, which utilizes an encryption technology that
+prevents vital personal information, including credit card numbers, from ever
+touching StatsOnIce's server. This means your credit card information is secure.
+More information about stripe.com's security system can be found
+<a href="https://stripe.com/help/security">here.</a></p>
+
+<h4>Application</h4>
+<p>Our Privacy Policy applies to Stats on Ice and all its present and future
+services and affiliates unless they have separate privacy policies that do not
+incorporate this Privacy Policy.</p>
+<p>Our Privacy Policy does not apply to services offered by other companies or
+individuals, including other sites linked to from StatsOnIce or sites that
+advertise our services.</p>
+
+<h4>Changes</h4>
+<p>Our privacy policy may change at any time. We will not reduce your rights
+under this Privacy Policy without your consent. Any future changes to the
+Privacy Policy will be posted to this page and if the changes are significant,
+we will provide a prominent notice. </p>
+
+
+{% endblock %}

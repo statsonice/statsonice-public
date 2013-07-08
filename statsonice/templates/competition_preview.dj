@@ -1,0 +1,16 @@
+{% extends "page.dj" %}
+{% block main %}
+<h3>Upcoming Competitions</h3>
+<ol>
+
+	{% for competition in competitions %}
+		<li>
+		<a href="{{competition.preview_url}}">
+		{{ competition.name }}
+		</a>
+		({{ competition.start_date }} - {{ competition.end_date }})
+		</li>
+	{% endfor %}
+</ol>
+
+{% endblock %}

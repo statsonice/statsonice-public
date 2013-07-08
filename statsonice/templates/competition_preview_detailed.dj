@@ -1,0 +1,24 @@
+{% extends "page.dj" %}
+{% block main %}
+<div class="hero-unit">
+<h3>Competition Preview</h3>
+<h4>
+<a href="{{ competition.url }}">
+{{ competition.name }}
+</a>
+</h4>
+<h5>{{ competition.start_date }} - {{ competition.end_date }}</h5>
+</div>
+
+<div class="row">
+  <div class="span12">
+	<div id="accordion2" class="accordion">
+	  {% include "include/competition_preview_category_sections.dj" with res=men_competitors category="MEN" %}
+	  {% include "include/competition_preview_category_sections.dj" with res=ladies_competitors category="LADIES" %}
+	  {% include "include/competition_preview_category_sections.dj" with res=pairs_competitors category="PAIRS" %}
+	  {% include "include/competition_preview_category_sections.dj" with res=dance_competitors category="DANCE" %}
+	</div> <!-- /accordion -->
+  </div>
+</div>
+
+{% endblock %}

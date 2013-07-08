@@ -1,0 +1,114 @@
+{% extends "page.dj" %}
+{% block main %}
+    <h3>About</h3>
+
+    <legend><h4>Mission</h4></legend>
+    <p>
+    The mission of Stats on Ice is to accumulate statistics from figure skating competitions around the world.
+    We use statistical methods and advanced web graphics software to present data from figure skating competitions in a new way.
+    Interactive graphics allow you to follow the success of quadruple jumps over the last several years or quickly see
+    which skaters have achieved the World Championships minimum qualifying scores.
+    </p>
+    <p>
+    The program layout tool allows users to create, save, edit, and email different program layouts.
+    It checks to see that your program fulfills the ISU and USFS requirements and allows you to see what happens to your
+    program's technical score when you recieve an under-rotation call on your second jumping pass or a +1 GOE on your double axel.
+    </p>
+
+    <br>
+{% comment %}
+    <legend><h4>Meet the Team</h4></legend>
+
+    <div class="row">
+      <div class="span3">
+    		<img src="{{ STATIC_PREFIX }}img/walker_photo.jpg" class="img-rounded">
+    		<br>
+    		<p><b>Favorites</b></p>
+    		<p>
+    			<b>Movie:</b> Fight Club
+    			<br>
+    			<b>Book:</b> Lord of the Flies
+    			<br>
+    			<b>Historical Figure:</b> Marlon Brando?
+    		</p>
+    	</div>
+    	<div class="span9">
+    		<p><b>Curran Oi</b></p>
+    		<p><b>MIT '13 - B.S. Nuclear Engineering and Physics</b></p>
+    		<p>Curran is a senior level figure skater. He finished 6th in the Championship Men's division at the 2009 US Figure Skating Championships and 5th at the 2009 World Junior Figure Skating Championships.</p>
+    		<p>His future academic goals include pursuing a PhD in either plasma physics or biophysics.</p>
+    	</div>
+    </div>
+
+    <br>
+
+    <div class="row">
+    	<div class="span3">
+    		<img src="{{ STATIC_PREFIX }}img/walker_photo.jpg" class="img-rounded">
+    		<br>
+    		<p><b>Favorites</b></p>
+    		<p>
+    			<b>Movie:</b>
+    			<br>
+    			<b>Book:</b>
+    			<br>
+    			<b>Historical Figure:</b>
+    		</p>
+    	</div>
+    	<div class="span9">
+    		<p><b>A***** ****</b></p>
+    		<p><b>MIT '12 - B.S. Electrical Engineering and Computer Science (EECS)</b></p>
+    		<p>A***** is fluent in many dialects of computer talk.</p>
+    		<p>These are not the droids you're looking for.</p>
+    	</div>
+    </div>
+
+    <br>
+
+    <div class="row">
+    	<div class="span3">
+    		<img src="{{ STATIC_PREFIX }}img/walker_photo.jpg" class="img-rounded">
+    		<br>
+    		<p><b>Favorites</b></p>
+    		<p>
+    			<b>Movie:</b>
+    			<br>
+    			<b>Book:</b>
+    			<br>
+    			<b>Historical Figure:</b>
+    		</p>
+    	</div>
+    	<div class="span9">
+    		<p><b>L**** ******</b></p>
+    		<p><b>MIT '13 - B.S. Electrical Engineering and Computer Science (EECS)</b></p>
+    		<p>L**** is a boss. Literally. Actually, we call her captain. Captain L****.</p>
+    	</div>
+    </div>
+
+    <br>
+
+    <div class="row">
+    	<div class="span3">
+    		<img src="{{ STATIC_PREFIX }}img/walker_photo.jpg" class="img-rounded">
+    		<br>
+    		<p><b>Favorites</b></p>
+    		<p>
+    			<b>Movie:</b> The Piano
+    			<br>
+    			<b>Book:</b> The Road from Coorain
+    			<br>
+    			<b>Historical Figure:</b>
+    		</p>
+    	</div>
+    	<div class="span9">
+    		<p><b>Pat Meehan</b></p>
+    		<p>
+    		<b>BU '86 - B.S. Psychology</b>
+    		<br>
+    		<b>Harvard '93 - Ph.D. Statistics</b>
+    		</p>
+    		<p>Pat is awesome.</p>
+    	</div>
+    </div>
+{% endcomment %}
+{% endblock %}

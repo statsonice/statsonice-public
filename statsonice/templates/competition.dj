@@ -1,0 +1,117 @@
+{% extends "page.dj" %}
+{% block main %}
+<script type="text/javascript">
+$('.collapse').collapse({
+    toggle: false
+});
+</script>
+
+<h3>
+  {{ competition.name }}
+</h3>
+<h4>
+  {{ competition.start_date }} - {{ competition.end_date }}
+</h4>
+
+<hr />
+
+<div class="row">
+  <div class="span12">
+    <h4>Programs and Results</h4>
+    <div id="accordion2" class="accordion">
+      {% include "include/competition_category_sections.dj" with res=results.men_pre category="MEN PRELIMINARY ROUND" %}
+      {% include "include/competition_category_sections.dj" with res=results.men category="MEN" %}
+      {% include "include/competition_category_sections.dj" with res=results.ladies_pre category="LADIES PRELIMINARY ROUND" %}
+      {% include "include/competition_category_sections.dj" with res=results.ladies category="LADIES" %}
+      {% include "include/competition_category_sections.dj" with res=results.pairs_pre category="PAIRS PRELIMINARY ROUND" %}
+      {% include "include/competition_category_sections.dj" with res=results.pairs category="PAIRS" %}
+      {% include "include/competition_category_sections.dj" with res=results.dance_pre category="DANCE PRELIMINARY ROUND" %}
+      {% include "include/competition_category_sections.dj" with res=results.dance category="DANCE" %}
+    </div> <!-- /accordion -->
+  </div>
+</div>
+
+<h4>Medal Statistics</h4>
+
+<table class="table table-bordered table-condensed">
+  <thead>
+    <th>Country</th>
+    <th>Gold</th>
+    <th>Silver</th>
+    <th>Bronze</th>
+    <th>Total</th>
+  </thead>
+  <tbody>
+  {% for country in comp_results.country_comp_stats %}
+    {% if country.total_medal_count > 0 %}
+    <tr>
+      <td>{{ country.country }}</td>
+      <td>{{ country.gold_count }}</td>
+      <td>{{ country.silver_count }}</td>
+      <td>{{ country.bronze_count }}</td>
+      <td>{{ country.total_medal_count }}</td>
+    </tr>
+    {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+
+<h4>Flag Statistics</h4>
+
+<table class="table table-bordered table-condensed">
+  <thead>
+    <tbody>
+      <th>Category</th>
+      <th>Level</th>
+      <th>Segment</th>
+      <th colspan="2">
+        {% include "include/flag.dj" with flag="OL" center=True %}
+      </th>
+      <th colspan="2">
+        {% include "include/flag.dj" with flag="NC" center=True %}
+      </th>
+      <th colspan="2">
+        {% include "include/flag.dj" with flag="PC" center=True %}
+      </th>
+      <th colspan=2>
+        {% include "include/flag.dj" with flag="TO" center=True %}
+      </th>
+      <th># Elements</th>
+    </tbody>
+  </thead>
+  <tbody>
+    {% for cls in comp_results.catlevseg_stats %}
+      {% if cls.num_elements > 0 %}
+        <tr>
+          <td>{{ cls.category.category }}</td>
+          <td>{{ cls.level.level }}</td>
+          <td>{{ cls.segment.segment }}</td>
+          <td>{{ cls.flag_ol.0 }}</td><td>{{ cls.flag_ol.1 }}%</td>
+          {% if cls.flag_nc.1 < 2 %}
+            <td>{{ cls.flag_nc.0 }}</td><td class="success">{{ cls.flag_nc.1 }}%</td>
+          {% elif cls.flag_nc.1 < 5 %}
+            <td>{{ cls.flag_nc.0 }}</td><td class="warning">{{ cls.flag_nc.1 }}%</td>
+          {% else %}
+            <td>{{ cls.flag_nc.0 }}</td><td class="danger">{{ cls.flag_nc.1 }}%</td>
+          {% endif %}
+          {% if cls.flag_pc.1 > 7.5 %}
+            <td>{{ cls.flag_pc.0 }}</td><td class="success">{{ cls.flag_pc.1 }}%</td>
+          {% elif cls.flag_pc.1 > 4 %}
+            <td>{{ cls.flag_pc.0 }}</td><td class="warning">{{ cls.flag_pc.1 }}%</td>
+          {% else %}
+            <td>{{ cls.flag_pc.0 }}</td><td class="danger">{{ cls.flag_pc.1 }}%</td>
+          {% endif %}
+          {% if cls.flag_to.1 < 2 %}
+            <td>{{ cls.flag_to.0 }}</td><td class="success">{{ cls.flag_to.1 }}%</td>
+          {% elif cls.flag_to.1 < 5 %}
+            <td>{{ cls.flag_to.0 }}</td><td class="warning">{{ cls.flag_to.1 }}%</td>
+          {% else %}
+            <td>{{ cls.flag_to.0 }}</td><td class="danger">{{ cls.flag_to.1 }}%</td>
+          {% endif %}
+          <td>{{ cls.num_elements }}</td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

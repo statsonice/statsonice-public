@@ -1,0 +1,39 @@
+{% extends "page.dj" %}
+{% block main %}
+
+<h1>Contact</h1>
+
+{% if submitted %}
+  <div class="alert alert-success">
+    Thanks for your message!
+  </div>
+{% endif %}
+
+<div class="row">
+
+  <form class="well span8" method="post" action="/contact/">
+    {% csrf_token %}
+    <div class="row">
+      <div class="span3">
+        <label for="name">Name</label>
+        <input type="text" class="span3" id="name" name="name">
+        <label for="email">Email Address</label>
+        <input type="text" class="span3" id="email" name="email">
+        <label for="subject">Subject</label>
+        <select  class="span3" id="subject" name="subject">
+          <option value="na">Choose One:</option>
+          <option value="service">General Customer Service</option>
+          <option value="suggestions">Suggestions</option>
+        </select>
+      </div>
+      <div class="span5">
+        <label for="message">Message</label>
+        <textarea class="input-xlarge span5" name="message" id="message" rows="10"></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary pull-right">Send</button>
+    </div>
+  </form>
+
+</div>
+
+{% endblock %}

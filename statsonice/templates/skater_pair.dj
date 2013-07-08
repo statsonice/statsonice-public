@@ -1,0 +1,336 @@
+{% extends "page.dj" %}
+{% block title %}
+- {{ skater_pair.view_name }}
+{% endblock%}
+{% block main %}
+  <legend>
+    <div class="row">
+      {% if category == 'DANCE' %}
+        <div class="dance">
+      {% elif category == 'PAIRS' %}
+        <div class="pairs">
+      {% else %}
+        <div>
+      {% endif %}
+        <div class="span11">
+          <h4>
+            {{ skater_pair.view_name }}
+          </h4>
+        </div>
+        <div class="span1">
+          <h4>
+            {{ skater_pair.country.country_name }}
+          </h4>
+        </div>
+      </div>
+    </div>
+  </legend>
+
+  <div class="row-fluid">
+  	<div class="span3">
+  		<h4>
+  		<a href="{{first_skater.url}}">
+  		{{ first_skater.view_name }}
+  		</a>
+  		</h4>
+  		<div class="row-fluid">
+  			{% if first_skater.dob %}
+				<div class="row-fluid">
+				  <div class="span4">
+					<b>DOB:</b>
+				  </div>
+				  <div class="span8">
+					{{ first_skater.dob }}
+				  </div>
+				</div>
+			  {% endif %}
+			  {% if first_skater.start_year %}
+				<div class="row-fluid">
+				  <div class="span4">
+					<b>Start year:</b>
+				  </div>
+				  <div class="span8">
+					{{ first_skater.start_year }}
+				  </div>
+				</div>
+			  {% endif %}
+			  {% if first_skater.height %}
+				<div class="row-fluid">
+				  <div class="span4">
+					<b>Height:</b>
+				  </div>
+				  <div class="span8">
+					{{ first_skater.height_feet}}' {{ first_skater.height_inches}}" ({{ first_skater.height }} cm)
+				  </div>
+				</div>
+			  {% endif %}
+  		</div>
+  	</div>
+  	<div class="span3">
+  		<h4>
+  		<a href="{{ second_skater.url }}">
+  		{{ second_skater.view_name }}
+  		</a>
+  		</h4>
+  		<div class="row-fluid">
+  			{% if second_skater.dob %}
+				<div class="row-fluid">
+				  <div class="span4">
+					<b>DOB:</b>
+				  </div>
+				  <div class="span8">
+					{{ second_skater.dob }}
+				  </div>
+				</div>
+			  {% endif %}
+			  {% if second_skater.start_year %}
+				<div class="row-fluid">
+				  <div class="span4">
+					<b>Start year:</b>
+				  </div>
+				  <div class="span8">
+					{{ second_skater.start_year }}
+				  </div>
+				</div>
+			  {% endif %}
+			  {% if second_skater.height %}
+				<div class="row-fluid">
+				  <div class="span4">
+					<b>Height:</b>
+				  </div>
+				  <div class="span8">
+					{{ second_skater.height_feet}}' {{ second_skater.height_inches}}" ({{ second_skater.height }} cm)
+				  </div>
+				</div>
+			  {% endif %}
+  		</div>
+  	</div>
+    <div class="span3">
+      <div><b>Coach(es):</b></div>
+      {% for coach in  skater_pair.coach.all %}
+      {{ coach.first_name }} {{ coach.last_name }}
+      <br>
+      {% endfor %}
+    </div>
+    <div class="span3">
+      <div><b>Choreographer(s):</b></div>
+      {% for choreographer in skater_pair.choreographer.all %}
+      {{ choreographer.first_name }} {{ choreographer.last_name }}
+      <br>
+      {% endfor %}
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row-fluid">
+  	<div class="span3">
+  	<h4>Pair Stats</h4>
+  		{% if height_gap %}
+			<div class="row-fluid">
+			  <div class="span4">
+				<b>Height gap:</b>
+			  </div>
+			  <div class="span8">
+				{{ height_gap.0 }}' {{ height_gap.1 }}" ({{ height_gap.2 }} cm)
+			  </div>
+			</div>
+		  {% endif %}
+  	</div>
+  </div>
+
+<!--
+  <hr>
+
+  <div class="row">
+    <div class="span12">
+      <h4>Progression of Scores (Example Data)</h4>
+      <p><b class="sp">SP</b>, <b class="fs">FS</b>, <b class="sp-fs-total">TOTAL</b></p>
+
+      <canvas id="canvas" height="400" width="800"></canvas>
+
+
+      <script>
+
+        var lineChartData = {
+          labels : ["January","February","March","April","May","June","July","August","September"],
+          datasets : [
+            // short program scores
+            {
+              fillColor : "rgba(192,42,42,0.05)",
+              strokeColor : "rgba(192,42,42,1)",
+              pointColor : "rgba(192,42,42,1)",
+              pointStrokeColor : "#fff",
+              // var data = sp_scores|jsonify
+              data : [65,59,71,73,64,55,80,72,75]
+            },
+            // free skating scores
+            {
+              fillColor : "rgba(0,102,51,0.05)",
+              strokeColor : "rgba(0,102,51,1)",
+              pointColor : "rgba(0,102,51,1)",
+              pointStrokeColor : "#fff",
+              data : [128,148,140,119,146,127,160,155,143]
+            },
+            // total scores
+            {
+              fillColor : "rgba(51,187,205,0.05)",
+              strokeColor : "rgba(51,187,205,1)",
+              pointColor : "rgba(51,187,205,1)",
+              pointStrokeColor : "#fff",
+              data : [193,207,211,192,210,182,240,227,218]
+            }
+          ]
+
+        }
+
+      var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
+
+      </script>
+    </div>
+  </div>
+-->
+
+  <hr>
+
+  {% if personal_records %}
+  <div class="row-fluid">
+    <div class="span12">
+      <h4>Personal Records</h4>
+      <table class="table table-striped table-condensed">
+      	<thead>
+      		<tr>
+      			<th>Segment</th>
+      			<th>TSS</th>
+      			<th>TES</th>
+      			<th>PCS</th>
+      			<th>Date</th>
+      			<th>Competition</th>
+      		</tr>
+      	</thead>
+      	<tbody>
+      		{% for comp, result in personal_records %}
+      		<tr>
+      			<td>
+      			<a href="{{result.program.url}}">
+      			{{result.program.segment.segment}}
+      			</a>
+      			</td>
+      			<td>{{result.tss}}</td>
+      			<td>{{result.tes}}</td>
+      			<td>{{result.pcs}}</td>
+      			<td>{{comp.start_date}}</td>
+      			<td>
+      			<a href="{{comp.url}}">
+      			{{comp.name}}
+      			</a>
+      			</td>
+      		</tr>
+      		{% endfor %}
+      		<tr>
+      			<td>TOTAL</td>
+      			<td>{{best_total.total_score}}</td>
+      			<td></td>
+      			<td></td>
+      			<td>{{best_total.competition.start_date}}</td>
+      			<td>
+      			<a href="{{best_total.competition.url}}">
+      			{{best_total.competition.name}}
+      			</a>
+      			</td>
+      		</tr>
+      	</tbody>
+      </table>
+    </div>
+  </div>
+
+  <hr>
+  {% endif %}
+  
+  {% if isu_years.0 %}
+  <div class="row-fluid">
+  	<div class="span12">
+  	<table class="table table-striped table-condensed">
+  		<thead>
+  			<tr>
+  				<th>ISU Competitions</th>
+  				{% for year in isu_years%}
+  				<th>{{ year }}</th>
+  				{% endfor %}
+  			</tr>
+  		</thead>
+  		<tbody>
+  			{% for competition_name, res_dictionary in isu_results_matrix %}
+  				<tr>
+  					<td>{{ competition_name }}</td>
+  					{% for year in isu_years %}
+  						{% if year not in res_dictionary %}
+  							<td></td>
+  						{% else %}
+							{% for comp_year, skater_result in res_dictionary.items %}
+								{% if comp_year == year %}
+									{% if skater_result.0.final_rank == None %}
+										<td>
+										<a href="{{ skater_result.1.url }}">
+										WD
+										</a>
+										</td>
+									{% else %}
+										<td>
+										<a href="{{ skater_result.1.url }}">
+										{{ skater_result.0.final_rank }}
+										</a>
+										</td>
+									{% endif%}
+								{% endif %}
+							{% endfor %}
+  						{% endif %}
+  					{% endfor %}
+  				</tr>
+  			{% endfor %}
+		</tbody>
+  	</table>
+  	</div>
+  </div>
+
+  <hr>
+  {% endif %}
+
+<!-- Make this into a matrix
+  <div class="row">
+    <div class="span12">
+      <h4>Top Lists</h4>
+      <table class="table table-bordered">
+        <tr>
+          <td>Highest SP score of 2012-2013</td>
+          <td>7th</td>
+        </tr>
+        <tr>
+          <td>Highest FS score of 2012-2013</td>
+          <td>3rd</td>
+        </tr>
+        <tr>
+          <td>Highest SS of 2012-2013</td>
+          <td>17th</td>
+        </tr>
+        <tr>
+          <td>Highest TR of 2012-2013</td>
+          <td>13th</td>
+        </tr>
+        <tr>
+          <td>Highest PE of 2012-2013</td>
+          <td>44th</td>
+        </tr>
+        <tr>
+          <td>Highest CH of 2012-2013</td>
+          <td>15th</td>
+        </tr>
+        <tr>
+          <td>Highest IN of 2012-2013</td>
+          <td>9th</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+-->
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "page.dj" %}
+{% block title %}
+- {{ competition_name }} {{ level }} {{ category }} {{ segment }} ({{ competition.start_date.year }})
+{% endblock%}
+{% block main %}
+<script>
+$(document).ready(function()
+    {
+        $("#segment").tablesorter();
+    }
+);
+</script>
+
+<h4>
+<a href="{{ competition.url }}">
+{{ competition_name }} {{ competition_year }}
+</a>
+</h4>
+<p><b>{{ level }} {{ category }} {{ segment }}</b></p>
+<table id="segment" class="table table-condensed table-striped">
+	<thead>
+		<tr>
+			<th>Rank</th>
+			<th>Name</th>
+			<th>Country</th>
+			<th>TSS</th>
+			<th>TES</th>
+			<th>PCS</th>
+			{% if segment_results.0.5 %}
+				{% for pcs in segment_results.0.5 %}
+					<th>{{ pcs.component.component }}</th>
+				{% endfor %}
+			{% else %}
+				{% for pcs in segment_results.0.3 %}
+					<th>{{ pcs.component.component }}</th>
+				{% endfor %}
+			{% endif %}
+			<th>Ded.</th>
+		</tr>
+	</thead>
+	<tbody>
+	{% if not segment_results.0.5 %}
+		{% for skater, country, result, pcs in segment_results %}
+		<tr>
+			<td>
+			<a href="{{ result.program.url }}">
+			{{ result.program.rank }}
+			</a>
+			</td>
+			<td>
+			<a href="{{ skater.url }}">
+			{{ skater.get_default_skater_name.first_name }} {{ skater.get_default_skater_name.last_name }}
+			</a>
+			</td>
+			<td>{{ country }}</td>
+			<td>{{ result.tss }}</td>
+			<td>{{ result.tes }}</td>
+			<td>{{ result.pcs }}</td>
+			{% for pc in pcs %}
+				<td>{{ pc.panel_score }}</td>
+			{% endfor %}
+			<td>{{ result.deductions }}</td>
+		</tr>
+		{% endfor %}
+	{% else %}
+		{% for skater_pair, female_skater, male_skater, country, result, pcs in segment_results %}
+		<tr>
+			<td>
+			<a href="{{ result.program.url }}">
+			{{ result.program.rank }}
+			</a>
+			</td>
+			<td>
+			<a href="{{ skater_pair.url }}">
+			{{ female_skater.get_default_skater_name.first_name }} {{ female_skater.get_default_skater_name.last_name }} /
+			{{ male_skater.get_default_skater_name.first_name }} {{ male_skater.get_default_skater_name.last_name }}
+			</a>
+			</td>
+			<td>{{ country }}</td>
+			<td>{{ result.tss }}</td>
+			<td>{{ result.tes }}</td>
+			<td>{{ result.pcs }}</td>
+			{% for pc in pcs %}
+				<td>{{ pc.panel_score }}</td>
+			{% endfor %}
+			<td>{{ result.deductions }}</td>
+		</tr>
+		{% endfor %}
+	{% endif %}
+	</tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,285 @@
+{% extends "page.dj" %}
+{% block main %}
+<script>
+  $(document).ready(function(){
+    $('.carousel').carousel({
+      interval: 5000
+    });
+  });
+</script>
+
+<!--
+<div class="hero-unit">
+	<h2>Stats on Ice</h2>
+	<p>The world's first comprehensive figure skating database, Stats on Ice provides advanced search, data analysis, and interactive features that can be used by fans, skaters, and coaches.</p>
+</div>
+-->
+
+<div class="row">
+	<!--
+	<div class="well">
+		<h4>Contribute to our database</h4>
+		<p>There are many pieces of incomplete or out of date information on our site and we are doing what we can to get them up to date.</p>
+		<p>We appreciate every piece of data you can send our way and we will do our best to update the site ASAP.</p>
+		<ul>
+			<li><a href="#">Submit data for choreographer database</a></li>
+			<li><a href="#">Submit skater data</a></li>
+			<li><a href="#">Submit competition/program data (IJS)</a></li>
+			<li><a href="#">Submit competition/program data (6.0)</a></li>
+			<li><a href="#">Submit other data</a></li>
+		</ul>
+	</div>
+	-->
+	<div id="myCarousel" class="carousel slide span9">
+	  <!-- Carousel items -->
+	  <div class="carousel-inner">
+		<div class="active item">
+			<img src="{{ STATIC_PREFIX }}img/placeholder.png" alt="">
+			<div class="carousel-caption">
+			  <h4>Stats on Ice</h4>
+			  <p>Stats on Ice provides advanced search, data analysis, and interactive features that can be used by figure skating fans, skaters, and coaches.</p>
+			</div>
+		</div>
+		<div class="item">
+			<img src="{{ STATIC_PREFIX }}img/protocol_flag.png" alt="">
+			<div class="carousel-caption">
+			  <h4>Markup Flags for Protocols</h4>
+			  <p>Stats on Ice adds flags to protocols to highlight judging patterns.</p>
+			</div>
+		</div>
+		<div class="item">
+			<img src="{{ STATIC_PREFIX }}img/head-to-head.png" alt="">
+			<div class="carousel-caption">
+			  <h4>Head-to-Head Pages</h4>
+			  <p>Track rivalries and margins of victory with head-to-head pages that automatically include all competitions in the Stats on Ice database.</p>
+			</div>
+		</div>
+	  </div>
+	  <!-- Carousel nav -->
+	  <a class="carousel-control left" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+	  <a class="carousel-control right" href="#myCarousel" data-slide="next">&rsaquo;</a>
+	</div>
+
+	<div class="span3">
+		<div class="well well-small">
+		<div class="row-fluid">
+			<div class="span8">
+				<h5>Competitions</h5>
+				<h5>Skaters</h5>
+				<h5>Programs</h5>
+			</div>
+			<div class="span4">
+				<h4>
+					<a href="{% url 'search_competitions' %}">
+					{{ competition_sum }}
+					</a>
+				</h4>
+				<h4>
+					<a href="{% url 'search_skaters' %}">
+					{{ skater_sum }}
+					</a>
+				</h4>
+				<h4>
+					<a href="{% url 'search_programs' %}">
+					{{ program_sum }}
+					</a>
+				</h4>
+			</div>
+		</div>
+		</div>
+		<legend>
+		<h3>Recent Activity</h3>
+		</legend>
+			<h4>Blog post</h4>
+			<a href="{{ blog_post_url }}">{{ blog_post }}</a><br />
+			{{ blog_post_date }}
+	</div>
+</div> <!-- row -->
+
+<hr>
+
+<div class="row">
+	<div class="span12">
+		<h4>
+		<a href="{% url 'competition_preview' %}">
+		Competition Preview Page
+		</a>
+		</h4>
+		<p>The competition preview page shows statistics for skaters entered in upcoming competitions. They are compared using metrics like head-to-head summaries, recent scores, consistency, and whether they are on the rise.</p>
+			
+	<h4><div class="center">Skate America 2013 Mens Preview (Excerpt)</div></h4>
+	<table class="table table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Country</th>
+			<th>Chance Win</th>
+			<th>Chance Medal</th>
+			<th>Recent Trend</th>
+			<th>Recent Consistency</th>
+			<th>Last Score</th>
+		</tr>
+	</thead>
+	<tbody>
+		
+		<tr>
+			<td>
+			<a href="/skater/Evan/Lysacek/">
+			Evan Lysacek
+			</a>
+			</td>
+			<td>USA</td>
+				<td class="success">31.2%</td>
+				<td class="success">74.7%</td>
+				<td class="success">18.3</td>
+				<td>2.3</td>
+			<td>257.67</td>
+		</tr>
+		<tr>
+			<td>
+			<a href="/skater/Denis/Ten/">
+			Denis Ten
+			</a>
+			</td>
+			<td>KAZ</td>
+				<td>1.6%</td>
+				<td>14.2%</td>						
+				<td class="success">44.4</td>						
+				<td>1.5</td>			
+			<td>266.48</td>
+		</tr>		
+		<tr>
+			<td>
+			<a href="/skater/Daisuke/Takahashi/">
+			Daisuke Takahashi
+			</a>
+			</td>
+			<td>JPN</td>			
+				<td class="success">21.7%</td>						
+				<td class="success">61.0%</td>						
+				<td class="success">13.4</td>						
+				<td>2.7</td>			
+			<td>249.52</td>
+		</tr>		
+		<tr>
+			<td>
+			<a href="/skater/Takahiko/Kozuka/">
+			Takahiko Kozuka
+			</a>
+			</td>
+			<td>JPN</td>			
+				<td class="success">24.4%</td>						
+				<td class="success">65.4%</td>						
+				<td>0.9</td>						
+				<td>2.8</td>			
+			<td>253.27</td>
+		</tr>		
+		<tr>
+			<td>
+			<a href="/skater/Max/Aaron/">
+			Max Aaron
+			</a>
+			</td>
+			<td>USA</td>			
+				<td>14.9%</td>						
+				<td class="success">55.1%</td>						
+				<td>1.0</td>						
+				<td class="success">7.3</td>			
+			<td>236.62</td>
+		</tr>		
+		<tr>
+			<td>
+			<a href="/skater/Brian/Joubert/">
+			Brian Joubert
+			</a>
+			</td>
+			<td>FRA</td>			
+				<td>6.1%</td>						
+				<td>29.6%</td>						
+				<td>-2.3</td>						
+				<td class="success">6.3</td>			
+			<td>227.95</td>
+		</tr>		
+		<tr>
+			<td>
+			<a href="/skater/Alexander/Majorov/">
+			Alexander Majorov
+			</a>
+			</td>
+			<td>SWE</td>			
+				<td>< 1%</td>
+				<td>< 5%</td>
+				<td>10.9</td>
+				<td>2.6</td>			
+			<td>204.29</td>
+		</tr>		
+		<tr>
+			<td>
+			<a href="/skater/Artur/Gachinski/">
+			Artur Gachinski
+			</a>
+			</td>
+			<td>RUS</td>			
+				<td>< 1%</td>
+				<td>< 5%</td>
+				<td>2.4</td>
+				<td>4.4</td>			
+			<td>209.84</td>
+		</tr>		
+		<tr>
+			<td>
+			<a href="/skater/Tatsuki/Machida/">
+			Tatsuki Machida
+			</a>
+			</td>
+			<td>JPN</td>			
+				<td>< 1%</td>
+				<td>< 5%</td>
+				<td>-15.7</td>
+				<td>2.2</td>
+			<td>198.63</td>
+		</tr>
+	</tbody>
+</table>
+	
+	
+	</div>
+</div> <!-- /row -->
+
+<hr>
+
+<div class="row">
+	<div class="span6">
+		<br>
+		<table>
+		<thead>
+		</thead>
+		<tbody>
+			<tr>
+			<td width=50px>{% include "include/flag.dj" with flag="PC" %}</td>
+			<td>Perfect Consensus: all the GOEs are the same (and not -3).</td>
+			</tr>
+			<tr>
+			<td width=50px>{% include "include/flag.dj" with flag="NC" %}</td>
+			<td>No Consensus: there is a large standard deviation in the GOEs or PCS scores.</td>
+			</tr>
+			<tr>
+			<td width=50px>{% include "include/flag.dj" with flag="TO" %}</td>
+			<td>Three and One: both a +1 and +3 are assigned to an element (or both -1 and -3).</td>
+			</tr>
+			<tr>
+			<td width=50px>{% include "include/flag.dj" with flag="OL" %}</td>
+			<td>Outlier: there is a small standard deviation in GOEs but a large range in assigned GOEs.</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+
+	<div class="span6">
+		<h4>Markup Flags for Protocols</h4>
+		<p>Skating protocols often show interesting and strange judging patters for a specific element or program component score. Protocol markup flags highlight some of the most common patterns of interest.</p>
+		<p>Protocols can be found by navigating to a competition page (via the search tab) and selecting an individual program (e.g. Kevin van der Perren's <a href="{% url "skater_result_profile_single" competition_name="World-Championships" competition_year="2012" skater_first_name="Kevin" skater_last_name="Van.Der.Perren" %}">free skate</a> from the 2012 World Championships).</p>
+	</div>
+</div> <!-- /row -->
+
+{% endblock %}

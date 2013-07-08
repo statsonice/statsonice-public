@@ -1,0 +1,35 @@
+{% extends "page.dj" %}
+{% block main %}
+  <h1>
+    Browse Skaters And Skater Pairs
+  </h1>
+
+  <hr />
+  <div>
+    Number of skaters:
+    {{ skaters|length }}
+  </div>
+
+  <div>
+    <ul>
+      {% for skater_url, skater_view_name, skater_pairs in skaters %}
+        <li>
+          <a href="{{ skater_url }}">
+            {{ skater_view_name }}
+          </a>
+          {% if skater_pairs %}
+            <ul>
+            {% for skater_pair_url, skater_pair_view_name in skater_pairs %}
+              <li>
+                <a href="{{ skater_pair_url }}">
+                  {{ skater_pair_view_name }}
+                </a>
+              </li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% endblock %}

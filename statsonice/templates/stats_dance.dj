@@ -1,0 +1,7 @@
+{% extends "page.dj" %}
+{% block main %}
+
+<legend><h3>Stats Dance</h3></legend>
+<p>Stats dance forthcoming</p>
+
+{% endblock %}

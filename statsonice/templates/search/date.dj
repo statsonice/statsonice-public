@@ -1,0 +1,16 @@
+<span class="other-inputs" for="{{ input_id }}_day" style="display:hidden"></span>
+<span class="other-inputs" for="{{ input_id }}_month" style="display:hidden"></span>
+<span class="other-inputs" for="{{ input_id }}_year" style="display:hidden"></span>
+
+{% if include_days %}
+<input type="text" id="{{ input_id }}_day" placeholder="Day"/> -
+{% endif %}
+<select id="{{ input_id }}_month" placeholder = "Month">
+<option value="">Month</option>
+{% for option in months %}
+    <option value="{{ option }}">{{ option }}</option>
+{% endfor %}
+</select> -
+<input type="text" id="{{ input_id }}_year" size="4" placeholder="Year" />
+
+

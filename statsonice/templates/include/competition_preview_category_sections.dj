@@ -1,0 +1,122 @@
+<div class="accordion-group">
+    <div class="accordion-heading">
+    <a href="#collapse{{category}}" data-parent="collapse{{category}}" data-toggle="collapse" class="accordion-toggle">
+      <p>{{category}}</p>
+    </a>
+    </div>
+    <div class="accordion-body collapse" id="collapse{{category}}" style="height: 0px;">
+      <div class="accordion-inner">
+      
+<h4>Summary Table</h4>
+<table class="table table-bordered table-condensed">
+	<thead>
+		<tr>
+			<th></th>
+			<th>Country</th>
+			<th>Chance Win</th>
+			<th>Chance Medal</th>
+			<th>Recent Trend</th>
+			<th>Recent Consistency</th>
+			<th>Last Score</th>
+		</tr>
+	</thead>
+	<tbody>
+		{% for skater_stat in res %}
+		<tr>
+			<td>
+			<a href="{{skater_stat.competitor.get_participants.url}}">
+			{{ skater_stat.competitor.get_participants.view_name }}
+			</a>
+			</td>
+			<td>{{ skater_stat.competitor.get_participants.country.country_name }}</td>
+			{% if skater_stat.chance_win > 20 %}
+				<td class="success">{{ skater_stat.chance_win }}%</td>
+			{% elif skater_stat.chance_win < 1 %}
+				<td>< 1%</td>
+			{% else %}
+				<td>{{ skater_stat.chance_win }}%</td>
+			{% endif %}
+			{% if skater_stat.chance_medal > 50 %}
+				<td class="success">{{skater_stat.chance_medal}}%</td>
+			{% elif skater_stat.chance_medal == 1%}
+				<td>< 5%</td>
+			{% else %}
+				<td>{{skater_stat.chance_medal}}%</td>
+			{% endif %}
+			{% if skater_stat.slope > 12 %}
+				<td class="success">{{ skater_stat.slope }}</td>
+			{% elif skater_stat.slope == 0 %}
+				<td>-</td>
+			{% else %}
+				<td>{{ skater_stat.slope }}</td>
+			{% endif%}
+			{% if skater_stat.consistency == None %}
+				<td>-</td>
+			{% elif skater_stat.consistency > 5 %}
+				<td class="success">{{ skater_stat.consistency }}</td>
+			{% else %}
+				<td>{{ skater_stat.consistency }}</td>
+			{% endif %}
+			{% if skater_stat.recent_scores.2 %}
+				<td>{{ skater_stat.recent_scores.2 }}</td>
+			{% elif skater_stat.recent_scores.1 %}
+				<td>{{ skater_stat.recent_scores.1 }}</td>
+			{% elif skater_stat.recent_scores.0 %}
+				<td>{{ skater_stat.recent_scores.0 }}</td>
+			{% else %}
+				<td></td>
+			{% endif %}
+		</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+<br>
+
+<h4>Head-to-Head Matrix</h4>
+<table class="table table-condensed">
+<thead>
+	<tr>
+	<th></th>
+	{% for skater_stat in res %}
+		<th>{{ skater_stat.competitor.get_participants.view_name }}</th>
+	{% endfor %}
+	</tr>
+</thead>
+<tbody>
+{% for skater_stat1 in res %}
+	<tr>
+	<th>{{ skater_stat1.competitor.get_participants.view_name }}</th>
+	{% for skater_stat2 in res %}
+		{% if skater_stat1.competitor == skater_stat2.competitor %}
+			<td></td>
+		{% else %}
+			{% for opponent1, value1 in skater_stat1.hth_record.items %}
+				{% for opponent2, value2 in skater_stat2.hth_record.items %}
+					{% if skater_stat1 == opponent2 and skater_stat2 == opponent1 %}
+						{% if skater_stat1.competitor.is_pair %}
+							<td>
+							<a href="{% url 'head_to_head_teams' skater1_first_name=skater_stat1.competitor.skater_pair.female_skater.get_default_skater_name.first_name skater1_last_name=skater_stat1.competitor.skater_pair.female_skater.get_default_skater_name.last_name skater2_first_name=skater_stat1.competitor.skater_pair.male_skater.get_default_skater_name.first_name skater2_last_name=skater_stat1.competitor.skater_pair.male_skater.get_default_skater_name.last_name skater3_first_name=skater_stat2.competitor.skater_pair.female_skater.get_default_skater_name.first_name  skater3_last_name=skater_stat2.competitor.skater_pair.female_skater.get_default_skater_name.last_name skater4_first_name=skater_stat2.competitor.skater_pair.male_skater.get_default_skater_name.first_name skater4_last_name=skater_stat2.competitor.skater_pair.male_skater.get_default_skater_name.last_name %}">
+								{{ value1 }}-{{ value2 }}
+							</a>
+							</td>
+						{% else %}
+							<td>
+							<a href="{% url 'head_to_head_singles' skater1_first_name=skater_stat1.competitor.skater.get_default_skater_name.first_name skater1_last_name=skater_stat1.competitor.skater.get_default_skater_name.last_name skater2_first_name=skater_stat2.competitor.skater.get_default_skater_name.first_name skater2_last_name=skater_stat2.competitor.skater.get_default_skater_name.last_name %}">
+								{{ value1 }}-{{ value2 }}
+							</a>
+							</td>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			{% endfor %}
+		{% endif%}
+	{% endfor %}
+	</tr>
+{% endfor %}
+<tbody>
+</table>
+
+</div>
+</div>
+</div>

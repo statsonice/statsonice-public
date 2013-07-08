@@ -1,0 +1,85 @@
+{% extends "page.dj" %}
+{% block main %}
+
+<legend><h3>Terms of Use</h3></legend>
+
+<h4>Welcome to Stats on Ice!</h4>
+<p>Thank you for using our products and services ("Services"). The Services are
+produced by StatsOnIce. By using our Services, you are agreeing to these terms and conditions of
+use. Please read them carefully.</p>
+
+
+<h4>Warranties and Disclaimers</h4>
+<p>OTHER THAN AS SPECIFICALLY SET FORTH IN THESE TERMS, STATSONICE DOES NOT
+MAKE ANY SPECIFIC PROMISES ABOUT THE SERVICES, INCLUDING COMMITMENTS ABOUT THE
+CONTENT WITHIN THE SERVICES, THE FUNCTION OF THE SERVICES, THE RELIABILITY OF
+THE SERVICES, OR THE ABILITY OF THE SERVICES TO MEET YOUR NEEDS. TO THE EXTENT
+PERMITTED BY LAW, WE EXCLUDE ALL WARRANTIES.</p>
+
+<h4>Links to Third-Party Sites</h4>
+<p>StatsOnIce contains links to third-party sites. Linking to these sites does
+not represent an endorsement of their content. We do not take responsibility
+for their content or practices and do not make any warranties about their
+content or the accuracy of their materials.</p>
+
+<h4>Privacy and Copyright Protection</h4>
+<p>Please read our
+<a href="{% url 'statsonice.static.privacy_policy' %}">Privacy Policy</a>,
+which describes our practices and how we protect your privacy when you use our
+Services. The Privacy Policy is subject to these terms and conditions of use.
+</p>
+
+<h4>Modifying and Terminating our Services</h4>
+<p>The Services on this site are continually changing and improving. Some of
+the functionalities and features may change or be removed entirely. We may stop
+a Service completely.</p>
+<p>You are allowed to stop using our Services at any time. StatsOnIce may
+impose or create new limits to our Services at any time, and we may also stop
+providing Services to you.</p>
+<p>If we discontinue a service, where it is reasonably possibly, we will give
+you advance notice.</p>
+
+<h4>Submissions</h4>
+<p>Comments and suggestions are always welcome at StatsOnIce. However, feedback,
+comments, ideas, suggestions, messages, or other communications
+("Communications"), submitted to us will be our exclusive property.
+StatsOnIce is assigned all worldwide right, title and interest in and to all
+copyrights and other intellectual property rights in and to the Communications,
+and you represent and warrant that you have the right to make such an assignment
+and that such Communications do not violate or infringe any rights of anybody.
+StatsOnIce will be entitled to use, reproduce, disclose, publish, and distribute
+any Communications (in part or in whole) for any purpose whatsoever worldwide
+and/or to incorporate it in other work in any form, media, or technology now
+known or later developed, without restriction and without compensating you in
+any way. For this reason, please do not send us any Communications that you do
+not desire to assign to StatsOnIce, including, but not limited to, any
+confidential information or any original creative materials such as stories,
+product ideas, computer code, or original artwork.</p>
+
+<h4>Liability for our Services</h4>
+<p>WHEN PERMITTED BY LAW, STATSONICE WILL NOT BE RESPONSIBLE FOR LOST DATA,
+PROFITS, REVENUE, OR INDIRECT, CONSEQUENTIAL, OR SPECIAL DAMAGES. TO THE EXTENT
+PERMITTED BY LAW, THE TOTAL LIABILITY OF STATSONICE IS LIMITED TO THE AMOUNT
+YOU PAID US TO USE OUR SERVICES. IN ALL CASES, STATSONICE WILL NOT BE
+RESPONSIBLE FOR ANY LOSS OR DAMAGE THAT IS NOT REASONABLY FORSEEABLE.</p>
+
+<h4>About these Terms and Conditions</h4>
+<p>We may modify these terms to reflect changes to the law or changes to our
+Services. You should look at the terms and conditions regularly. Changes to
+these terms and conditions will be posted on this page, will not apply
+retroactively, and will become effective no sooner than fourteen days after
+posting on this page. However, changes concerning new functions for a Service
+or changes made for legal reasons will be effectively immediately. If you do
+not agree to the modified terms and conditions for a Service, you should
+discontinue your use of that service.</p>
+<p>These terms and conditions control the relationship between StatsOnIce and
+you and they do not create and third party beneficiary rights.</p>
+<p>If you do not comply with these terms and conditions and we do not take
+action right away, this does not mean that we are giving up any rights we may
+have, including taking action in the future.</p>
+<p>If it turns out that a particular term or condition is not enforceable,
+this will not affect any other terms and conditions.</p>
+<p>For information about how to contact us at StatsOnIce, please visit our
+<a href="{% url 'statsonice.static.contact' %}">contact page</a>.</p>
+
+{% endblock %}

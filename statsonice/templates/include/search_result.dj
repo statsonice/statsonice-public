@@ -1,0 +1,20 @@
+{% if results %}
+  <p>{{ results|length }} results found </p>
+  <ul>
+    {% for result in results %}
+      <li>
+        <a href="{{ result.url }}">
+          {{ result.view_name }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% elif error_message %}
+  <p class="center">
+    <i>{{ error_message }}</i>
+  </p>
+{% else %}
+  <p class="center">
+    <b>No Results Found Matching Your Search</b>
+  </p>
+{% endif %}
