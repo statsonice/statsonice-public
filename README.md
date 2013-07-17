@@ -8,8 +8,6 @@ It therefore doesn't contain all the commits and branches that are used in devel
 There are also several missing directories:
 - data - holds sql dumps and various other data in text format
 - data\_scraping - holds code that scrapes and parses skating results into the database
-- util - holds settings and middleware files
-- statsonice/models - Holds files relating to models and data validation
 - statsonice/migrations - Holds migration files created by Django South
 - statsonice/static/admin - Holds Django admin static files
 - statsonice/static/bootstrap - Holds Twitter bootstrap static files

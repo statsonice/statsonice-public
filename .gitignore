@@ -5,8 +5,6 @@
 # project specific ignores
 data
 data_scraping
-util
-statsonice/models
 statsonice/migrations
 statsonice/static/admin
 statsonice/static/bootstrap
