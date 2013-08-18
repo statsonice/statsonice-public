@@ -2,6 +2,16 @@
 {% block title %}
 - {{ competition_name }} {{ level }} {{ category }} {{ segment }} ({{ competition.start_date.year }})
 {% endblock%}
+
+{% block header %}
+<h3>
+<a href="{{ competition.url }}">
+{{ competition_name }} {{ competition_year }}
+</a>
+</h3>
+<p><b>{{ level }} {{ category }} {{ segment }}</b></p>
+{% endblock %}
+
 {% block main %}
 <script>
 $(document).ready(function()
@@ -11,12 +21,6 @@ $(document).ready(function()
 );
 </script>
 
-<h4>
-<a href="{{ competition.url }}">
-{{ competition_name }} {{ competition_year }}
-</a>
-</h4>
-<p><b>{{ level }} {{ category }} {{ segment }}</b></p>
 <table id="segment" class="table table-condensed table-striped">
 	<thead>
 		<tr>
@@ -43,7 +47,7 @@ $(document).ready(function()
 		{% for skater, country, result, pcs in segment_results %}
 		<tr>
 			<td>
-			<a href="{{ result.program.url }}">
+			<a href="{{ result.program.skater_result.url }}">
 			{{ result.program.rank }}
 			</a>
 			</td>
@@ -63,15 +67,15 @@ $(document).ready(function()
 		</tr>
 		{% endfor %}
 	{% else %}
-		{% for skater_pair, female_skater, male_skater, country, result, pcs in segment_results %}
+		{% for skater_team, female_skater, male_skater, country, result, pcs in segment_results %}
 		<tr>
 			<td>
-			<a href="{{ result.program.url }}">
+			<a href="{{ result.program.skater_result.url }}">
 			{{ result.program.rank }}
 			</a>
 			</td>
 			<td>
-			<a href="{{ skater_pair.url }}">
+			<a href="{{ skater_team.url }}">
 			{{ female_skater.get_default_skater_name.first_name }} {{ female_skater.get_default_skater_name.last_name }} /
 			{{ male_skater.get_default_skater_name.first_name }} {{ male_skater.get_default_skater_name.last_name }}
 			</a>
@@ -89,4 +93,26 @@ $(document).ready(function()
 	{% endif %}
 	</tbody>
 </table>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div id="accordion2" class="accordion">
+      <div class="accordion-group">
+      	<div class="accordion-heading">
+      	  <a href="#collapsePROTOCOLS" data-parent="collapsePROTOCOLS" data-toggle="collapse" class="accordion-toggle">
+      	    <p>Protocols</p>
+      	  </a>
+      	</div>
+      	<div class="accordion-body collapse" id="collapsePROTOCOLS" style="height: 0px;">
+		  <div class="accordion-inner">
+		  	{% for programresult in programs %}
+		  		{% include "include/program.dj" with programresult=programresult %}
+			{% endfor %}
+		  </div>
+		</div>
+	  </div>
+	</div>
+  </div>
+</div>
+
 {% endblock %}

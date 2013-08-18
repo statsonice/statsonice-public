@@ -7,19 +7,17 @@ from django.http import HttpResponse
 from django.http import Http404
 from django.conf import settings
 
-from statsonice.models import Skater, SkaterPair, SkaterName, Competition, Program, Settings
+from statsonice.models import Skater, SkaterTeam, SkaterName, Competition, Program, Settings
 
 def home(request):
     competition_sum = Competition.objects.count()
-    skater_sum = Skater.objects.count() + SkaterPair.objects.count()
-    program_sum = Program.objects.count()
+    skater_sum = Skater.objects.count() + SkaterTeam.objects.count()
     return render(request, 'index.dj', {
         'competition_sum': competition_sum,
         'skater_sum': skater_sum,
-        'program_sum': program_sum,
         'blog_post_url': Settings.get_value('blog_post_url'),
         'blog_post': Settings.get_value('blog_post'),
-        'blog_post_date': Settings.get_value('blog_post_date').split(" ")[0],
+        'blog_post_date': Settings.get_value('blog_post_date').split(" ")[0]
     })
 
 def about(request):

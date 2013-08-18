@@ -7,10 +7,6 @@ class Category(models.Model):
         ('LADIES', 'Ladies'),
         ('PAIRS', 'Pairs'),
         ('DANCE', 'Ice Dance'),
-        ('MEN PRE', 'Men Preliminary Round'),
-        ('LADIES PRE', 'Ladies Preliminary Round'),
-        ('PAIRS PRE', 'Pairs Preliminary Round'),
-        ('DANCE PRE', 'Ice Dance Preliminary Round'),
     )
     category = models.CharField(max_length = 10,
                                 choices = CATEGORY_CHOICES,
@@ -164,8 +160,6 @@ class Segment(models.Model):
         ('OD', 'Original Dance'),
         ('FD', 'Free Dance'),
         ('SD', 'Short Dance'),
-        ('Pre', 'Preliminary'),
-        ('Qual','Qualifying'),
     )
     segment = models.CharField(max_length = 10,
                                choices = SEGMENT_CHOICES,

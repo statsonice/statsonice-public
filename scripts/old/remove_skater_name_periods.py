@@ -4,7 +4,7 @@ This hacked up script removes periods from skater names
 
 import os
 import sys
-parent_path = os.path.dirname(os.path.realpath(__file__))+'/util/'
+parent_path = os.path.dirname(os.path.realpath(__file__))+'/../../util/'
 sys.path.append(parent_path)
 from get_settings import load_settings
 load_settings(sys.argv)

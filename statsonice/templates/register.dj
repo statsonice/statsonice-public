@@ -3,9 +3,11 @@
 - Register
 {% endblock%}
 
-{% block main %}
-  <h3>Registration</h3>
+{% block header %}
+<h3>Registration</h3>
+{% endblock %}
 
+{% block main %}
   {% for error in errors %}
     <div class="alert alert-error">
       {{ error }}

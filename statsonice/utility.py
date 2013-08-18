@@ -3,6 +3,7 @@ import urllib2
 from django.http import HttpResponse
 
 from statsonice.models import Settings
+from statsonice import user
 
 def save_settings(key, value):
     s = Settings()
@@ -12,7 +13,7 @@ def save_settings(key, value):
 
 def cache_blog(request):
     try:
-        f = urllib2.urlopen('http://blog.statsonice.com/most-recent-post.php')
+        f = urllib2.urlopen('http://blog.statsonice.com/statsonice/most-recent-post.php')
         blog_post = f.read().split("\n")
         save_settings('blog_post_url', blog_post[0])
         save_settings('blog_post', blog_post[1])
@@ -21,3 +22,15 @@ def cache_blog(request):
     except:
         return HttpResponse('Not Found')
 
+
+def require_subscribe(f):
+    def wrapped(*args, **kwargs):
+        # TODO - have code to check for subscription
+        subscribed = True
+
+        if subscribed:
+            return f(*args, **kwargs)
+        else:
+            return user.subscribe(*args, **kwargs)
+        return value
+    return wrapped

@@ -61,25 +61,16 @@ def competitions(request):
         'months': get_options('months'),
     })
 
-@ensure_csrf_cookie
-def programs(request):
-    if request.method == 'POST':
-        search_params = request.POST.copy()
-        # Actually do a search
-        all_programs = Program.objects.all()
-        search = search_backend.GeneralSearch(all_programs)
-        results = search.general_search(search_params, search_backend.PROGRAM_FIELD_TYPES)
-        if type(results) == str or type(results) == unicode:
-            return search_error(results)
-        return render_to_response('include/search_result.dj', {
-            'results' : results,
-        })
-    return render(request, 'search_programs.dj', {
-        'skaters': get_options('skaters'),
-        'competitions': get_options('competitions'),
-        'categories': get_options('categories'),
-        'segment': get_options('segment'),
-        'level': get_options('level'),
+def head_to_head(request):
+    skaters_dict = get_options('skaters_dict')
+    for view_name, url_name in skaters_dict.items():
+        skaters_dict[view_name] = url_name[0]+'/'+url_name[1]
+    teams_dict = get_options('teams_dict')
+    for view_name, url_name in teams_dict.items():
+        teams_dict[view_name] = url_name[0][0]+'/'+url_name[0][1]+'/'+url_name[1][0]+'/'+url_name[1][1]
+    return render(request, 'search_head_to_head.dj', {
+        'skaters_dict': skaters_dict,
+        'teams_dict': teams_dict,
     })
 
 def get_options(option):
@@ -91,15 +82,17 @@ def get_options(option):
         return search_backend.MONTHS
     if option == 'genders':
         return ['', 'Female', 'Male']
-    if option == 'competitions':
-        return [competition.name for competition in Competition.objects.all()]
-    if option == 'skaters':
-        return [skater.view_name() for skater in Skater.objects.all()]
-    if option == 'categories':
-        return ['']+[category.category for category in Category.objects.all()]
-    if option == 'segment':
-        return [segment.segment for segment in Segment.objects.all()]
-    if option == 'level':
-        return [level.level for level in Level.objects.all()]
+    if option == 'skaters_dict':
+        skater_list = [(skater.view_name(), skater.url_name()) for skater in Skater.objects.all()]
+        skater_dict = {}
+        for view_name, url_name in skater_list:
+            skater_dict[view_name] = url_name
+        return skater_dict
+    if option == 'teams_dict':
+        teams_list = [(team.view_name(), team.url_name()) for team in SkaterTeam.objects.all()]
+        teams_dict = {}
+        for view_name, url_name in teams_list:
+            teams_dict[view_name] = url_name
+        return teams_dict
 
 

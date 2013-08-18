@@ -10,8 +10,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_PREFIX }}img/favicon.ico" />
 
     <!-- Stylesheets !-->
-    <link href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap.css" rel="stylesheet" />
-    <link href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="http://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="stylesheet" />
     <link href="{{ STATIC_PREFIX }}css/global.css" rel="stylesheet" />
 
@@ -23,151 +22,140 @@
     <!-- Javascript !-->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-transition.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-alert.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-modal.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-dropdown.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-scrollspy.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-tab.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-tooltip.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-popover.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-button.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-collapse.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-carousel.js"></script>
-    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap-typeahead.js"></script>
+    <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/csrf.js"></script>
     <script src="{{ STATIC_PREFIX }}js/Chart.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/global.js"></script>
     <script src="{{ STATIC_PREFIX }}js/jquery.tablesorter.js"></script>
 
+    <!-- d3js -->
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
     <script>
-	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-	  ga('create', 'UA-40105817-1', 'statsonice.com');
-	  ga('send', 'pageview');
-
-	</script>
+      ga('create', 'UA-40105817-1', 'statsonice.com');
+      ga('send', 'pageview');
+    </script>
 
   </head>
 
   <body>
-
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
+    <div class="wrapper">
+      <!-- navbar -->
+      <header class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="{% url 'home' %}">Stats on Ice</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="{% url 'search_skaters' %}">Skaters</a></li>
-                  <li><a href="{% url 'search_competitions' %}">Competitions</a></li>
-                  <li><a href="{% url 'search_programs' %}">Programs</a></li>
-                </ul>
-              </li>
-              <li><a href="{% url 'competition_browse' %}">Competitions</a></li>
-              <li><a href="{% url 'skater_browse' %}">Skaters</a></li>
-              <li class="dropdown">
-                <a href="{% url 'stats' %}" class="dropdown-toggle" data-toggle="dropdown">Statistics <b class="caret"></b></a>
-                <ul class="dropdown-menu">
-                  <li><a href="#">Head-to-Head</a></li>
-                  <li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>
-                  <li><a href="#">Top Scores</a></li>
-                  <!--<li><a href="{% url 'stats_men' %}">Men</a></li>
-                  <li><a href="{% url 'stats_ladies' %}">Ladies</a></li>
-                  <li><a href="{% url 'stats_pairs' %}">Pairs</a></li>
-                  <li><a href="{% url 'stats_dance' %}">Dance</a></li>-->
-                </ul>
-              </li>
-              <li><a href="//blog.statsonice.com/">Blog</a></li>
-            </ul>
-            <ul class="nav navbar-form pull-right">
+          <a class="navbar-brand" href="{% url 'home' %}">Stats on Ice</a>
+          <ul class="nav navbar-nav">
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'search_skaters' %}">Skaters</a></li>
+                <li><a href="{% url 'search_competitions' %}">Competitions</a></li>
+                <li><a href="{% url 'search_head_to_head' %}">Head To Head</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="{% url 'competition_browse' %}">Competitions</a>
+            </li>
+            <li>
+              <a href="{% url 'skater_browse' %}">Skaters</a>
+            </li>
+            <li class="dropdown">
+              <a href="{% url 'stats' %}" class="dropdown-toggle" data-toggle="dropdown">Statistics <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'search_head_to_head' %}">Head-to-Head</a></li>
+                <li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>
+                <li><a href="{% url 'element_stats' %}">Element Statistics</a></li>
+              </ul>
+            </li>
+            <li>
+              <a href="//blog.statsonice.com/">Blog</a></li>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav pull-right">
             {% if user.is_authenticated %}
-              <li><a href="{% url 'account' %}">{{ user.username }}</a></li>
-              <li><a href="{% url 'logout' %}">Sign Out</a></li>
+              <li>
+                <a href="{% url 'account' %}">{{ user.username }}</a>
+              </li>
+              <li>
+                <a href="{% url 'logout' %}">Sign Out</a>
+              </li>
             {% else %}
-              <li><a href="{% url 'login' %}">Login</a></li>
-              <li><a href="{% url 'register' %}">Register</a></li>
+              <li>
+                <a href="{% url 'login' %}">Login</a>
+              </li>
+              <li>
+                <a href="{% url 'register' %}">Register</a>
+              </li>
             {% endif %}
-            </ul>
-          </div><!--/.nav-collapse -->
+          </ul>
         </div>
-      </div>
-    </div>
+      </header><!-- /.navbar -->
 
-    <div class="container">
+      <div id="body" class="container">
 
-    <!-- Put content here -->
-    <div class="alert alert-success">
-    	This is a BETA Version. We appreciate any and all
-    	<a href="{% url 'contact' %}">
-    	feedback
-    	</a>!
-    </div>
+        <div class="alert alert-success">
+          This is a BETA Version. We appreciate any and all
+          <a href="{% url 'contact' %}">
+            feedback
+          </a>!
+        </div>
 
-    {% block main %}{% endblock %}
+        {% block header %}{% endblock %}
 
-      <br>
-      <br>
+        {% block main %}{% endblock %}
 
-    </div> <!-- /container -->
+        <br>
+        <br>
+      </div> <!-- /container -->
 
-    <div class="bottomnav-gray">
-		<div class="container">
-			<div class="row">
-				<div class="span4">
-				<legend><h4>Info</h4></legend>
-					<ul class="nav nav-white">
-						<li><a href="{% url 'home' %}">Home</a></li>
-						<li><a href="{% url 'about' %}">About</a></li>
-						<li><a href="{% url 'contact' %}">Contact</a></li>
-						<li><a href="{% url 'terms_of_use' %}">Terms of Use</a></li>
-						<li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
-						<li><a href="{% url 'faq' %}">FAQ</a></li>
-					</ul>
-				</div>
-				<div class="span4">
-					<legend><h4>Statistics</h4></legend>
-					<ul class="nav nav-white">
-					  <li><a href="#">Head-to-Head</a></li>
-					  <li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>
-					  <!--
-					  <li><a href="{% url 'stats_men' %}">Men</a></li>
-					  <li><a href="{% url 'stats_ladies' %}">Ladies</a></li>
-					  <li><a href="{% url 'stats_pairs' %}">Pairs</a></li>
-					  <li><a href="{% url 'stats_dance' %}">Dance</a></li>-->
-					  <li><a href="#">Top Scores</a></li>
-					  <li><a href="#">Order Custom</a></li>
-					</ul>
-				</div>
-				<div class="span4">
-					<legend><h4>User</h4></legend>
-					<ul class="nav nav-white">
-            {% if user.is_authenticated %}
-              <li><a href="{% url 'account' %}">Account</a></li>
-              <li><a href="{% url 'logout' %}">Sign Out</a></li>
-            {% else %}
-              <li><a href="{% url 'login' %}">Login</a></li>
-              <li><a href="{% url 'register' %}">Register</a></li>
-            {% endif %}
-					</ul>
-				</div>
-			</div>
 
-			<footer>
-				<p>&copy; Stats on Ice 2013</p>
-			</footer>
-		</div> <!-- /container -->
-	</div>
+      <!-- footer -->
+      <footer class="navbar bottomnav-gray">
+        <div class="container">
+          <div class="row">
+            <div class="col-lg-4">
+            <legend><h4>Info</h4></legend>
+              <ul class="navbar-inner nav-white">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'about' %}">About</a></li>
+                <li><a href="{% url 'contact' %}">Contact</a></li>
+                <li><a href="{% url 'terms_of_use' %}">Terms of Use</a></li>
+                <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
+                <li><a href="{% url 'faq' %}">FAQ</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-4">
+              <legend><h4>Statistics</h4></legend>
+              <ul class="navbar-inner nav-white">
+                <li><a href="{% url 'search_head_to_head' %}">Head-to-Head</a></li>
+                <li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>
+                <li><a href="{% url 'element_stats' %}">Element Statistics</a></li>
+              </ul>
+            </div>
+            <div class="col-lg-4">
+              <legend><h4>User</h4></legend>
+              <ul class="navbar-inner nav-white">
+                {% if user.is_authenticated %}
+                  <li><a href="{% url 'account' %}">Account</a></li>
+                  <li><a href="{% url 'logout' %}">Sign Out</a></li>
+                {% else %}
+                  <li><a href="{% url 'login' %}">Login</a></li>
+                  <li><a href="{% url 'register' %}">Register</a></li>
+                {% endif %}
+              </ul>
+            </div>
+          </div>
 
+          <div class="center">
+            <p>&copy; Stats on Ice 2013</p>
+          </div>
+        </div>
+      </footer> <!-- footer -->
+    </div> <!-- wrapper -->
   </body>
 </html>

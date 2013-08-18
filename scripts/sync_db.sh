@@ -45,4 +45,12 @@ fi
 
 # Clearing memcached
 echo 'CLEARING MEMCACHED'
-echo 'flush_all' | nc localhost 11211
+if [[ $DB_NAME == 'statsonice' ]]; then
+    echo 'flush_all' | nc localhost 11211
+else
+    echo 'flush_all' | nc localhost 11212
+fi
+
+# Running variable caching script
+echo 'STARTING MEMCACHED UPDATER'
+screen -d -m python scripts/update_memcached.py

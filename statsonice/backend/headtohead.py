@@ -1,5 +1,5 @@
 # head to head results
-from statsonice.models import Skater, SkaterPair, Competitor, Competition, SkaterResult
+from statsonice.models import Skater, Competitor, Competition, SkaterResult
 from stats import *
 from includes import stats
 
@@ -15,8 +15,8 @@ class HeadToHead:
         hth_results = []
         s1_count = 0
         s2_count = 0
-        skater1_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor1) if 'PRE' not in sr.category.category and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
-        skater2_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor2) if 'PRE' not in sr.category.category and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
+        skater1_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor1) if sr.qualifying == None and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
+        skater2_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor2) if sr.qualifying == None and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
         skater1_competitions = [x.competition for x in skater1_skater_results]
         skater2_competitions = [x.competition for x in skater2_skater_results]
         competitions = set(skater1_competitions).intersection(set(skater2_competitions))
@@ -116,16 +116,20 @@ class HeadToHead:
         table_stats['recent_trend'] = (s1_trend,s2_trend)
 
         # highest total score
-        s1_max_score = max([x.total_score for x in s1_results])
-        s2_max_score = max([x.total_score for x in s2_results])
+        s1_max_score, s2_max_score = None,None
+        if s1_results:
+            s1_max_score = max([x.total_score for x in s1_results])
+        if s2_results:
+            s2_max_score = max([x.total_score for x in s2_results])
 
         table_stats['max_score'] = (s1_max_score,s2_max_score)
 
         # chance win
         s1_recent = [s.total_score for s in s1_results if s.total_score != 0][-3:]
         s2_recent = [s.total_score for s in s2_results if s.total_score != 0][-3:]
-        s1_chance_win, s2_chance_win = determine_win_probability(s1_recent,s2_recent)
-        table_stats['chance_win'] = (s1_chance_win,s2_chance_win)
+        if s1_recent and s2_recent:
+            s1_chance_win, s2_chance_win = determine_win_probability(s1_recent,s2_recent)
+            table_stats['chance_win'] = (s1_chance_win,s2_chance_win)
         
         return table_stats
             

@@ -1,7 +1,0 @@
-{% extends "page.dj" %}
-{% block main %}
-
-<legend><h3>Stats Pairs</h3></legend>
-<p>Stats pairs forthcoming</p>
-
-{% endblock %}

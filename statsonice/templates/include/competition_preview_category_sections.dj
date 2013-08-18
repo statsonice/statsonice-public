@@ -15,8 +15,18 @@
 			<th>Country</th>
 			<th>Chance Win</th>
 			<th>Chance Medal</th>
-			<th>Recent Trend</th>
-			<th>Recent Consistency</th>
+			<th>
+			Recent Trend
+			<span class="badge badge-info" title="The recent trend is the slope of the last three international scores achieved by a skater. It has units of points/competition.">
+			?
+			</span>
+			</th>
+			<th>
+			Recent Consistency
+			<span class="badge badge-info" title="Recent consistency is defined as 10/sqrt(x) where x is the standard deviation in the three most recent international scores the skater achieved.">
+			?
+			</span>
+			</th>
 			<th>Last Score</th>
 		</tr>
 	</thead>
@@ -94,9 +104,9 @@
 			{% for opponent1, value1 in skater_stat1.hth_record.items %}
 				{% for opponent2, value2 in skater_stat2.hth_record.items %}
 					{% if skater_stat1 == opponent2 and skater_stat2 == opponent1 %}
-						{% if skater_stat1.competitor.is_pair %}
+						{% if skater_stat1.competitor.is_team %}
 							<td>
-							<a href="{% url 'head_to_head_teams' skater1_first_name=skater_stat1.competitor.skater_pair.female_skater.get_default_skater_name.first_name skater1_last_name=skater_stat1.competitor.skater_pair.female_skater.get_default_skater_name.last_name skater2_first_name=skater_stat1.competitor.skater_pair.male_skater.get_default_skater_name.first_name skater2_last_name=skater_stat1.competitor.skater_pair.male_skater.get_default_skater_name.last_name skater3_first_name=skater_stat2.competitor.skater_pair.female_skater.get_default_skater_name.first_name  skater3_last_name=skater_stat2.competitor.skater_pair.female_skater.get_default_skater_name.last_name skater4_first_name=skater_stat2.competitor.skater_pair.male_skater.get_default_skater_name.first_name skater4_last_name=skater_stat2.competitor.skater_pair.male_skater.get_default_skater_name.last_name %}">
+							<a href="{% url 'head_to_head_teams' skater1_first_name=skater_stat1.competitor.skater_team.female_skater.get_default_skater_name.first_name skater1_last_name=skater_stat1.competitor.skater_team.female_skater.get_default_skater_name.last_name skater2_first_name=skater_stat1.competitor.skater_team.male_skater.get_default_skater_name.first_name skater2_last_name=skater_stat1.competitor.skater_team.male_skater.get_default_skater_name.last_name skater3_first_name=skater_stat2.competitor.skater_team.female_skater.get_default_skater_name.first_name  skater3_last_name=skater_stat2.competitor.skater_team.female_skater.get_default_skater_name.last_name skater4_first_name=skater_stat2.competitor.skater_team.male_skater.get_default_skater_name.first_name skater4_last_name=skater_stat2.competitor.skater_team.male_skater.get_default_skater_name.last_name %}">
 								{{ value1 }}-{{ value2 }}
 							</a>
 							</td>

@@ -5,6 +5,13 @@ Useful for when running python scripts that require settings file
 
 def load_settings(sys_argv):
     settings = "util.test_settings"
+    try:
+        from util.keys.secret_key import ENV
+        if ENV == 'production' or ENV == 'staging':
+            settings = "util.settings"
+    except ImportError:
+        settings = "util.test_settings"
+
     for arg in sys_argv:
         if '--production' == arg:
             settings = "util.settings"

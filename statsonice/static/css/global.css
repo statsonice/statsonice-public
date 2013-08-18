@@ -1,66 +1,59 @@
+/* General CSS */
+html {
+    height: 100%;
+}
 body {
     padding-top: 60px;
-    padding-bottom: 40px;
+    padding-bottom: 220px;
+    height: 100%;
 }
 img {
-        display: block;
+    display: block;
     margin-left: auto;
     margin-right: auto;
 }
-.bottomnav-gray {
-    	background-color:#A9A9A9;
-    	border-width:1px;
-    	border-style:solid;
-    	border-color:#888888;
+footer {
+    height: 220px;
+    width: 100%;
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
 }
-.white {
-    	color:white;
+.wrapper {
+    min-height: 100%;
+    position:relative;
+}
+.bottomnav-gray {
+    background-color:#A9A9A9;
+    border-width:1px;
+    border-style:solid;
+    border-color:#888888;
+}
+ul.nav-white {
+    list-style-type: none;
+    padding:0;
+    margin:0;
 }
 ul.nav-white a {
-    	color:white;
-}
-ul.nav-white a:hover {
-    	color:white;
-    	background-color:#777777;
-}
-.hero-unit {
-        padding-top:20px;
-    padding-bottom:30px;
-    padding-left:40px;
-}
-.stats {
-        width:20%;
-    text-align:center;
-    text-decoration:none;
     color:white;
 }
-.bold {
-    font-weight:bold;
+ul.nav-white a:hover {
+    color:white;
+    background-color:#777777;
+}
+.hero-unit {
+    padding-top:20px;
+    padding-bottom:30px;
+    padding-left:40px;
 }
 td.success {
     background-color:#61B329;
 }
 td.warning {
-	background-color:#FFD700;
+    background-color:#FFD700;
 }
 td.danger {
     background-color:#CD5C5C;
-}
-.bronze {
-    background-color:#8C7853;
-    font-size:17px;
-}
-.silver {
-    background-color:#C0C0C0;
-    font-size:17px;
-}
-.gold {
-    background-color:#CDAD00;
-    font-size:17px;
-}
-.platinum {
-    background-color:#EDEDEF;
-    font-size:17px;
 }
 .diamond {
     background-color:#0EBFE9;
@@ -71,74 +64,58 @@ td.danger {
     margin-right:10px;
     font-size:15px;
 }
-.register {
-    width:100%;
-}
-td.account-top {
-    height:70px;
-}
-td.account-bottom {
-    height:110px;
-}
 .center {
     text-align:center;
 }
 
+/* Global Page Templates */
+.register {
+    width:100%;
+}
+td.account-bottom {
+    height:110px;
+}
+
+
 /* title bar for homepage and program page */
 .title-bar {
-	background-color:black;
-	color:white;
-	padding-left:20px;
-	-moz-border-radius: 10px 10px 0 0;
-	border-radius: 10px 10px 0 0;
-	border-width:1px;
-	border-style:solid;
-}
-.title-bar-blue {
-	background-color:#2f96b4;
-	border-color:#0066CC;
-}
-.title-bar-red {
-	background-color:#bd362f;
-	border-color:#990033;
-}
-.title-bar-green {
-	background-color:#51a351;
-	border-color:#339933;
-}
-.title-bar-yellow {
-	background-color:#FFC125;
-	border-color:#FFD700;
+    background-color:black;
+    color:white;
+    padding-left:20px;
+    -moz-border-radius: 10px 10px 0 0;
+    border-radius: 10px 10px 0 0;
+    border-width:1px;
+    border-style:solid;
 }
 .title-bar-black {
-	-moz-border-radius: 5px 5px 0 0;
-	border-radius: 5px 5px 0 0;
-	background-color:#2c2c2c;
-	border-color:black;
+    -moz-border-radius: 5px 5px 0 0;
+    border-radius: 5px 5px 0 0;
+    background-color:#2c2c2c;
+    border-color:black;
 }
 
 /* ladies, men, pairs dance themes */
 
 .ladies {
-	color:#C12267;
+    color:#C12267;
 }
 .men {
-	color:#357EC7;
+    color:#357EC7;
 }
 .pairs {
-	color:#4AA02C;
+    color:#4AA02C;
 }
 .dance {
-	color:#E7A503;
+    color:#E7A503;
 }
 
 /* plot colors for profiles */
 .sp {
-	color:rgb(192,42,42);
+    color:rgb(192,42,42);
 }
 .fs {
-	color:rgb(0,102,51);
+    color:rgb(0,102,51);
 }
 .sp-fs-total {
-	color:rgb(51,187,205);
+    color:rgb(51,187,205);
 }

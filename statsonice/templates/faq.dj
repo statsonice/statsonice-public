@@ -1,11 +1,9 @@
 {% extends "page.dj" %}
-{% block main %}
-<div class="hero-unit">
-  <h3>
-  Frequently Asked Questions
-  </h3>
-</div>
+{% block header %}
+<h3>Frequently Asked Questions</h3>
+{% endblock %}
 
+{% block main %}
 <div id="section">
   <h4>How are the head-to-head future encounter probabilities computed?</h4>
   <p>The algorithm uses the last three international scores for a skater or team to predict future results:</p>

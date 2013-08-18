@@ -1,7 +1,7 @@
 import datetime
 from django.db.models import Q
 
-from statsonice.models import Skater, SkaterPair, Competitor, Country
+from statsonice.models import Country
 
 MONTHS = [datetime.date(2000,i,1).strftime('%B') for i in range(1,13)]
 
@@ -25,24 +25,8 @@ COMPETITION_FIELD_TYPES = {
     'start_date_range':     'DateRange',
     'isu_identifier':       'String',
 }
-PROGRAM_FIELD_TYPES = {
-    'competitor':           'Competitor',
-    'competition':          'ForeignKey',
-    'category':             'ForeignKey',
-    'segment':              'ForeignKey',
-    'level':                'ForeignKey',
-    'starting_number':      'Number',
-    'rank':                 'Number',
-    'rank_range':           'NumberRange',
-}
 
 class GeneralSearch:
-    FOREIGN_KEY_TYPES = {
-        'competition':          'name',
-        'category':             'category',
-        'segment':              'segment',
-        'level':                'level',
-    }
     def __init__(self, objects):
         self.objects = objects
 
@@ -107,10 +91,6 @@ class GeneralSearch:
                 status = self.name_filter(field, value)
             elif field_type == 'Country':
                 status = self.country_filter(field, value)
-            elif field_type == 'Competitor':
-                status = self.competitor_filter(field, value)
-            elif field_type == 'ForeignKey':
-                status = self.foreign_key_filter(field, value)
             else:
                 return 'Field of type '+field_type+' not supported'
             if type(status) == str or type(status) == unicode:
@@ -243,32 +223,4 @@ class GeneralSearch:
         args = {field+'__country_name':value}
         self.objects = self.objects.filter(**args)
 
-    def competitor_filter(self, field, value):
-        # Find all skaters matching
-        skaters = Skater.objects.filter(Q(skatername__first_name__icontains=value) | Q(skatername__last_name__icontains=value))
-        if skaters.count() == 0:
-            self.objects = self.objects.none()
-            return
-        # Find all competitors matching
-        competitors = Competitor.objects.filter(pair=False, participant=skaters[0].pk)
-        for skater in skaters:
-            competitors |= Competitor.objects.filter(pair=False, participant=skater.pk)
-            # Find all skaterpairs matching
-            if skater.gender == 'F':
-                skaterpair = SkaterPair.objects.filter(female_skater__id=skater.id)
-            elif skater.gender == 'M':
-                skaterpair = SkaterPair.objects.filter(male_skater__id=skater.id)
-            skaterpair = list(skaterpair.values_list('id', flat=True))
-            competitors |= Competitor.objects.filter(pair=True, participant__in=skaterpair)
-        competitors = list(competitors.values_list('id', flat=True))
-        args = {field+'__in':competitors}
-        self.objects.filter(**args)
-
-    def foreign_key_filter(self, field, value):
-        try:
-            foreign_key_extension = self.FOREIGN_KEY_TYPES[field]
-        except:
-            return "No support for foreign key "+field
-        args = {field+'__'+foreign_key_extension:value}
-        self.objects = self.objects.filter(**args)
 

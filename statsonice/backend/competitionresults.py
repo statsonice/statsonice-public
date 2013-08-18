@@ -43,11 +43,11 @@ class CountryCompStats:
     def get_medal_count(self):
         gold_count, silver_count, bronze_count = 0, 0, 0
         skater_results = SkaterResult.objects.filter(competition = self.competition, final_rank__in=[1,2,3])
-        skater_results = skater_results.exclude(category__category__contains='PRE')
+        skater_results = skater_results.exclude(qualifying__isnull=True)
         for skater_result in skater_results:
             if not skater_result.competitor.get_participants().country:
                 continue
-            if skater_result.competitor.get_participants().country.country_name == self.country:
+            if skater_result.competitor.get_participants().country == self.country:
                 if skater_result.final_rank == 1:
                     gold_count += 1
                 elif skater_result.final_rank == 2:
@@ -121,11 +121,15 @@ class CompResults:
     # for pairs: [participant, female_skater, male_skater, country, result, [program component scores]]
     # for singles: [skater, country, result, [program component scores]]
     #
-    def get_segment_results(self,category,level,segment):
+    def get_segment_results(self,category,qualifying,level,segment):
         programs = Program.objects.filter(skater_result__competition = self.competition,
                                           skater_result__category__category = category.replace('_',' '),
                                           skater_result__level__level = level,
                                           segment__segment = segment)
+        if qualifying == '':
+            programs = programs.filter(skater_result__qualifying__isnull = True)
+        else:
+            programs = programs.filter(skater_result__qualifying__name = qualifying)
         results = [x.resultijs for x in programs]
         ordered_results = []
         for result in results:
@@ -134,7 +138,7 @@ class CompResults:
             country = ''
             if participant.country != None:
                 country = participant.country.country_name
-            if result.program.skater_result.competitor.is_pair:
+            if result.program.skater_result.competitor.is_team:
                 female_skater = participant.female_skater
                 male_skater = participant.male_skater
                 inner_temp.extend([participant,female_skater,male_skater,country,result])

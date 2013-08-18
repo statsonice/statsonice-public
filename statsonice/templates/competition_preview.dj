@@ -1,6 +1,9 @@
 {% extends "page.dj" %}
-{% block main %}
+{% block header %}
 <h3>Upcoming Competitions</h3>
+{% endblock %}
+
+{% block main %}
 <ol>
 
 	{% for competition in competitions %}

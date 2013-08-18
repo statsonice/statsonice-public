@@ -2,7 +2,7 @@
   $(function() {
     var availableTags = [
       {% for option in options %}
-        "{{ option }}",
+        "{{ option|safe }}",
       {% endfor %}
     ];
     $( "#{{ input_id }}" ).autocomplete({

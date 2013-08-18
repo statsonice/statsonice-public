@@ -21,6 +21,13 @@ class CompetitionCutoff(models.Model):
     def __unicode__(self):
         return u'(CompetitionCutoff)'
 
+class Qualifying(models.Model):
+    name = models.CharField(max_length = 20)
+    class Meta:
+        app_label = 'statsonice'
+    def __unicode__(self):
+        return u'(Qualifying %s)' % (self.name)
+
 class Competition(models.Model):
     name = models.CharField(max_length = 100)
     start_date = models.DateField()
@@ -62,6 +69,7 @@ class SkaterResult(models.Model):
     competition = models.ForeignKey(Competition)
     category = models.ForeignKey(Category)
     level = models.ForeignKey(Level)
+    qualifying = models.ForeignKey(Qualifying, null=True, blank=True)
     # Don't save into total_score, final_rank
     total_score = models.DecimalField(max_digits = 5, decimal_places = 2, null=True, blank=True)
     final_rank = models.PositiveIntegerField(null=True, blank=True)
@@ -70,8 +78,8 @@ class SkaterResult(models.Model):
 
     @cached_function
     def url(self):
-        if self.competitor.is_pair:
-            return reverse('skater_result_profile_pair', kwargs={\
+        if self.competitor.is_team:
+            return reverse('skater_result_profile_team', kwargs={\
                 'competition_name':self.competition.name.replace(' ','-'), \
                 'competition_year':self.competition.start_date.year, \
                 'first_skater_first_name':self.competitor.url_name()[0][0], \
@@ -166,10 +174,20 @@ class Program(models.Model):
         return name
     @cached_function
     def url_segment_summary(self):
+        if self.skater_result.qualifying == None:
+            return reverse('segment_summary', kwargs={\
+                'competition_name':self.skater_result.competition.name.replace(' ','-'), \
+                'competition_year':self.skater_result.competition.start_date.year, \
+                'category': self.skater_result.category.category, \
+                'qualifying': '', \
+                'level': self.skater_result.level.level, \
+                'segment': self.segment.segment, \
+            })
         return reverse('segment_summary', kwargs={\
             'competition_name':self.skater_result.competition.name.replace(' ','-'), \
             'competition_year':self.skater_result.competition.start_date.year, \
             'category': self.skater_result.category.category, \
+            'qualifying': self.skater_result.qualifying.name, \
             'level': self.skater_result.level.level, \
             'segment': self.segment.segment, \
         })

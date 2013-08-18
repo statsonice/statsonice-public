@@ -1,13 +1,16 @@
 {% extends "page.dj" %}
+{% block header %}
+<h3>Search Competitions</h3>
+{% endblock %}
+
 {% block main %}
 <script type="text/javascript">
 var search_url = '/search_competitions/';
 </script>
 <script  type="text/javascript" src="{{ STATIC_PREFIX }}js/search.js"></script>
 
-<legend><h3>Search Competitions</h3></legend>
 <div class="row-fluid">
-	<div class="span7">
+	<div class="col-lg-7">
 	<div class="form-horizontal">
 	  <div class="control-group">
 		<label class="control-label" for="name">Name</label>
@@ -39,17 +42,17 @@ var search_url = '/search_competitions/';
 	  </div>
 	</div> <!-- form-horizontal -->
 
-	<button onclick="javascript:search()">Search</button>
+	<button onclick="javascript:search()" class="btn btn-primary">Search</button>
 
 	</div>
 
-	<div class="span5">
+	<div class="col-lg-5">
 
 		<div class="row-fluid">
-			<div class="span8">
+			<div class="col-lg-8">
 				<h3>Results</h3>
 			</div>
-			<div class="span4">
+			<div class="col-lg-4">
 				{% include "include/spinner.dj" %}
 			</div>
 		</div>

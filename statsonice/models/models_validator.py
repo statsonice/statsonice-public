@@ -37,30 +37,30 @@ class PeopleValidator:
                 found_default_name = True
 
     @staticmethod
-    def validate_skaterpair(female_skater, male_skater):
+    def validate_skaterteam(female_skater, male_skater):
         if female_skater.gender != 'F':
             raise ValidationError("Female Skater with id "+str(female_skater.id)+"must be female")
         if male_skater.gender != 'M':
             raise ValidationError("Male Skater with id "+str(male_skater.id)+"must be male")
 
     @staticmethod
-    def validate_skaterpair_unique(skater_pair):
-        skater_pairs = type(skater_pair).objects.filter(female_skater=skater_pair.female_skater, male_skater=skater_pair.male_skater)
-        if skater_pair.pk:
-            skater_pairs = skater_pairs.exclude(pk=skater_pair.pk)
-        if skater_pairs.count() > 0:
-            raise ValidationError("More than one skater pair with the same name")
+    def validate_skaterteam_unique(skater_team):
+        skater_teams = type(skater_team).objects.filter(female_skater=skater_team.female_skater, male_skater=skater_team.male_skater)
+        if skater_team.pk:
+            skater_teams = skater_teams.exclude(pk=skater_team.pk)
+        if skater_teams.count() > 0:
+            raise ValidationError("More than one skater team with the same name")
 
     @staticmethod
     def validate_competitor(competitor):
-        if competitor.is_pair and competitor.skater != None:
-            raise ValidationError("Cannot have pair competitor and single skater")
-        if not competitor.is_pair and competitor.skater_pair != None:
-            raise ValidationError("Cannot have pair competitor and single skater")
+        if competitor.is_team and competitor.skater != None:
+            raise ValidationError("Cannot have team competitor and single skater")
+        if not competitor.is_team and competitor.skater_team != None:
+            raise ValidationError("Cannot have team competitor and single skater")
         participant = competitor.get_participants()
         if participant == None:
-            raise ValidationError("Competitor does not refer to a valid Skater or SkaterPair")
-        competitors = type(competitor).objects.filter(skater=competitor.skater, skater_pair=competitor.skater_pair)
+            raise ValidationError("Competitor does not refer to a valid Skater or SkaterTeam")
+        competitors = type(competitor).objects.filter(skater=competitor.skater, skater_team=competitor.skater_team)
         if competitor.pk:
             competitors = competitors.exclude(pk=competitor.pk)
         if competitors.count() > 0:
@@ -110,10 +110,10 @@ class ModelValidator:
     @staticmethod
     def validate_program(competitor, category):
         if category.category == 'MEN' or category.category == 'LADIES':
-            if competitor.pair:
-                raise ValidationError("Programs for "+category.category+" cannot be for skater pairs")
+            if competitor.is_team:
+                raise ValidationError("Programs for "+category.category+" cannot be for skater teams")
         if category.category == 'PAIRS' or category.category == 'DANCE':
-            if not competitor.pair:
+            if not competitor.is_team:
                 raise ValidationError("Programs for "+category.category+" cannot be for individual skaters")
 
 

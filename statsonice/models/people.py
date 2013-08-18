@@ -1,8 +1,8 @@
 import urllib
+import datetime
 
 from django.core.urlresolvers import reverse
 from django.db import models
-from django.http import Http404
 
 from statsonice.models.location import *
 from statsonice.models.models_validator import PeopleValidator, EnumValidator
@@ -44,20 +44,22 @@ class Skater(models.Model):
             'skater_last_name':skater_name.url_name()[1]\
         })
     @staticmethod
-    def find_skater_by_url_name(skater_first_name, skater_last_name):
-        skater_first_name = urllib.unquote(skater_first_name).replace('.', ' ')
-        skater_last_name = urllib.unquote(skater_last_name).replace('.', ' ')
-        try:
-            return Skater.objects.distinct().get(skatername__first_name=skater_first_name, skatername__last_name=skater_last_name)
-        except:
-            raise Http404
+    def find_skater_by_url_name(first_name, last_name):
+        first_name = SkaterName.get_search_string(first_name)
+        last_name = SkaterName.get_search_string(last_name)
+        search_dict = {}
+        for name in first_name:
+            search_dict['skatername__first_name__contains'] = name
+        for name in last_name:
+            search_dict['skatername__last_name__contains'] = name
+        return Skater.objects.distinct().get(**search_dict)
     def get_default_skater_name(self):
         return self.skatername_set.get(is_default_name=True)
-    def pairs(self):
+    def teams(self):
         if self.gender == 'M':
-            return SkaterPair.objects.filter(male_skater__id = self.id)
+            return SkaterTeam.objects.filter(male_skater__id = self.id)
         else:
-            return SkaterPair.objects.filter(female_skater__id = self.id)
+            return SkaterTeam.objects.filter(female_skater__id = self.id)
     def competitor(self):
         return Competitor.find_competitor(self)
     class Meta:
@@ -77,10 +79,26 @@ class SkaterName(models.Model):
     last_name = models.CharField(max_length = 100)
     is_default_name = models.BooleanField()
 
+    URL_NAME_CHARACTERS_TO_REPLACE = [' ', '\'', ',']
+    REPLACEMENT_CHAR = '.'
+
+    @cached_function
     def view_name(self):
         return self.first_name + ' ' + self.last_name
+    @cached_function
     def url_name(self):
-        return (self.first_name.replace(' ','.'), self.last_name.replace(' ','.'))
+        first_name = self.first_name
+        last_name = self.last_name
+        for char in SkaterName.URL_NAME_CHARACTERS_TO_REPLACE:
+            first_name = first_name.replace(char, SkaterName.REPLACEMENT_CHAR)
+            last_name = last_name.replace(char, SkaterName.REPLACEMENT_CHAR)
+        return (first_name, last_name)
+    @staticmethod
+    def get_search_string(url_name):
+        url_name = urllib.unquote(url_name)
+        url_name = url_name.split(SkaterName.REPLACEMENT_CHAR)
+        url_name = [x for x in url_name if x != '']
+        return url_name
     class Meta:
         app_label = 'statsonice'
     def __unicode__(self):
@@ -106,6 +124,8 @@ class SkaterMetadata(models.Model):
     skater = models.ForeignKey(Skater)
     metadata_key = models.CharField(max_length = 100, choices = METADATA_CHOICES, default = '')
     metadata_value = models.CharField(max_length = 100)
+    start_date = models.DateField(null=True, blank=True, default=datetime.date(1,1,1))
+    end_date = models.DateField(null=True, blank=True, default=datetime.date(3000,1,1))
 
     class Meta:
         app_label = 'statsonice'
@@ -118,72 +138,79 @@ class SkaterMetadata(models.Model):
         super(SkaterMetadata, self).save(*args, **kwargs)
 
 
-class SkaterPair(models.Model):
+class SkaterTeam(models.Model):
     female_skater = models.ForeignKey(Skater, related_name = 'female_skater')
     male_skater = models.ForeignKey(Skater, related_name = 'male_skater')
     country = models.ForeignKey(Country, null=True, blank=True, related_name = 'team_country')
-    coach = models.ManyToManyField(Coach, related_name='pair_coach')
-    choreographer = models.ManyToManyField(Coach, related_name='pair_choreographer')
+    coach = models.ManyToManyField(Coach, related_name='team_coach')
+    choreographer = models.ManyToManyField(Coach, related_name='team_choreographer')
     start_year = models.PositiveIntegerField(null=True, blank=True)
     end_year = models.PositiveIntegerField(null=True, blank=True)
 
     @cached_function
     def view_name(self):
         return self.female_skater.view_name() + ' & ' + self.male_skater.view_name()
+    @cached_function
     def url_name(self):
         return (self.female_skater.url_name(), self.male_skater.url_name())
     @cached_function
     def url(self):
         female_skater_url_name = self.female_skater.get_default_skater_name().url_name()
         male_skater_url_name = self.male_skater.get_default_skater_name().url_name()
-        return reverse('pair_profile', kwargs={\
+        return reverse('team_profile', kwargs={\
             'first_skater_first_name':female_skater_url_name[0], \
             'first_skater_last_name':female_skater_url_name[1], \
             'second_skater_first_name':male_skater_url_name[0], \
             'second_skater_last_name':male_skater_url_name[1]\
         })
-    @staticmethod
-    def find_skater_pair_by_url_name(first_skater_first_name, first_skater_last_name, second_skater_first_name, second_skater_last_name):
-        first_skater = Skater.find_skater_by_url_name(first_skater_first_name, first_skater_last_name)
-        second_skater = Skater.find_skater_by_url_name(second_skater_first_name, second_skater_last_name)
-        return SkaterPair.objects.get(female_skater=first_skater, male_skater=second_skater)
+    @cached_function
+    def is_dance(self):
+        try:
+            skater_result = self.competitor().skaterresult_set.all()[0]
+            category = skater_result.category.category
+            if 'DANCE' in category:
+                return True
+            else:
+                return False
+        except:
+            return None
     def competitor(self):
         return Competitor.find_competitor(self)
     class Meta:
         app_label = 'statsonice'
     def __unicode__(self):
-        return u'(SkaterPair of Skaters #%s and #%s)' % (self.female_skater.id, self.male_skater.id)
+        return u'(SkaterTeam of Skaters #%s and #%s)' % (self.female_skater.id, self.male_skater.id)
     def clean(self):
-        PeopleValidator.validate_skaterpair(self.female_skater, self.male_skater)
-        PeopleValidator.validate_skaterpair_unique(self)
+        PeopleValidator.validate_SkaterTeam(self.female_skater, self.male_skater)
+        PeopleValidator.validate_SkaterTeam_unique(self)
     def save(self, *args, **kwargs):
         self.full_clean()
-        super(SkaterPair, self).save(*args, **kwargs)
+        super(SkaterTeam, self).save(*args, **kwargs)
 
 
 class Competitor(models.Model):
     # Do not access these fields directly; use the functions below
-    skater_pair = models.ForeignKey(SkaterPair, null=True, blank=True)
+    skater_team = models.ForeignKey(SkaterTeam, null=True, blank=True)
     skater = models.ForeignKey(Skater, null=True, blank=True)
-    is_pair = models.BooleanField()
+    is_team = models.BooleanField()
 
-    # Set the skater or skaterpair for this Competitor
+    # Set the skater or SkaterTeam for this Competitor
     def set_participants(self, participant):
-        if type(participant) == SkaterPair:
-            self.is_pair = True
+        if type(participant) == SkaterTeam:
+            self.is_team = True
             self.skater = None
-            self.skater_pair = participant
+            self.skater_team = participant
         elif type(participant) == Skater:
-            self.is_pair = False
+            self.is_team = False
             self.skater = None
             self.skater = participant
         else:
             raise TypeError("Cannot set Competitor for a "+str(participant))
         return self
-    # Get the skater or skaterpair for this competitor
+    # Get the skater or SkaterTeam for this competitor
     def get_participants(self):
-        if self.is_pair:
-            return self.skater_pair
+        if self.is_team:
+            return self.skater_team
         else:
             return self.skater
     def url_name(self):
@@ -191,10 +218,10 @@ class Competitor(models.Model):
     @staticmethod
     def find_competitor(participant):
         try:
-            if type(participant) == SkaterPair:
-                return Competitor.objects.get(is_pair=True, skater_pair=participant)
+            if type(participant) == SkaterTeam:
+                return Competitor.objects.get(is_team=True, skater_team=participant)
             elif type(participant) == Skater:
-                return Competitor.objects.get(is_pair=False, skater=participant)
+                return Competitor.objects.get(is_team=False, skater=participant)
         except:
             return None
         raise TypeError("Cannot find competitor for a "+str(participant))

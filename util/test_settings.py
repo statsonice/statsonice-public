@@ -25,7 +25,6 @@ MIDDLEWARE_CLASSES += (
 )
 
 INSTALLED_APPS += (
-    'grappelli',
     'django.contrib.admin',
     #'debug_toolbar',
 )

@@ -1,0 +1,59 @@
+{% extends "page.dj" %}
+{% block header %}
+  <h3>Search Head To Head</h3>
+{% endblock %}
+{% block main %}
+<script type="text/javascript">
+  skaters_dict = {};
+  teams_dict = {};
+  {% for view_name, url_name in skaters_dict.items %}
+    skaters_dict['{{ view_name|escapejs }}'] = '{{ url_name }}';
+  {% endfor %}
+  {% for view_name, url_name in teams_dict.items %}
+    teams_dict['{{ view_name|escapejs }}'] = '{{ url_name }}';
+  {% endfor %}
+</script>
+<script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
+
+<div id="search_error" class="alert" style="display:none">
+</div>
+
+<div class="row-fluid">
+  <div class="col-lg-6">
+    <div class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="skater_name">Skater Name</label>
+        <div class="controls">
+          {% include "search/autocomplete.dj" with input_id="skater_name" options=skaters_dict.keys %}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="matching_skater_name">Skater Name</label>
+        <div class="controls">
+          {% include "search/autocomplete.dj" with input_id="matching_skater_name" options=skaters_dict.keys %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-6">
+    <div class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="skaterteam_names">Skater Team Name</label>
+        <div class="controls">
+          {% include "search/autocomplete.dj" with input_id="skaterteam_names" options=teams_dict.keys %}
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="matching_skaterteam_names">Skater Team Name</label>
+        <div class="controls">
+          {% include "search/autocomplete.dj" with input_id="matching_skaterteam_names" options=teams_dict.keys %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button onclick="javascript:search()" class="btn btn-primary">Compare</button>
+
+{% endblock %}

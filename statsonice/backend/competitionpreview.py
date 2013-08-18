@@ -35,7 +35,7 @@ class CompetitorStats(object):
 
     def get_skater_results(self):
         results = SkaterResult.objects.filter(competitor=self.competitor)
-        results = results.exclude(final_rank=None, category__category__contains='PRE')
+        results = results.exclude(final_rank=None, qualifying__isnull=True)
         results = results.annotate(programs=Count('program')).filter(programs__gt=1)
         results = results.order_by('competition__start_date')
         return results

@@ -103,7 +103,7 @@
 </div>
 {% endfor %}
 {% if act == 'diamond' %}
-<div class="span12">
+<div class="col-lg-12">
 	<p>We do not have any higher-level accounts at this time.</p>
 </div>
 {% endif %}
@@ -112,7 +112,7 @@
 
 {% endblock %}
 
-<div class="span4">
+<div class="col-lg-4">
       <form class="form-horizontal">
         <fieldset>
           <table class="table table-bordered">

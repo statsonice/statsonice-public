@@ -1,9 +1,9 @@
 {% extends "page.dj" %}
+{% block header %}
+<h3>Past Competitions</h3>
+{% endblock %}
+
 {% block main %}
-  <h1>
-  Past Competitions
-  </h1>
-  <hr />
   <div>
     For future competitions, see <a href="{% url "competition_preview" %}">Competition Previews</a>.
   </div>

@@ -1,4 +1,13 @@
 {% extends "page.dj" %}
+{% block header %}
+<h3>
+  {{ competition.name }}
+</h3>
+<h4>
+  {{ competition.start_date }} - {{ competition.end_date }}
+</h4>
+{% endblock %}
+
 {% block main %}
 <script type="text/javascript">
 $('.collapse').collapse({
@@ -6,17 +15,8 @@ $('.collapse').collapse({
 });
 </script>
 
-<h3>
-  {{ competition.name }}
-</h3>
-<h4>
-  {{ competition.start_date }} - {{ competition.end_date }}
-</h4>
-
-<hr />
-
 <div class="row">
-  <div class="span12">
+  <div class="col-lg-12">
     <h4>Programs and Results</h4>
     <div id="accordion2" class="accordion">
       {% include "include/competition_category_sections.dj" with res=results.men_pre category="MEN PRELIMINARY ROUND" %}
@@ -45,7 +45,7 @@ $('.collapse').collapse({
   {% for country in comp_results.country_comp_stats %}
     {% if country.total_medal_count > 0 %}
     <tr>
-      <td>{{ country.country }}</td>
+      <td>{{ country.country.country_name }}</td>
       <td>{{ country.gold_count }}</td>
       <td>{{ country.silver_count }}</td>
       <td>{{ country.bronze_count }}</td>

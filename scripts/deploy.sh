@@ -5,8 +5,10 @@
 branch=$1
 if [[ $branch == "production" ]] ; then
     basedir='/home/statsonice_production/'
+    baseurl='http://www.statsonice.com/'
 elif [[ $branch == "master" ]] ; then
     basedir='/home/statsonice_staging/'
+    baseurl='http://staging.statsonice.com/'
 else
     echo 'No branch selected'
     exit
@@ -45,7 +47,7 @@ echo "Removing left-over temporary files"
 /bin/bash $basedir/scripts/remove_temp_files.sh > /dev/null 2>&1
 echo "Pulling new code"
 git pull
-if [[ "$reslog" == *db_dump* ]] || [[ "$force" == "force" ]] ; then
+if [[ "$reslog" == *db_dump* ]] || [[ "$reslog" == *models* ]] || [[ "$force" == "force" ]] ; then
     echo "Synchronizing Database"
     /bin/bash $basedir/scripts/sync_db.sh
     echo "Database Synchronized"
@@ -53,10 +55,10 @@ else
     echo "No database updates found; not synchronizing database"
 fi
 
-# Update blog cache
-echo "Updating blog cache"
-curl http://www.statsonice.com/cache_blog/ > /dev/null
-
 # Remove maintence mode file
 echo "Re-enabling site"
 rm $basedir/maintenance.txt
+
+# Update blog cache
+echo "Updating blog cache"
+/usr/bin/wget -O - -q -t 1 $baseurl/cache_blog/ > /dev/null

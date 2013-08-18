@@ -52,7 +52,7 @@ class ProfileResults:
         used_competitions = []
         for ordered_competition in ordered_competitions:
             for skater_result in skater_results:
-                if skater_result.competition.start_date > now or 'PRE' in skater_result.category.category:
+                if skater_result.competition.start_date > now or skater_result.qualifying != None:
                     continue
                 comp = skater_result.competition
                 name = comp.name
@@ -79,7 +79,7 @@ class ProfileResults:
                         isu_results_matrix.append([name,res_dic])
                         
         for skater_result in skater_results:
-            if skater_result.competition.start_date > now or 'PRE' in skater_result.category.category:
+            if skater_result.competition.start_date > now or skater_result.qualifying != None:
                 continue
             comp = skater_result.competition
             name = comp.name

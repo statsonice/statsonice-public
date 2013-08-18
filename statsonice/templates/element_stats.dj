@@ -1,0 +1,94 @@
+{% extends "page.dj" %}
+{% block title %}
+- Element Stats
+{% endblock%}
+
+{% block header %}
+<h3>
+Element Stats
+</h3>
+{% endblock %}
+
+{% block main %}
+<div class="row">
+  <div class="col-lg-6">
+  	<!--
+  	<div class="form-horizontal" method="POST">
+	  <div class="input-group">
+		<input type="text" class="form-control" id="elementName" name="elementName">
+		<span class="input-group-btn">
+		  <button class="btn btn-default" type="button">Search</button>
+		</span>
+	  </div>
+    </div>-->
+      <form action="/stats/element_stats/" method="POST">
+		{% csrf_token %}
+		<div class="input-group">
+		  {% if element_name == "None" %}
+		    <input class="form-control" id="elementName" name="elementName" size="30" type="text" />
+		  {% else %}
+		  	{% if skater_name != '' %}
+		      <input class="form-control" id="elementName" name="elementName" size="30" type="text" value="{{ element_name }}, {{ skater_name }}" />
+		    {% else %}
+		      <input class="form-control" id="elementName" name="elementName" size="30" type="text" value="{{ element_name }}" />
+		    {% endif %}
+		  {% endif %}
+		  <span class="input-group-btn">
+			<button type="submit" class="btn btn-primary">Search</button>
+		  </span>
+		</div><!-- /clearfix -->
+		<div class="input-group">
+		  <span class="input-group-addon">
+		  	{% if category_name == 'LADIES' %}
+				<input type="radio" name="group1" value="men" id="men"> Men
+				<input type="radio" name="group1" value="ladies" id="ladies" checked="checked"> Ladies
+				<input type="radio" name="group1" value="pairs" id="pairs"> Pairs
+				<input type="radio" name="group1" value="dance" id="dance"> Dance
+			{% elif category_name == 'PAIRS' %}
+				<input type="radio" name="group1" value="men" id="men"> Men
+				<input type="radio" name="group1" value="ladies" id="ladies"> Ladies
+				<input type="radio" name="group1" value="pairs" id="pairs" checked="checked"> Pairs
+				<input type="radio" name="group1" value="dance" id="dance"> Dance
+			{% elif category_name == 'DANCE' %}
+				<input type="radio" name="group1" value="men" id="men"> Men
+				<input type="radio" name="group1" value="ladies" id="ladies"> Ladies
+				<input type="radio" name="group1" value="pairs" id="pairs"> Pairs
+				<input type="radio" name="group1" value="dance" id="dance" checked="checked"> Dance
+			{% else %}
+				<input type="radio" name="group1" value="men" id="men" checked="checked"> Men
+				<input type="radio" name="group1" value="ladies" id="ladies"> Ladies
+				<input type="radio" name="group1" value="pairs" id="pairs"> Pairs
+				<input type="radio" name="group1" value="dance" id="dance"> Dance
+			{% endif %}
+		  </span>
+		</div><!-- /input-group -->
+	  </form>
+    <div class="input-group">
+      <span class="input-group-addon">
+        <input type="radio" name="group2" value="bar_chart" onchange="draw_radio_chart()" checked="checked"> Bar Chart<br>
+        <input type="radio" name="group2" value="time_series" onchange="draw_radio_chart()"> Time Series<br>
+      </span>
+    </div><!-- /input-group -->
+  </div><!-- /.col-lg-6 -->
+
+  <div class="col-lg-6">
+  	<h3 class="center">{{ element_name }}</h3>
+  	{% if skater_name != '' %}
+  	  <h3 class="center">{{ category_name }}, {{ skater_name }}</h3>
+  	{% else %}
+  	  <h3 class="center">{{ category_name }}</h3>
+  	{% endif %}
+  </div>
+</div>
+
+<br><br>
+
+<div id="element_stats"></div>
+<script language="javascript" type="text/javascript">
+  var element_stats = "#element_stats";
+  var goes = {{ goes }};
+  var years = {{ years }};
+  var time_series = {{ time_series }};
+</script>
+<script src="{{ STATIC_PREFIX }}js/d3_element_stats.js"></script>
+{% endblock %}

@@ -35,12 +35,14 @@
           {% for skater_result in skater_results %}
             <tr>
               {% if skater_result.withdrawal %}
-              	{% if 'wc' in skater_result.competition.identifier or 'wjc' in skater_result.competition.identifier or 'owg' in skater_result.competition.identifier or 'isu_ec' in skater_result.competition.identifier or 'isu_fc' in skater_result.competition.identifier %}
-              		{% if skater_result.program_set.all.0.rank > 20 %}
+              	{% if category == "MEN" and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
               		<td>FNR</td>
-              		{% else %}
-              		<td>WD</td>
-              		{% endif %}
+              	{% elif category == "LADIES" and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
+              		<td>FNR</td>
+              	{% elif category == "PAIRS" and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.pairs %}
+              		<td>FNR</td>
+              	{% elif category == "DANCE" and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.dance %}
+              		<td>FNR</td>
               	{% else %}
                 	<td>WD</td>
                 {% endif %}

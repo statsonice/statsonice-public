@@ -1,9 +1,12 @@
+from django.core.cache import cache
+from django.http import Http404
 from django.shortcuts import render, redirect
 
-from statsonice.models import Skater, SkaterPair, SkaterName, Competitor, Program
+from statsonice.models import Skater, SkaterTeam, SkaterName, Competitor, Program
 from statsonice.backend.profileresults import ProfileResults
+from statsonice import search
 from includes import unitconversion
-from django.core.cache import cache
+
 
 # View to browse through all skaters
 #
@@ -16,12 +19,12 @@ def browse(request):
             url = skater.url()
             view_name = skater.view_name()
             skaters[skater.id] = [url, view_name, []]
-        skater_pairs = SkaterPair.objects.all()
-        for skater_pair in skater_pairs:
-            url = skater_pair.url()
-            view_name = skater_pair.view_name()
-            skaters[skater_pair.female_skater_id][2].append([url, view_name])
-            skaters[skater_pair.male_skater_id][2].append([url, view_name])
+        skater_teams = SkaterTeam.objects.all()
+        for skater_team in skater_teams:
+            url = skater_team.url()
+            view_name = skater_team.view_name()
+            skaters[skater_team.female_skater_id][2].append([url, view_name])
+            skaters[skater_team.male_skater_id][2].append([url, view_name])
         skaters = skaters.values()
         skaters.sort(key=lambda i: i[1])
         response_dict = {'skaters':skaters}
@@ -32,7 +35,10 @@ def browse(request):
 #
 def profile(request, skater_first_name, skater_last_name):
     # Get skater
-    skater = Skater.find_skater_by_url_name(skater_first_name, skater_last_name)
+    try:
+        skater = Skater.find_skater_by_url_name(skater_first_name, skater_last_name)
+    except:
+        raise Http404
     skater_name = skater.get_default_skater_name()
 
     # Redirect to canonical name (and url) if not default skater name
@@ -53,6 +59,11 @@ def profile(request, skater_first_name, skater_last_name):
     personal_records, best_total = profile_results.get_best_isu_programs()
     isu_results_matrix, isu_years = profile_results.get_isu_results_matrix()
 
+    # Get head to head autocomplete
+    skaters_dict = search.get_options('skaters_dict')
+    for view_name, url_name in skaters_dict.items():
+        skaters_dict[view_name] = url_name[0]+'/'+url_name[1]
+
     return render(request, 'skater.dj', {
         'skater_name': skater_name,
         'skater': skater,
@@ -60,14 +71,19 @@ def profile(request, skater_first_name, skater_last_name):
         'isu_years': isu_years,
         'personal_records': personal_records,
         'best_total': best_total,
+        'skaters_dict': skaters_dict,
     })
 
-# View to display information about a skater pair
+# View to display information about a skater team
 #
-def pair_profile(request, first_skater_first_name, first_skater_last_name, second_skater_first_name, second_skater_last_name):
-    skater_pair = SkaterPair.find_skater_pair_by_url_name(first_skater_first_name, first_skater_last_name, second_skater_first_name, second_skater_last_name)
-    first_skater = skater_pair.female_skater
-    second_skater = skater_pair.male_skater
+def team_profile(request, first_skater_first_name, first_skater_last_name, second_skater_first_name, second_skater_last_name):
+    try:
+        first_skater = Skater.find_skater_by_url_name(first_skater_first_name, first_skater_last_name)
+        second_skater = Skater.find_skater_by_url_name(second_skater_first_name, second_skater_last_name)
+        skater_team = SkaterTeam.objects.get(female_skater=first_skater, male_skater=second_skater)
+        competitor = Competitor.find_competitor(skater_team)
+    except:
+        raise Http404
 
     # skater heights
     first_skater.height_feet, first_skater.height_inches = unitconversion.metric_to_imperial(first_skater.height)
@@ -80,8 +96,7 @@ def pair_profile(request, first_skater_first_name, first_skater_last_name, secon
     else:
         height_gap = False
 
-    # determine whether pairs or dance
-    competitor = Competitor.find_competitor(skater_pair)
+    # determine whether teams or dance
     program = Program.objects.filter(skater_result__competitor = competitor)
     if program.count() == 0:
         program = 0
@@ -91,19 +106,25 @@ def pair_profile(request, first_skater_first_name, first_skater_last_name, secon
         category = program.skater_result.category.category
 
     # get results matrices
-    profile_results = ProfileResults(skater_pair)
+    profile_results = ProfileResults(skater_team)
     personal_records, best_total = profile_results.get_best_isu_programs()
     isu_results_matrix, isu_years = profile_results.get_isu_results_matrix()
 
-    return render(request, 'skater_pair.dj', {
+    # Get head to head autocomplete
+    teams_dict = search.get_options('teams_dict')
+    for view_name, url_name in teams_dict.items():
+        teams_dict[view_name] = url_name[0][0]+'/'+url_name[0][1]+'/'+url_name[1][0]+'/'+url_name[1][1]
+
+    return render(request, 'skater_team.dj', {
             'first_skater': first_skater,
             'second_skater': second_skater,
             'height_gap': height_gap,
             'category': category,
-            'skater_pair': skater_pair,
+            'skater_team': skater_team,
             'program': program,
             'isu_results_matrix': isu_results_matrix,
             'isu_years': isu_years,
             'personal_records': personal_records,
-            'best_total': best_total
+            'best_total': best_total,
+            'teams_dict': teams_dict,
         })

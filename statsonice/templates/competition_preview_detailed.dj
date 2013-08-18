@@ -1,6 +1,5 @@
 {% extends "page.dj" %}
-{% block main %}
-<div class="hero-unit">
+{% block header %}
 <h3>Competition Preview</h3>
 <h4>
 <a href="{{ competition.url }}">
@@ -8,10 +7,11 @@
 </a>
 </h4>
 <h5>{{ competition.start_date }} - {{ competition.end_date }}</h5>
-</div>
+{% endblock %}
 
+{% block main %}
 <div class="row">
-  <div class="span12">
+  <div class="col-lg-12">
 	<div id="accordion2" class="accordion">
 	  {% include "include/competition_preview_category_sections.dj" with res=men_competitors category="MEN" %}
 	  {% include "include/competition_preview_category_sections.dj" with res=ladies_competitors category="LADIES" %}

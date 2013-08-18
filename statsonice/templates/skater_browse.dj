@@ -1,7 +1,7 @@
 {% extends "page.dj" %}
 {% block main %}
   <h1>
-    Browse Skaters And Skater Pairs
+    Browse Skaters And Skater Teams
   </h1>
 
   <hr />
@@ -12,17 +12,17 @@
 
   <div>
     <ul>
-      {% for skater_url, skater_view_name, skater_pairs in skaters %}
+      {% for skater_url, skater_view_name, skater_teams in skaters %}
         <li>
           <a href="{{ skater_url }}">
             {{ skater_view_name }}
           </a>
-          {% if skater_pairs %}
+          {% if skater_teams %}
             <ul>
-            {% for skater_pair_url, skater_pair_view_name in skater_pairs %}
+            {% for skater_team_url, skater_team_view_name in skater_teams %}
               <li>
-                <a href="{{ skater_pair_url }}">
-                  {{ skater_pair_view_name }}
+                <a href="{{ skater_team_url }}">
+                  {{ skater_team_view_name }}
                 </a>
               </li>
             {% endfor %}

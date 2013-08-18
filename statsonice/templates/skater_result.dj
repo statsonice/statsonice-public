@@ -1,6 +1,10 @@
 {% extends "page.dj" %}
+
+{% block header %}
+<h3>Skater Result</h3>
+{% endblock %}
+
 {% block main %}
-<h4>Skater Result</h4>
 
 {% for skater_result, programs in skater_results.skater_results.items %}
   {% for programresult in programs %}

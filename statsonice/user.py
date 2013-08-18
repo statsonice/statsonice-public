@@ -18,8 +18,10 @@ def register(request):
             errors.append('Password is too short')
         if '@' not in email:
             errors.append('Email is improperly formatted')
-        elif User.objects.filter(email=email).count() != 0:
+        if User.objects.filter(email=email).exists():
             errors.append('Email already taken')
+        if User.objects.filter(username=username).exists():
+            errors.append('Username already taken')
         if len(errors) == 0:
             log_event('New User', username+' at '+email)
             user = User.objects.create_user(username, email, password)
@@ -67,6 +69,9 @@ def logout(request):
 def account(request):
     return render(request, 'account.dj')
 
+def subscribe(request):
+    return render(request, 'subscription.dj')
+
 """
 @login_required
 def change_account_settings(request):
@@ -91,9 +96,9 @@ def upgrade_account(request):
     # act = user.subscription.name
     act = 'silver'
     if act is 'bronze':
-        span_num = 'span3'
+        span_num = 'col-3'
     else:
-        span_num = 'span4'
+        span_num = 'col-4'
     act_cost = costs[act]
     act_features = features[act]
     act_upgrades = act_upgrades[act_upgrades.index(act)+1:]
