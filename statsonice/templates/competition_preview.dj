@@ -1,5 +1,10 @@
 {% extends "page.dj" %}
 {% block header %}
+<span title="This feature will require a subscription to access in the future">
+  <button type="button" class="btn btn-large btn-info pull-right">
+	<span class="glyphicon glyphicon-usd"></span>
+  </button>
+</span>
 <h3>Upcoming Competitions</h3>
 {% endblock %}
 

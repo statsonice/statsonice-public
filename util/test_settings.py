@@ -19,7 +19,6 @@ CACHES = {
 }
 
 MIDDLEWARE_CLASSES += (
-    'util.middleware.timer.TimerMiddleware',
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'util.middleware.profiling.ProfileMiddleware',
 )

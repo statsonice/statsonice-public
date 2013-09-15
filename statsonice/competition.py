@@ -1,5 +1,6 @@
 from datetime import datetime
 import urllib
+from time import time
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
@@ -11,13 +12,14 @@ from statsonice.backend.competitionresults import CompResults
 
 def browse(request):
     now = datetime.now().date()
-    competitions = Competition.objects.filter(end_date__lt = now)
+    competitions = Competition.objects.filter(end_date__lt = now).order_by('-start_date')
     return render(request, 'competition_browse.dj', {
         'competitions': competitions
     })
 
 
 def profile(request, competition_name, competition_year):
+    start = time()
     competition_name = competition_name.replace('-',' ')
     competition = get_object_or_404(Competition, name=competition_name, start_date__year = competition_year)
     if competition.end_date > datetime.now().date():
@@ -25,11 +27,15 @@ def profile(request, competition_name, competition_year):
         return redirect(reverse('competition_preview_detailed', kwargs=data))
 
     comp_results = CompResults(competition)
+    print 'after backend stuffs', time() - start
     results = comp_results.get_results_by_category_and_level()
+    print 'after get results by cat and level', time() - start
     combined_results = {}
     for category, results_in_category in results.items():
         category = category.lower()
         combined_results[category] = comp_results.get_combined_results(results_in_category)
+
+    print 'time to process competition: ', time() - start
     return render(request, 'competition.dj', {
         'comp_results': comp_results,
         'competition': competition,
@@ -87,6 +93,7 @@ def segment_summary(request, competition_name, competition_year, category, quali
         'competition_name': competition_name,
         'competition_year': competition_year,
         'category': category,
+        'qulifying':qualifying,
         'level': level,
         'segment': segment,
         'segment_results': segment_results,

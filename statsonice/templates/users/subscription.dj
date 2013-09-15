@@ -1,0 +1,14 @@
+{% extends "page.dj" %}
+
+{% block header %}
+<h3>Subscribe To StatsOnIce</h3>
+{% endblock %}
+
+{% block main %}
+
+You should subscribe.  We have lots of features.
+Information TODO
+
+Subscription form TODO
+
+{% endblock %}

@@ -49,6 +49,9 @@ def terms_of_use(request):
 def faq(request):
     return render(request, 'faq.dj')
 
+def subscription(request):
+    return render(request, 'subscription.dj')
+
 # Render a robots.txt file
 def robots(request):
     text = ''

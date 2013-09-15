@@ -9,7 +9,7 @@ var search_url = '/search_competitions/';
 </script>
 <script  type="text/javascript" src="{{ STATIC_PREFIX }}js/search.js"></script>
 
-<div class="row-fluid">
+<div class="row">
 	<div class="col-lg-7">
 	<div class="form-horizontal">
 	  <div class="control-group">
@@ -48,7 +48,7 @@ var search_url = '/search_competitions/';
 
 	<div class="col-lg-5">
 
-		<div class="row-fluid">
+		<div class="row">
 			<div class="col-lg-8">
 				<h3>Results</h3>
 			</div>

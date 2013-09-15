@@ -19,7 +19,6 @@ class Coach(models.Model):
 
 
 class Skater(models.Model):
-    image = models.FileField(upload_to='/skater_images/', blank=True)
     country = models.ForeignKey(Country, null=True, blank=True)
     dob = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length = 1) # M or F
@@ -181,8 +180,8 @@ class SkaterTeam(models.Model):
     def __unicode__(self):
         return u'(SkaterTeam of Skaters #%s and #%s)' % (self.female_skater.id, self.male_skater.id)
     def clean(self):
-        PeopleValidator.validate_SkaterTeam(self.female_skater, self.male_skater)
-        PeopleValidator.validate_SkaterTeam_unique(self)
+        PeopleValidator.validate_skaterteam(self.female_skater, self.male_skater)
+        PeopleValidator.validate_skaterteam_unique(self)
     def save(self, *args, **kwargs):
         self.full_clean()
         super(SkaterTeam, self).save(*args, **kwargs)

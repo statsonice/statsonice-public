@@ -1,20 +1,23 @@
 {% for lev, skater_results in res.items %}
-  <div class="accordion-group">
-    <div class="accordion-heading">
-    {% if not "PRELIMINARY" in category %}
-    <a href="#collapse{{category}}{{lev}}" data-parent="collapse{{category}}{{lev}}" data-toggle="collapse" class="accordion-toggle">
-      <p>{{ lev }} {{category}}</p>
-    </a>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">
+	{% if not "PRELIMINARY" in category %}
+		<a href="#collapse{{category}}{{lev}}" data-parent="collapse{{category}}{{lev}}" data-toggle="collapse" class="accordion-toggle">
+		  {{ lev }} {{category}}
+		</a>
+	  </h4>
     </div>
-    <div class="accordion-body collapse" id="collapse{{category}}{{lev}}" style="height: 0px;">
+    <div class="panel-collapse collapse" id="collapse{{category}}{{lev}}" style="height: 0px;">
     {% else %}
-    <a href="#collapsePRELIM{{category.0}}{{lev}}" data-parent="collapsePRELIM{{category.0}}{{lev}}" data-toggle="collapse" class="accordion-toggle">
-      <p>{{ lev }} {{category}}</p>
-    </a>
+		<a href="#collapsePRELIM{{category.0}}{{lev}}" data-parent="collapsePRELIM{{category.0}}{{lev}}" data-toggle="collapse" class="accordion-toggle">
+		  {{ lev }} {{category}}
+		</a>
+	  </h4>
     </div>
-    <div class="accordion-body collapse" id="collapsePRELIM{{category.0}}{{lev}}" style="height: 0px;">
+    <div class="panel-collapse collapse" id="collapsePRELIM{{category.0}}{{lev}}" style="height: 0px;">
     {% endif %}
-      <div class="accordion-inner">
+      <div class="panel-body">
         <table class="table table-striped table-condensed">
           <thead>
             <tr>
@@ -35,13 +38,13 @@
           {% for skater_result in skater_results %}
             <tr>
               {% if skater_result.withdrawal %}
-              	{% if category == "MEN" and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
+              	{% if category == "MEN" and skater_result.competition.cutoff.singles and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
               		<td>FNR</td>
-              	{% elif category == "LADIES" and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
+              	{% elif category == "LADIES" and skater_result.competition.cutoff.singles and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
               		<td>FNR</td>
-              	{% elif category == "PAIRS" and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.pairs %}
+              	{% elif category == "PAIRS" and skater_result.competition.cutoff.pairs and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.pairs %}
               		<td>FNR</td>
-              	{% elif category == "DANCE" and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.dance %}
+              	{% elif category == "DANCE" and skater_result.competition.cutoff.dance and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.dance %}
               		<td>FNR</td>
               	{% else %}
                 	<td>WD</td>

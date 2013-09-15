@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
@@ -6,6 +8,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
 from includes.log_event import log_event
+from statsonice.models import UserInfo
 
 def register(request):
     errors = []
@@ -25,8 +28,12 @@ def register(request):
         if len(errors) == 0:
             log_event('New User', username+' at '+email)
             user = User.objects.create_user(username, email, password)
+            userinfo = UserInfo()
+            userinfo.user = user
+            userinfo.last_login = date.today()
+            userinfo.save()
             success = True
-    return render(request, 'register.dj', {
+    return render(request, 'users/register.dj', {
         'errors':errors,
         'success': success,
     })
@@ -41,7 +48,7 @@ def login(request):
             # the password verified for the user
             if user.is_active:
                 auth_login(request, user)
-                if 'next' in request.POST:
+                if 'next' in request.POST and request.POST['next'] != '':
                     return redirect(request.POST['next'])
                 else:
                     return redirect('account')
@@ -52,7 +59,7 @@ def login(request):
     next = 'account'
     if 'next' in request.GET:
         next = request.GET['next']
-    return render(request, 'login.dj', {
+    return render(request, 'users/login.dj', {
         'errors':errors,
         'next':next,
     })
@@ -61,28 +68,35 @@ def login(request):
 def logout(request):
     successes = ['You have been logged out']
     auth_logout(request)
-    return render(request, 'login.dj', {
+    return render(request, 'users/login.dj', {
         'successes': successes,
     })
 
 @login_required
 def account(request):
-    return render(request, 'account.dj')
+    return render(request, 'users/account.dj')
 
 def subscribe(request):
-    return render(request, 'subscription.dj')
+    return render(request, 'users/subscription.dj')
 
-"""
+
 @login_required
 def change_account_settings(request):
-    return render(request, 'change_account_settings.dj')
+    if request.method == 'POST':
+        user = request.user
+        user.first_name = request.POST['first_name']
+        user.last_name = request.POST['last_name']
+        user.email = request.POST['email']
+        if request.POST['password'] != '':
+            user.set_password(request.POST['password'])
+        user.save()
+    return render(request, 'users/change_account_settings.dj')
 
+"""
 @login_required
 def payment_processing(request):
-    return render(request, 'payment_processing.dj')
-"""
+    return render(request, 'users/payment_processing.dj')
 
-"""
 # TODO: add user input and get subscription name from it
 # TODO: clean up this mess
 def upgrade_account(request):
@@ -107,7 +121,7 @@ def upgrade_account(request):
         if act != 'bronze':
             costs[a] += 0.95
 
-    return render(request, 'upgrade_account.dj', {
+    return render(request, 'users/upgrade_account.dj', {
             'act': act,
             'act_cost': act_cost,
             'act_features': act_features,

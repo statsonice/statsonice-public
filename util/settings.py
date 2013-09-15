@@ -128,6 +128,7 @@ MIDDLEWARE_CLASSES = (
     'util.middleware.exception.ExceptionLoggingMiddleware',
     'util.middleware.maintenance.MaintenanceMiddleware',
     'util.middleware.staging.StagingMiddleware',
+    'util.middleware.timer.TimerMiddleware',
 )
 
 ROOT_URLCONF = 'statsonice.urls'
@@ -187,4 +188,9 @@ LOGGING = {
         #    'propagate': True,
         #},
     }
+}
+
+# Make the statsonice/migrations handle auth migrations
+SOUTH_MIGRATION_MODULES = {
+    'auth': 'statsonice.auth_migrations',
 }

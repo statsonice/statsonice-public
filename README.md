@@ -15,16 +15,15 @@ There are also several missing directories:
 
 If you wish to view the hold codebase and maybe contribute, contact @albertyw
 
-
-
 Dependencies
 ------------
 System
 - MySQL
 - pdftohtml
 - memcached
-- python-memcached
+- python-mysqldb
 - python
+- python-pip
 - python libraries: run `pip install -r requirements.txt`
 
 For the production server:
@@ -35,9 +34,8 @@ Installation Instructions
 
 1.  Install Dependencies - remember your mysql root password
 2.  Git clone this repository, make sure you are on the master branch
-3.  Run `mysql -u root --password < data/init_database.sql`
-4.  Copy `util/keys/secret_key_example.py` to `util/keys/secret_key.py` and
-`util/keys/secret_key_example.sh` to `util/keys/secret_key.sh`
+3.  `cd util` and run `git clone https://github.com/albertyw/statsonice-keys keys`
+4.  Run `mysql -u root --password < data/init_database.sql`
 5.  Run `scripts/sync_db.sh --auth`
 6.  Launch the server by running `scripts/runserver.sh`
 7.  Check that everything is running by going to localhost:9001
@@ -73,6 +71,7 @@ Scripts
 -------
 There are several scripts in the `scripts` directory that automate common tasks.
 - `deploy.sh` - Runs on the production server to update it when there are new commits
+- `memcached_status.sh` - Continuously shows the current status of memcached
 - `recalculate_cached_variables.py` - Recalculate and save certain variables that
 were calculated in the database
 - `remove_temp_files.sh` - Remove backup and .pyc files from your repo
@@ -80,5 +79,10 @@ were calculated in the database
 it crashes
 - `sync_db.sh` - Update your database with the repository database dump
 - `update_dump.sh` - Dumps the current database to the `data/db_dump.sql` file
+- `update_memcached.py` - Updates memcached with data from database
+- `old/assign_cities_to_coutries.py` - Assign city rows in database to countries
+- `old/auth_dump.py` - Dump the auth tables from the database
+- `old/combine_skaters.py` - Find and combine duplicate skaters
+- `old/remove_skater_name_periods.py` - Change skater names to not have periods
 
 

@@ -1,0 +1,29 @@
+{% extends "page.dj" %}
+
+{% block header %}
+<h3>Account</h3>
+{% endblock %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-lg-4">
+      <legend><h4>Change Your Account</h4></legend>
+      <form action="." method="POST">
+        {% csrf_token %}
+        <b>Username:</b> {{ user.username }}
+        <br />
+        <b>First Name:</b> <input type="text" name="first_name" value="{{ user.first_name }}" />
+        <br />
+        <b>Last Name:</b> <input type="text" name="last_name" value="{{ user.last_name }}" />
+        <br />
+        <b>E-mail:</b> <input type="text" name="email" value="{{ user.email }}" />
+        <br />
+        <b>Password:</b> <input type="password" name="password" />
+        <br />
+        <input type="submit" class="btn btn-primary" />
+      </form>
+    </div>
+  </div>
+  <a href="{% url 'account' %}">Back to Account Overview</a>
+
+{% endblock %}

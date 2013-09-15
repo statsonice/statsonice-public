@@ -1,5 +1,10 @@
 {% extends "page.dj" %}
 {% block header %}
+<span title="This feature will require a subscription to access in the future">
+  <button type="button" class="btn btn-large btn-info pull-right">
+	<span class="glyphicon glyphicon-usd"></span>
+  </button>
+</span>
   <h3>Search Head To Head</h3>
 {% endblock %}
 {% block main %}
@@ -18,7 +23,7 @@
 <div id="search_error" class="alert" style="display:none">
 </div>
 
-<div class="row-fluid">
+<div class="row">
   <div class="col-lg-6">
     <div class="form-horizontal">
       <div class="control-group">

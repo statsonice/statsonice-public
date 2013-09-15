@@ -7,15 +7,13 @@ from includes.stats import *
 from statsonice.models import ElementScore, Element, BaseElement, Category, Skater, Competitor
 
 # TODO: completely redo element competitor stats
-'''
+
 class ElementCompetitorStats:
-    def __init__(self, element_name, competitor, element_scores=None):
-        self.element_name = element_name
+    def __init__(self, element_names, competitor, element_scores):
+        self.element_names = element_names # array of elements [['3Lo'],['3Lo','2T']]
 
         self.competitor = competitor
         self.element_scores = element_scores
-        if self.element_scores == None:
-            self.element_scores = self.get_element_scores()
 
         self.average_score = 0
         self.std_dev_scores = 0
@@ -23,7 +21,7 @@ class ElementCompetitorStats:
 
         self.num_attempts = len(self.element_scores)
 
-        # ???
+        # number of < and << jumps
         self.single_dg = 0
         self.double_dg = 0
 
@@ -39,10 +37,13 @@ class ElementCompetitorStats:
         }
         self.compute_modifier_goe_stats()
 
-    def get_element_scores(self):
-        return ElementScore.objects.filter(result__program__skater_result__competitor = self.competitor)
+        # level stats
+        self.leveled = self.get_leveled_boolean()
+        self.level_stats = self.get_level_stats()
 
     def compute_ave_std_dev_stats(self):
+        if len(self.element_names) != 1:
+            return None # return None if would have to average scores for different elements
         scores = list(self.element_scores.values_list('panel_score'))
         return (average(scores), std_dev(scores,average))
 
@@ -61,7 +62,43 @@ class ElementCompetitorStats:
             average_goe = average(judge_goes)
             average_goe = int(math.floor(average_goe))
             self.goe_ranges[average_goe] += 1  # assumes that average_goe will be between -3 and 3
-'''
+
+    def get_leveled_boolean(self):
+        l_boolean = []
+        for element in self.element_names:
+            for el_name in element:
+                if str(el_name) + '1' in dict(BaseElement.BASE_ELEMENT_CHOICES):
+                    l_boolean.append(1)
+                else:
+                    l_boolean.append(0)
+        return l_boolean
+
+    def get_level_stats(self):
+        # condition: solo element
+        if len(self.element_names) > 1 or not self.leveled[0]:
+            return None
+        else:
+            level_stats = {}
+            levels = ['B','1','2','3','4']
+            for es in self.element_scores:
+                year = es.result.program.skater_result.competition.start_date.year
+                level = es.element_set.all()[0].base_element.element_name[-1]
+                if level not in levels:
+                    continue
+                if year in level_stats:
+                    level_stats[year][level] += 1
+                else:
+                    level_stats[year] = {
+                            'B':0,
+                            '1':0,
+                            '2':0,
+                            '3':0,
+                            '4':0
+                        }
+                    level_stats[year][level] += 1
+
+        return level_stats
+
 
 class ElementStats:
     # TODO:
@@ -79,19 +116,24 @@ class ElementStats:
         self.nums = ['0','1','2','3','4','5','6','7','8','9']
 
         self.element_name = self.remove_modifiers(element_name)
+
+	if self.element_name == '':
+	    return
+
         self.competitor = self.get_competitor(skater_name)
         self.category_name = category_name
 
         self.category = self.get_category() # returns category object
         self.element_names = self.get_element_names() # array of names split by '+'
-        print 'element_names: ', self.element_names
         self.leveled = self.get_leveled_boolean() # array matching element_names to determine whether
                                                   # to check icontains or exact match for element name
 
         self.element_scores = self.get_element_scores()
 
+        '''
         for es in self.element_scores:
             print es.get_element_name()
+        '''
 
         # data to be displayed
         self.detailed_goe_stats = None # element score objects associated with goe bars
@@ -105,15 +147,39 @@ class ElementStats:
 
         print 'elapsed time for element query: ', time() - self.start # keep in for a little while bc I'm concerned about slow queries
 
+    #-----------------------------------------
+    # Basic get functions. No data manipulation.
+    #-----------------------------------------
     def get_competitor(self, skater_name):
         try:
-            skater_name = skater_name.split(' ')
-            first_name = skater_name[0]
-            last_name = ' '.join(skater_name[1:])
+            if ' and ' not in skater_name and '+' not in skater_name:
+                skater_name = skater_name.split(' ')
+                first_name = skater_name[0]
+                last_name = ' '.join(skater_name[1:])
 
-            skater = Skater.find_skater_by_url_name(first_name,last_name)
-            competitor = Competitor.find_competitor(skater)
-            return competitor
+                skater = Skater.find_skater_by_url_name(first_name,last_name)
+                competitor = Competitor.find_competitor(skater)
+                return competitor
+            else:
+                if ' and ' in skater_name:
+                    skaters = skater_name.split(' and ')
+                if '+' in skater_name:
+                    skaters = skater_name.split('+')
+                if not skaters:
+                    return None
+                skaters = [s.strip() for s in skaters]
+                if len(skaters) is not 2:
+                    return None
+                female_skater_names = skaters[0].split(' ')
+                female_skater = Skater.find_skater_by_url_name(female_skater_names[0],' '.join(female_skater_names[1:]))
+                male_skater_names = skaters[1].split(' ')
+                male_skater = Skater.find_skater_by_url_name(male_skater_names[0],' '.join(male_skater_names[1:]))
+                skater_team = SkaterTeam.objects.filter(female_skater=female_skater,male_skater=male_skater)
+                if not skater_team:
+                    return None
+                skater_team = skater_team[0]
+                competitor = skater_team.competitor()
+                return competitor
         except:
             return None
 
@@ -133,15 +199,15 @@ class ElementStats:
         new_names = []
         if len(self.element_name) == 0:
             return []
-        print self.element_name, type(self.element_name)
         if 'and' in self.element_name:
             self.element_name = self.element_name.split(' and ')
         if type(self.element_name) == str or type(self.element_name) == unicode:
-            new_names.append(self.element_name)
+            new_names.append(self.element_name.strip())
         else:
             for elem_name in self.element_name:
                 sub_new_names = []
                 for el in elem_name.split('+'):
+                    el = el.strip()
                     if el[-1] in self.nums:
                         el = el[:-1]
                     sub_new_names.append(el)
@@ -158,6 +224,9 @@ class ElementStats:
                     l_boolean.append(0)
         return l_boolean
 
+    #-----------------------------------------
+    # Get the element score objects
+    #-----------------------------------------
     def get_element_scores(self):
         tot_element_scores = []
         if len(self.element_names) > 1:
@@ -224,8 +293,9 @@ class ElementStats:
 
         return tot_element_scores
 
+    #-----------------------------------------
     # methods to retrieve element data
-    # TODO: find a better work around for bad data in calculate_goe
+    #-----------------------------------------
     def calculate_goe(self, element_judges):
         try:
             element_judges = list(element_judges)
@@ -235,7 +305,7 @@ class ElementStats:
             tot = sum(element_goes)
             return float(tot)/len(element_goes)
         except:
-            return -3 # find a better fix than this
+            return None # find a better fix than this
 
     def get_goe_stats(self):
         goe_stats = {}
@@ -247,6 +317,8 @@ class ElementStats:
         for es in self.element_scores:
             year = es.result.program.skater_result.competition.start_date.year
             goe = self.calculate_goe(es.elementjudge_set.all())
+            if goe == None:
+                continue
             goe_range = math.floor(goe)
             if goe_range == 3:
                 goe_range = 2
@@ -309,7 +381,6 @@ class ElementStats:
                     level_stats[year][level] += 1
                 else:
                     level_stats[year] = {
-                            '0':0,
                             'B':0,
                             '1':0,
                             '2':0,
@@ -355,4 +426,21 @@ class ElementStats:
         return attempts
 
     def get_competitor_stats(self):
-        pass
+        competitor_scores = [es for es in self.element_scores]
+        competitor_scores.sort(key=lambda x:x.result__program__skater_result__competitor)
+
+        competitors = [x.result__program__skater_result__competitor for x in competition_scores]
+        temp = []
+        for competitor in competitors:
+            if competitor not in temp:
+                temp.append(competitor)
+        competitors = temp
+
+        # turn into an array of ElementComepetitorStats instances
+        competitor_score_objects = []
+        for competitor in competitors:
+            temp_element_scores = [x for x in competitor_scores if x.result__program__skater_result__competitor == competitor]
+            competitor_score_objects.append(ElementCompetitorStats(self.element_names,competitor,temp_element_scores))
+
+        competitor_score_stats = [(ecs.competitor,ecs.num_attempts,ecs.average_score,ecs.std_dev_scores) for ecs in competitor_score_objects]
+        return competitor_score_stats

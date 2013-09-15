@@ -1,0 +1,19 @@
+{% extends "page.dj" %}
+
+{% block header %}
+  <h3>Custom Stats</h3>
+{% endblock %}
+
+{% block main %}
+  <p>
+    If you have ideas for more statistics or forecasts that we don't have on the
+    website, please <a href="{% url 'contact' %}">Contact Us</a>.  Depending on
+    how much interest there is, we may build it into the website.
+  </p>
+
+  <p>
+    If you're interested in specific statistics or raw data, we have a service
+    to provide that information for a small fee.
+  </p>
+
+{% endblock %}

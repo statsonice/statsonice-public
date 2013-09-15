@@ -9,7 +9,6 @@ sys.path.append(parent_path)
 from get_settings import load_settings
 load_settings(sys.argv)
 import traceback
-import tempfile
 
 from django.conf import settings
 

@@ -1,6 +1,7 @@
 from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import render, redirect
+from time import time
 
 from statsonice.models import Skater, SkaterTeam, SkaterName, Competitor, Program
 from statsonice.backend.profileresults import ProfileResults
@@ -35,6 +36,7 @@ def browse(request):
 #
 def profile(request, skater_first_name, skater_last_name):
     # Get skater
+    start = time()
     try:
         skater = Skater.find_skater_by_url_name(skater_first_name, skater_last_name)
     except:
@@ -47,10 +49,6 @@ def profile(request, skater_first_name, skater_last_name):
 
     # Compute skater information
     skater.height_feet, skater.height_inches = unitconversion.metric_to_imperial(skater.height)
-    if skater.gender == 'F':
-        skater.gender = 'Female'
-    elif skater.gender == 'M':
-        skater.gender = 'Male'
     skater.other_names = list(skater.skatername_set.all())
     skater.other_names.remove(skater_name)
 
@@ -60,9 +58,12 @@ def profile(request, skater_first_name, skater_last_name):
     isu_results_matrix, isu_years = profile_results.get_isu_results_matrix()
 
     # Get head to head autocomplete
+    # TODO: this part is too slow, takes on the order of 15s
+    '''
     skaters_dict = search.get_options('skaters_dict')
     for view_name, url_name in skaters_dict.items():
         skaters_dict[view_name] = url_name[0]+'/'+url_name[1]
+    '''
 
     return render(request, 'skater.dj', {
         'skater_name': skater_name,
@@ -71,7 +72,7 @@ def profile(request, skater_first_name, skater_last_name):
         'isu_years': isu_years,
         'personal_records': personal_records,
         'best_total': best_total,
-        'skaters_dict': skaters_dict,
+        #'skaters_dict': skaters_dict,
     })
 
 # View to display information about a skater team
@@ -111,9 +112,12 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
     isu_results_matrix, isu_years = profile_results.get_isu_results_matrix()
 
     # Get head to head autocomplete
+    # TODO: this part is too slow, takes on the order of 15s
+    '''
     teams_dict = search.get_options('teams_dict')
     for view_name, url_name in teams_dict.items():
         teams_dict[view_name] = url_name[0][0]+'/'+url_name[0][1]+'/'+url_name[1][0]+'/'+url_name[1][1]
+    '''
 
     return render(request, 'skater_team.dj', {
             'first_skater': first_skater,
@@ -126,5 +130,5 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
             'isu_years': isu_years,
             'personal_records': personal_records,
             'best_total': best_total,
-            'teams_dict': teams_dict,
+            #'teams_dict': teams_dict,
         })

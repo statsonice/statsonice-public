@@ -70,6 +70,8 @@
                 <li><a href="{% url 'search_head_to_head' %}">Head-to-Head</a></li>
                 <li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>
                 <li><a href="{% url 'element_stats' %}">Element Statistics</a></li>
+                <li><a href="{% url 'top_scores' %}">Top Scores</a></li>
+                <li><a href="{% url 'custom_stats' %}">Custom Statistics</a></li>
               </ul>
             </li>
             <li>
@@ -99,9 +101,9 @@
       <div id="body" class="container">
 
         <div class="alert alert-success">
-          This is a BETA Version. We appreciate any and all
+          This is a BETA version. Find any errors?  We'd love to
           <a href="{% url 'contact' %}">
-            feedback
+            hear about them
           </a>!
         </div>
 
@@ -115,46 +117,21 @@
 
 
       <!-- footer -->
-      <footer class="navbar bottomnav-gray">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-4">
-            <legend><h4>Info</h4></legend>
-              <ul class="navbar-inner nav-white">
-                <li><a href="{% url 'home' %}">Home</a></li>
-                <li><a href="{% url 'about' %}">About</a></li>
-                <li><a href="{% url 'contact' %}">Contact</a></li>
-                <li><a href="{% url 'terms_of_use' %}">Terms of Use</a></li>
-                <li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
-                <li><a href="{% url 'faq' %}">FAQ</a></li>
-              </ul>
-            </div>
-            <div class="col-lg-4">
-              <legend><h4>Statistics</h4></legend>
-              <ul class="navbar-inner nav-white">
-                <li><a href="{% url 'search_head_to_head' %}">Head-to-Head</a></li>
-                <li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>
-                <li><a href="{% url 'element_stats' %}">Element Statistics</a></li>
-              </ul>
-            </div>
-            <div class="col-lg-4">
-              <legend><h4>User</h4></legend>
-              <ul class="navbar-inner nav-white">
-                {% if user.is_authenticated %}
-                  <li><a href="{% url 'account' %}">Account</a></li>
-                  <li><a href="{% url 'logout' %}">Sign Out</a></li>
-                {% else %}
-                  <li><a href="{% url 'login' %}">Login</a></li>
-                  <li><a href="{% url 'register' %}">Register</a></li>
-                {% endif %}
-              </ul>
-            </div>
-          </div>
-
-          <div class="center">
-            <p>&copy; Stats on Ice 2013</p>
-          </div>
-        </div>
+      <footer class="footer">
+		  <header class="navbar navbar-inverse navbar-nocorners">
+			<div class="container">
+			  <ul class="nav navbar-nav">
+				<li><a href="{% url 'about' %}">About</a></li>
+				<li><a href="{% url 'contact' %}">Contact</a></li>
+				<li><a href="{% url 'terms_of_use' %}">Terms of Use</a></li>
+				<li><a href="{% url 'privacy_policy' %}">Privacy Policy</a></li>
+				<li><a href="{% url 'faq' %}">FAQ</a></li>
+			  </ul>
+			  <ul class="nav navbar-nav pull-right">
+			  	<li><a>&copy; Stats on Ice 2013</a></li>
+			  </ul>
+			</div>
+		  </header><!-- /.navbar -->
       </footer> <!-- footer -->
     </div> <!-- wrapper -->
   </body>

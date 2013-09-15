@@ -1,10 +1,11 @@
-
+from time import time
 from statsonice.models import Program, Level, Segment, Category, SkaterResult
 
 # This class counts flags for a category/level/segment in a competition
 #
 class CatLevSegStats:
     def __init__(self,competition,category,level,segment):
+        start = time()
         self.competition = competition
         self.category = category
         self.level = level
@@ -43,6 +44,7 @@ class CountryCompStats:
     def get_medal_count(self):
         gold_count, silver_count, bronze_count = 0, 0, 0
         skater_results = SkaterResult.objects.filter(competition = self.competition, final_rank__in=[1,2,3])
+	# TODO: fix following line bc it causes no medal stats for most comps (e.g. NHK Trophy 2010)
         skater_results = skater_results.exclude(qualifying__isnull=True)
         for skater_result in skater_results:
             if not skater_result.competitor.get_participants().country:
@@ -58,27 +60,35 @@ class CountryCompStats:
 
     def get_total_medal_count(self):
         return self.gold_count + self.silver_count + self.bronze_count
-        
+
 class CompResults:
     # comp results class takes a competition object
     #
     def __init__(self, competition):
+        start = time()
         self.LEVELS = Level.objects.values_list('level', flat=True).reverse()
+        print 'A', time() - start
         self.SEGMENTS = Segment.objects.values_list('segment', flat=True)
+        print 'B', time() - start
         self.CATEGORIES = Category.objects.values_list('category', flat=True)
+        print 'C', time() - start
         self.CATEGORIES = [category.replace(' ','_') for category in self.CATEGORIES]
+        print 'D', time() - start
         self.competition = competition
-        self.catlevseg_stats = [CatLevSegStats(competition,category,level,segment) for category in Category.objects.all() for level in Level.objects.all() for segment in Segment.objects.all()]
+        print 'E', time() - start
+        # TODO: this is too slow
+        # self.catlevseg_stats = [CatLevSegStats(competition,category,level,segment) for category in Category.objects.all() for level in Level.objects.all() for segment in Segment.objects.all()]
+        print 'F', time() - start
 
         self.countries = self.get_countries()
+        print 'G', time() - start
         self.country_comp_stats = self.get_country_comp_stats()
+        print 'H', time() - start
 
     def get_countries(self):
         countries = set([])
         skater_results = SkaterResult.objects.filter(competition = self.competition).select_related('competitor')
-        for skater_result in skater_results:
-            country = skater_result.competitor.get_participants().country
-            countries.add(country)
+        countries = set([skater_result.competitor.get_participants().country for skater_result in skater_results])
         countries.discard(None)
         return countries
 
@@ -109,10 +119,10 @@ class CompResults:
                 del results_by_level[level]
                 continue
             # sort by overall score to determine rank
-            skater_results.sort(key=lambda skater_result: -skater_result.total_score)
+            skater_results.sort(key=lambda skater_result: (-skater_result.total_score,skater_result.withdrawal()))
 
             # move withdrawals behind other skater results
-            skater_results.sort(key=lambda r: r.withdrawal())
+            #skater_results.sort(key=lambda r: r.withdrawal())
             results_by_level[level] = skater_results
         return results_by_level
 

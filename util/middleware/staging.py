@@ -7,13 +7,12 @@ from django.conf import settings
 from django.shortcuts import render
 
 class StagingMiddleware(object):
-    STAGING_PASSWORD = 'staging'
     ALLOWED_URLS = ['cache_blog/']
 
     def process_request(self, request):
         if settings.ENV != 'staging':
             return None
-        if StagingMiddleware.STAGING_PASSWORD in request.COOKIES:
+        if settings.STAGING_PASSWORD in request.COOKIES:
             return None
         if self.check_password(request):
             return None
@@ -24,11 +23,11 @@ class StagingMiddleware(object):
 
     def process_response(self, request, response):
         if self.check_password(request):
-            response.set_cookie(StagingMiddleware.STAGING_PASSWORD)
+            response.set_cookie(settings.STAGING_PASSWORD)
         return response
 
     def check_password(self, request):
         if 'pass' in request.GET:
-            if request.GET['pass'] == StagingMiddleware.STAGING_PASSWORD:
+            if request.GET['pass'] == settings.STAGING_PASSWORD:
                 return True
         return False

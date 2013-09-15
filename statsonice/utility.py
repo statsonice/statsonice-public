@@ -18,7 +18,9 @@ def cache_blog(request):
         save_settings('blog_post_url', blog_post[0])
         save_settings('blog_post', blog_post[1])
         save_settings('blog_post_date', blog_post[2])
-        return HttpResponse('Loaded')
+        output = 'Loaded<br />'
+        output += '<br />'.join(blog_post)
+        return HttpResponse(output)
     except:
         return HttpResponse('Not Found')
 

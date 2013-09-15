@@ -3,6 +3,8 @@ import fileinput
 import sys
 
 def main(auth_file, no_auth_file):
+    auth_file.write("SET foreign_key_checks = 0;\n")
+    no_auth_file.write("SET foreign_key_checks = 0;\n")
     auth = False
     for line in fileinput.input('data/tmp.sql'):
         if 'Table structure for table' in line:

@@ -1,0 +1,22 @@
+{% extends "page.dj" %}
+
+{% block header %}
+<h3>Account</h3>
+{% endblock %}
+
+{% block main %}
+  <div class="row">
+    <div class="col-lg-4">
+      <legend><h4>Your Account Information</h4></legend>
+      <b>Username:</b> {{ user.username }}
+      <br />
+      <b>Name:</b> {{ user.first_name }} {{ user.last_name }}
+      <br />
+      <b>E-mail:</b> {{ user.email }}
+      <br />
+    </div>
+  </div>
+
+
+  <a href="{% url 'change_account_settings' %}">Change Account Settings</a>
+{% endblock %}

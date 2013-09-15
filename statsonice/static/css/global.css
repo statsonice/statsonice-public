@@ -23,12 +23,22 @@ footer {
     min-height: 100%;
     position:relative;
 }
-.bottomnav-gray {
-    background-color:#A9A9A9;
-    border-width:1px;
-    border-style:solid;
-    border-color:#888888;
+
+.footer {
+	position: relative;
+	margin-top: 0px; /* negative value of footer height */
+	height: 0px;
+	clear:both;
+	padding-top:20px;
+	color:#fff;
 }
+
+.navbar-nocorners {
+	-moz-border-radius: 0px 0px 0 0;
+    border-radius: 0px 0px 0 0;
+    border-width:0px;
+}
+
 ul.nav-white {
     list-style-type: none;
     padding:0;

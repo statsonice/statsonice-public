@@ -1,6 +1,4 @@
-from django.http import HttpResponse
-from django.http import Http404
-from django.shortcuts import render, render_to_response, get_object_or_404
+from django.shortcuts import render, get_object_or_404
 from django.utils import simplejson
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -9,8 +7,9 @@ from datetime import datetime, timedelta
 from statsonice.backend.headtohead import HeadToHead
 from statsonice.backend.competitionpreview import CompPreviewStats
 from statsonice.backend.elementstats import *
+from statsonice.backend.top_scores import *
 from statsonice.backend.stats import *
-from statsonice.models import Skater, SkaterTeam, Competitor, Competition, ElementScore
+from statsonice.models import Skater, SkaterTeam, Competitor, Competition
 
 
 def stats(request):
@@ -157,5 +156,23 @@ def stats_element_stats(request):
             'years': years,
             'time_series': time_series
         })
+
+@ensure_csrf_cookie
+def stats_top_scores(request):
+    if request.method == 'POST':
+        category = request.POST.get('category')
+        start_year = int(request.POST.get('season'))
+    else:
+        start_year = 2006
+        category = 'MEN'
+    top_scores = TopScores(category,start_year)
+    return render(request, 'top_scores.dj', {
+            'top_scores': top_scores,
+            'category': category,
+            'start_year': start_year
+        })
+
+def custom_stats(request):
+    return render(request, 'custom_stats.dj')
 
 

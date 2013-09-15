@@ -96,15 +96,17 @@ $(document).ready(function()
 
 <div class="row">
   <div class="col-lg-12">
-    <div id="accordion2" class="accordion">
-      <div class="accordion-group">
-      	<div class="accordion-heading">
-      	  <a href="#collapsePROTOCOLS" data-parent="collapsePROTOCOLS" data-toggle="collapse" class="accordion-toggle">
-      	    <p>Protocols</p>
-      	  </a>
+    <div id="accordion" class="panel-group">
+      <div class="panel panel-default">
+      	<div class="panel-heading">
+      	  <h4 class="panel-title">
+      	    <a href="#collapsePROTOCOLS" data-parent="collapsePROTOCOLS" data-toggle="collapse" class="accordion-toggle">
+      	      Protocols
+      	    </a>
+      	  </h4>
       	</div>
-      	<div class="accordion-body collapse" id="collapsePROTOCOLS" style="height: 0px;">
-		  <div class="accordion-inner">
+      	<div class="panel-collapse collapse" id="collapsePROTOCOLS" style="height: 0px;">
+		  <div class="panel-body">
 		  	{% for programresult in programs %}
 		  		{% include "include/program.dj" with programresult=programresult %}
 			{% endfor %}

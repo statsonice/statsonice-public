@@ -4,7 +4,7 @@
 {% endblock%}
 
 {% block header %}
-<div class="row-fluid">
+<div class="row">
       {% if category == 'DANCE' %}
         <div class="dance">
       {% elif category == 'PAIRS' %}
@@ -27,16 +27,16 @@
 {% endblock %}
 
 {% block main %}
-  <div class="row-fluid">
+  <div class="row">
   	<div class="col-lg-3">
   		<h4>
   		<a href="{{first_skater.url}}">
   		{{ first_skater.view_name }}
   		</a>
   		</h4>
-  		<div class="row-fluid">
+  		<div class="row">
   			{% if first_skater.dob %}
-				<div class="row-fluid">
+				<div class="row">
 				  <div class="col-lg-4">
 					<b>DOB:</b>
 				  </div>
@@ -46,7 +46,7 @@
 				</div>
 			  {% endif %}
 			  {% if first_skater.start_year %}
-				<div class="row-fluid">
+				<div class="row">
 				  <div class="col-lg-4">
 					<b>Start year:</b>
 				  </div>
@@ -56,7 +56,7 @@
 				</div>
 			  {% endif %}
 			  {% if first_skater.height %}
-				<div class="row-fluid">
+				<div class="row">
 				  <div class="col-lg-4">
 					<b>Height:</b>
 				  </div>
@@ -73,9 +73,9 @@
   		{{ second_skater.view_name }}
   		</a>
   		</h4>
-  		<div class="row-fluid">
+  		<div class="row">
   			{% if second_skater.dob %}
-				<div class="row-fluid">
+				<div class="row">
 				  <div class="col-lg-4">
 					<b>DOB:</b>
 				  </div>
@@ -85,7 +85,7 @@
 				</div>
 			  {% endif %}
 			  {% if second_skater.start_year %}
-				<div class="row-fluid">
+				<div class="row">
 				  <div class="col-lg-4">
 					<b>Start year:</b>
 				  </div>
@@ -95,7 +95,7 @@
 				</div>
 			  {% endif %}
 			  {% if second_skater.height %}
-				<div class="row-fluid">
+				<div class="row">
 				  <div class="col-lg-4">
 					<b>Height:</b>
 				  </div>
@@ -124,11 +124,11 @@
 
   <hr>
 
-  <div class="row-fluid">
+  <div class="row">
   	<div class="col-lg-3">
   	<h4>Team Stats</h4>
   		{% if height_gap %}
-			<div class="row-fluid">
+			<div class="row">
 			  <div class="col-lg-4">
 				<b>Height gap:</b>
 			  </div>
@@ -192,13 +192,12 @@
   </div>
 -->
 
-  <hr>
-
   {% if personal_records %}
-  <div class="row-fluid">
+  <hr>
+  <div class="row">
     <div class="col-lg-12">
       <h4>Personal Records</h4>
-      <table class="table table-bordered table-condensed">
+      <table class="table table-condensed">
       	<thead>
       		<tr>
       			<th>Segment</th>
@@ -244,14 +243,13 @@
       </table>
     </div>
   </div>
-
-  <hr>
   {% endif %}
 
   {% if isu_years.0 %}
-  <div class="row-fluid">
+  <hr>
+  <div class="row">
   	<div class="col-lg-12">
-  	<table class="table table-bordered table-condensed">
+  	<table class="table table-condensed">
   		<thead>
   			<tr>
   				<th>ISU Competitions</th>
@@ -354,6 +352,8 @@
     </div>
   </div>
 -->
+
+{% comment %}
   <hr>
   <script type="text/javascript">
     teams_dict = {};
@@ -371,4 +371,5 @@
       <input type="submit" onclick="javascript:teams_skater()" />
     </div>
   </div>
+{% endcomment %}
 {% endblock %}

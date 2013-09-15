@@ -18,7 +18,7 @@ $('.collapse').collapse({
 <div class="row">
   <div class="col-lg-12">
     <h4>Programs and Results</h4>
-    <div id="accordion2" class="accordion">
+    <div id="accordion" class="panel-group">
       {% include "include/competition_category_sections.dj" with res=results.men_pre category="MEN PRELIMINARY ROUND" %}
       {% include "include/competition_category_sections.dj" with res=results.men category="MEN" %}
       {% include "include/competition_category_sections.dj" with res=results.ladies_pre category="LADIES PRELIMINARY ROUND" %}
@@ -30,6 +30,9 @@ $('.collapse').collapse({
     </div> <!-- /accordion -->
   </div>
 </div>
+
+{% if user.is_authenticated %}
+<br>
 
 <h4>Medal Statistics</h4>
 
@@ -56,6 +59,7 @@ $('.collapse').collapse({
   </tbody>
 </table>
 
+{% comment %} THIS IS TOO SLOW
 <h4>Flag Statistics</h4>
 
 <table class="table table-bordered table-condensed">
@@ -113,5 +117,7 @@ $('.collapse').collapse({
       {% endif %}
     {% endfor %}
   </tbody>
+{% endcomment %}
+{% endif %}
 </table>
 {% endblock %}

@@ -1,0 +1,79 @@
+{% extends "page.dj" %}
+
+{% block title %}
+- Top Scores
+{% endblock%}
+
+{% block header %}
+<span title="This feature will require a subscription to access in the future">
+  <button type="button" class="btn btn-large btn-info pull-right">
+	<span class="glyphicon glyphicon-usd"></span>
+  </button>
+</span>
+<h3>
+Top Scores
+</h3>
+{% endblock %}
+
+{% block main %}
+<form action="/stats/top_scores/" method="POST">
+	{% csrf_token %}
+	<select name="category">
+		<option value="MEN" {% if category == 'MEN' %}selected{% endif %}>MEN</option>
+		<option value="LADIES" {% if category == 'LADIES' %}selected{% endif %}>LADIES</option>
+		<option value="PAIRS" {% if category == 'PAIRS' %}selected{% endif %}>PAIRS</option>
+		<option value="DANCE" {% if category == 'DANCE' %}selected{% endif %}>DANCE</option>
+	</select>
+	<select name="season">
+		<option value="2006" {% if start_year == 2006 %}selected{% endif %}>2006-2007</option>
+		<option value="2007" {% if start_year == 2007 %}selected{% endif %}>2007-2008</option>
+		<option value="2008" {% if start_year == 2008 %}selected{% endif %}>2008-2009</option>
+		<option value="2009" {% if start_year == 2009 %}selected{% endif %}>2009-2010</option>
+		<option value="2010" {% if start_year == 2010 %}selected{% endif %}>2010-2011</option>
+		<option value="2011" {% if start_year == 2011 %}selected{% endif %}>2011-2012</option>
+		<option value="2012" {% if start_year == 2012 %}selected{% endif %}>2012-2013</option>
+		<option value="2013" {% if start_year == 2013 %}selected{% endif %}>2013-2014</option>
+		<option value="0" {% if start_year == 0 %}selected{% endif %}>All Time</option>
+	</select>
+	<button type="submit" class="btn btn-mini btn-primary">Search</button>
+</form>
+
+<h3>
+{{ top_scores.scores.0.category.category }}
+{% if start_year == 0 %}
+	All Time
+{% else %}
+	{{ start_year }} - {{ start_year|add:"1" }}
+{% endif %}
+</h3>
+<table class="table table-condensed">
+<thead>
+	<tr>
+		<th>#</th>
+		<th>Score</th>
+		<th>Name</th>
+		<th>Competition</th>
+		<th>Date</th>
+		{% comment %}
+		<th>OQ</th>
+		<th>WQ</th>
+		<th>WJQ</th>
+		<th>FCQ/ECQ</th>
+		{% endcomment %}
+	</tr>
+</thead>
+{% for sr in top_scores.scores %}
+	<tr>
+		<td>{{ forloop.counter }}</td>
+		<td>{{ sr.total_score }}</td>
+		<td>
+			<a href="{{ sr.competitor.get_participants.url }}">{{ sr.competitor.get_participants.view_name }}</a>
+		</td>
+		<td>
+			<a href="{{ sr.competition.url }}">{{ sr.competition.name }}</a>
+		</td>
+		<td>{{ sr.competition.end_date.isoformat }}</td>
+	</tr>
+{% endfor %}
+</table>
+{% endblock %}
