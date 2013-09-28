@@ -17,6 +17,21 @@ vs.
 ({{ s1_count }} - {{ s2_count }})
 </div>
 </h4>
+<div class="row">
+  <div class="col-lg-4 col-lg-offset-4">
+	<div class="center" id="headline">
+		<script>
+		// initialize variables for the bar chart
+		var chart_id = "#headline";
+		var dataset = {{ diff_scores }};
+		var years = {{ num }};
+		var headlineGraphic = 1;
+
+		</script>
+		<script src="{{ STATIC_PREFIX }}js/d3_plus_minus_bar_chart.js"></script>
+	</div>
+  </div>
+</div>
 {% endblock %}
 
 {% block main %}
@@ -77,11 +92,13 @@ vs.
 	var chart_id = "#chart";
 	var dataset = {{ diff_scores }};
 	var years = {{ num }};
+	var headlineGraphic = 0;
 
 	</script>
 	<script src="{{ STATIC_PREFIX }}js/d3_plus_minus_bar_chart.js"></script>
 </div>
 
+{% comment %}
 <hr>
 
 <br>
@@ -158,5 +175,5 @@ vs.
 		</tr>
 	</tbody>
 </table>
-
+{% endcomment %}
 {% endblock %}

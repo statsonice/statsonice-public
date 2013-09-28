@@ -2,8 +2,9 @@ from django.core.cache import cache
 from django.http import Http404
 from django.shortcuts import render, redirect
 from time import time
+from datetime import datetime
 
-from statsonice.models import Skater, SkaterTeam, SkaterName, Competitor, Program
+from statsonice.models import Skater, SkaterTeam, SkaterName, Competitor, Program, SkaterResult
 from statsonice.backend.profileresults import ProfileResults
 from statsonice import search
 from includes import unitconversion
@@ -36,7 +37,6 @@ def browse(request):
 #
 def profile(request, skater_first_name, skater_last_name):
     # Get skater
-    start = time()
     try:
         skater = Skater.find_skater_by_url_name(skater_first_name, skater_last_name)
     except:
@@ -57,6 +57,21 @@ def profile(request, skater_first_name, skater_last_name):
     personal_records, best_total = profile_results.get_best_isu_programs()
     isu_results_matrix, isu_years = profile_results.get_isu_results_matrix()
 
+    # get all results
+    now = datetime.now()
+    now = now.date()
+    results = list(SkaterResult.objects.filter(competitor__skater=skater))
+    results.sort(key=lambda x:x.competition.start_date)
+    result_dic = {}
+    for result in results:
+        if result.competition.end_date > now:
+            continue
+        year = result.competition.start_date.year
+        if year not in result_dic:
+            result_dic[year] = []
+        result_dic[year].append(result)
+
+
     # Get head to head autocomplete
     # TODO: this part is too slow, takes on the order of 15s
     '''
@@ -72,6 +87,7 @@ def profile(request, skater_first_name, skater_last_name):
         'isu_years': isu_years,
         'personal_records': personal_records,
         'best_total': best_total,
+        'results': result_dic,
         #'skaters_dict': skaters_dict,
     })
 
@@ -111,6 +127,20 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
     personal_records, best_total = profile_results.get_best_isu_programs()
     isu_results_matrix, isu_years = profile_results.get_isu_results_matrix()
 
+    # get all results
+    now = datetime.now()
+    now = now.date()
+    results = list(SkaterResult.objects.filter(competitor__skater_team=skater_team))
+    results.sort(key=lambda x:x.competition.start_date)
+    result_dic = {}
+    for result in results:
+        if result.competition.end_date > now:
+            continue
+        year = result.competition.start_date.year
+        if year not in result_dic:
+            result_dic[year] = []
+        result_dic[year].append(result)
+
     # Get head to head autocomplete
     # TODO: this part is too slow, takes on the order of 15s
     '''
@@ -130,5 +160,6 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
             'isu_years': isu_years,
             'personal_records': personal_records,
             'best_total': best_total,
+            'results': result_dic,
             #'teams_dict': teams_dict,
         })

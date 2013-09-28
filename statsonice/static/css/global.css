@@ -56,15 +56,6 @@ ul.nav-white a:hover {
     padding-bottom:30px;
     padding-left:40px;
 }
-td.success {
-    background-color:#61B329;
-}
-td.warning {
-    background-color:#FFD700;
-}
-td.danger {
-    background-color:#CD5C5C;
-}
 .diamond {
     background-color:#0EBFE9;
     font-size:17px;
@@ -128,4 +119,43 @@ td.account-bottom {
 }
 .sp-fs-total {
     color:rgb(51,187,205);
+}
+
+/* some homepage stlyes */
+p.homepage-center {
+	font-family:"Verdana";
+	font-size: 20px;
+}
+
+/* db completion color codes */
+td.in-db {
+	background-color:#3CB371;
+}
+td.not-in-db {
+	background-color:#1E90FF;
+}
+td.not-held {
+	background-color:#C0C0C0;
+}
+td.title-block {
+	background-color:#F5F5BE;
+}
+
+.table-short td {
+	line-height:50px;
+}
+
+/* competition preview table codes */
+td.cp-success {
+    background-color:#7cc87c;
+}
+td.cp-warning {
+    background-color:#FBEC5D;
+}
+td.cp-danger {
+    background-color:#d9635f;
+}
+
+img.medal {
+	padding-left:5px;
 }

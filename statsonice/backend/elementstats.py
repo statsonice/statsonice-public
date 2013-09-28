@@ -125,10 +125,12 @@ class ElementStats:
 
         self.category = self.get_category() # returns category object
         self.element_names = self.get_element_names() # array of names split by '+'
+        print 'element names: ', self.element_names, time() - self.start
         self.leveled = self.get_leveled_boolean() # array matching element_names to determine whether
                                                   # to check icontains or exact match for element name
 
         self.element_scores = self.get_element_scores()
+        print 'got element scores: ', len(self.element_scores), time() - self.start
 
         '''
         for es in self.element_scores:
@@ -202,7 +204,16 @@ class ElementStats:
         if 'and' in self.element_name:
             self.element_name = self.element_name.split(' and ')
         if type(self.element_name) == str or type(self.element_name) == unicode:
-            new_names.append(self.element_name.strip())
+            if '+' in self.element_name:
+                sub_new_names = []
+                for el in self.element_name.split('+'):
+                    el = el.strip()
+                    if el[-1] in self.nums:
+                        el = el[:-1]
+                    sub_new_names.append(el)
+                new_names.append(sub_new_names)
+            else:
+                new_names.append([self.element_name.strip()])
         else:
             for elem_name in self.element_name:
                 sub_new_names = []
@@ -229,47 +240,49 @@ class ElementStats:
     #-----------------------------------------
     def get_element_scores(self):
         tot_element_scores = []
-        if len(self.element_names) > 1:
-            for element in self.element_names:
-                ind = -1
-                element_scores = None
-                for element_name in element:
-                    if len(element) == 1:
-                        combo_order = 0
+        #if len(self.element_names) > 1:
+        for element in self.element_names:
+            ind = -1
+            element_scores = None
+            for element_name in element:
+                if len(element) == 1:
+                    combo_order = 0
+                else:
+                    ind += 1
+                    combo_order = ind + 1
+                if element_name == '*':
+                    continue
+                else:
+                    if self.competitor:
+                        if self.leveled[ind] == 1:
+                            elements = list(Element.objects.filter(base_element__element_name__icontains=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
+                        else:
+                            elements = list(Element.objects.filter(base_element__element_name=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
                     else:
-                        ind += 1
-                        combo_order = ind + 1
-                    if element_name == '*':
+                        if self.leveled[ind] == 1:
+                            elements = list(Element.objects.filter(base_element__element_name__icontains=element_name,combination_order=combo_order))
+                        else:
+                            elements = list(Element.objects.filter(base_element__element_name=element_name,combination_order=combo_order))
+                    if self.category != None:
+                        elements = [el for el in elements if el.element_score.result.program.skater_result.category == self.category]
+                    e_scores = [el.element_score for el in elements]
+                if element_scores == None:
+                    if e_scores == None:
                         continue
                     else:
-                        if self.competitor:
-                            if self.leveled[ind] == 1:
-                                elements = list(Element.objects.filter(base_element__element_name__icontains=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
-                            else:
-                                elements = list(Element.objects.filter(base_element__element_name=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
-                        else:
-                            if self.leveled[ind] == 1:
-                                elements = list(Element.objects.filter(base_element__element_name__icontains=element_name,combination_order=combo_order))
-                            else:
-                                elements = list(Element.objects.filter(base_element__element_name=element_name,combination_order=combo_order))
-                        if self.category != None:
-                            elements = [el for el in elements if el.element_score.result.program.skater_result.category == self.category]
-                        e_scores = [el.element_score for el in elements]
-                    if element_scores == None:
-                        if e_scores == None:
-                            continue
-                        else:
-                            element_scores = e_scores
-                    else:
-                        element_scores = set(e_scores).intersection(element_scores)
+                        element_scores = e_scores
+                else:
+                    element_scores = set(e_scores).intersection(element_scores)
 
-                # take intersection or difference with set of elements with combo order 3
+            # take intersection or difference with set of elements with combo order 3
+            if len(self.element_names) > 1:
                 element_scores_3 = [es.element_score for es in Element.objects.filter(combination_order=3)]
                 if len(element) == 2:
                     element_scores = set(element_scores).difference(element_scores_3)
                 elif len(element) == 3:
                     element_scores = set(element_scores).intersection(element_scores_3)
-                tot_element_scores.extend(list(element_scores))
+            tot_element_scores.extend(list(element_scores))
+        '''
         else:
             element_name = self.element_names[0]
             if self.competitor:
@@ -287,9 +300,11 @@ class ElementStats:
             e_scores = [el.element_score for el in elements]
             element_scores = e_scores
             tot_element_scores = list(element_scores)
+        '''
 
         #tot_element_scores = list(tot_element_scores)
         tot_element_scores.sort(key=lambda x:x.result.program.skater_result.competition.start_date)
+        tot_element_scores.reverse()
 
         return tot_element_scores
 

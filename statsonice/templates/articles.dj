@@ -1,0 +1,16 @@
+{% extends "page.dj" %}
+
+{% block header %}
+<h3>Articles</h3>
+{% endblock %}
+
+{% block main %}
+<p>We don't have any articles up just yet.</p>
+{% comment %}
+{% if article_name == None %}
+  <a href="{{ static }}/stats/articles/ice_cube_1.pdf">Ice Cube 1</a>
+{% else %}
+
+{% endif %}
+{% endcomment %}
+{% endblock %}

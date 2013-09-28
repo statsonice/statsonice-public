@@ -63,6 +63,7 @@ var draw_goe_bar_chart = function() {
 
   var block_width = (w - 2*xPadding - Math.floor(goes.length/6)*20 - goes.length)/goes.length;
 
+  // goe bars
   var blocks = svg.selectAll("rect")
                   .data(goes)
                   .enter()
@@ -87,11 +88,53 @@ var draw_goe_bar_chart = function() {
     })
     .attr("fill", function(d,i) {
       if (i%6 < 3) {
-        return "rgb(" + 150 + "," + 0 + "," + 0 + ")";
+        return "rgb(" + (150 + (i%6)*50) + "," + 0 + "," + 0 + ")";
       } else {
-        return "rgb(" + 0 + "," + 150 + "," + 0 + ")";
+        return "rgb(" + 0 + "," + (150 + (i%6 - 3)*50) + "," + 0 + ")";
       }
     });
+
+  // create legend
+  var legend_blocks = svg.selectAll("rect.legend")
+                         .data([0,1,2,3,4,5])
+                         .enter()
+                         .append("rect");
+
+  legend_blocks
+    .attr("x",w - 80)
+    .attr("width",15)
+    .attr("y",function(d) {
+        return d*15;
+    })
+    .attr("height",15)
+    .attr("fill", function(d) {
+      if (d%6 < 3) {
+        return "rgb(" + (150 + (d%6)*50) + "," + 0 + "," + 0 + ")";
+      } else {
+        return "rgb(" + 0 + "," + (150 + (d%6 - 3)*50) + "," + 0 + ")";
+      }
+    });
+
+  // add legend labels
+  var text = svg.selectAll("text.legend")
+                .data([0,1,2,3,4,5])
+                .enter()
+                .append("text");
+
+  text
+    .text(function(d) {
+			  return (d-3) + ' to ' + (d-2);
+		})
+		.attr("x", function(d,i) {
+			return w-60;
+		})
+		.attr("y", function(d) {
+			return d*15 + 10;
+		})
+		.attr("font-family", "sans-serif")
+		.attr("font-size", "14px")
+		.attr("fill", "black");
+
 
   // add x-axis labels
   var text = svg.selectAll("text.xAxis")
@@ -134,8 +177,6 @@ var draw_goe_bar_chart = function() {
 		.attr("font-family", "sans-serif")
 		.attr("font-size", "11px")
 		.attr("fill", "black");
-
-
 
   current_chart = "bar_chart";
 }

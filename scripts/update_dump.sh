@@ -25,7 +25,7 @@ fi
 echo "Dumping database"
 . util/keys/secret_key.sh
 mysqldump --default-character-set=utf8 --user=$DB_USER --password=$DB_PASSWORD $DB_NAME > data/tmp.sql
-python scripts/old/auth_dump.py data/db_dump_auth.sql data/db_dump.sql
+python scripts/old/auth_dump.py data/tmp.sql data/db_dump_auth data/db_dump
 rm data/tmp.sql
 
 echo "Dumping database clearing script"

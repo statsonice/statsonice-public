@@ -17,11 +17,15 @@
 {% block main %}
 <div class="row">
   <div class="col-lg-12">
-	<div id="accordion2" class="accordion">
+	<div id="accordion2" class="panel-group">
+	  <span class="label label-primary">MEN</span>
 	  {% include "include/competition_preview_category_sections.dj" with res=men_competitors category="MEN" %}
+	  <span class="label label-danger">LADIES</span>
 	  {% include "include/competition_preview_category_sections.dj" with res=ladies_competitors category="LADIES" %}
-	  {% include "include/competition_preview_category_sections.dj" with res=pairs_competitors category="PAIRS" %}
+	  <span class="label label-warning">DANCE</span>
 	  {% include "include/competition_preview_category_sections.dj" with res=dance_competitors category="DANCE" %}
+	  <span class="label label-success">PAIRS</span>
+	  {% include "include/competition_preview_category_sections.dj" with res=pairs_competitors category="PAIRS" %}
 	</div> <!-- /accordion -->
   </div>
 </div>

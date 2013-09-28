@@ -9,23 +9,26 @@
   </div>
   <br />
   <div>Number of competitions:
-    {{ competitions|length }}
+    {{ total_competitions }}
   </div>
 
   <div>
-    <ul>
-      {% for competition in competitions %}
-        <li>
-          {% if competition.name == '' %}
-            No name
-          {% else %}
-            <a href="{{ competition.url }}">
-              {{ competition.name }}
-            </a>
-            ({{ competition.start_date.year }})
-          {% endif %}
-        </li>
-      {% endfor %}
+    {% for year, competitions in competition_years %}
+      <h2>{{ year }}</h2>
+      <ul>
+        {% for competition in competitions %}
+          <li>
+            {% if competition.name == '' %}
+              No name
+            {% else %}
+              <a href="{{ competition.url }}">
+                {{ competition.name }}
+              </a>
+              ({{ competition.start_date.year }})
+            {% endif %}
+          </li>
+        {% endfor %}
     </ul>
+    {% endfor %}
   </div>
 {% endblock %}

@@ -2,6 +2,7 @@
 Classes to create a grand prix preview page
 """
 from itertools import permutations
+from datetime import date
 
 from django.db.models import Count
 
@@ -17,6 +18,8 @@ from includes import stats
 class CompetitorStats(object):
     def __init__(self,competitor):
         self.competitor = competitor
+        if type(self.competitor.get_participants()) is Skater:
+            self.age = self.get_age()
         self.skater_results = self.get_skater_results()
         self.competitions = self.get_competitions()
         self.scores = self.get_scores()
@@ -32,6 +35,18 @@ class CompetitorStats(object):
         self.projected_placement = None
         self.hth_record = {}
         self.hth_probabilities = {}
+
+    def get_age(self):
+        born = self.competitor.get_participants().dob
+        today = date.today()
+        try:
+            birthday = born.replace(year=today.year)
+        except ValueError: # raised when birth date is February 29 and the current year is not a leap year
+            birthday = born.replace(year=today.year, day=born.day-1)
+        if birthday > today:
+            return today.year - born.year - 1
+        else:
+            return today.year - born.year
 
     def get_skater_results(self):
         results = SkaterResult.objects.filter(competitor=self.competitor)

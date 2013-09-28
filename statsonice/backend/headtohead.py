@@ -15,8 +15,8 @@ class HeadToHead:
         hth_results = []
         s1_count = 0
         s2_count = 0
-        skater1_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor1) if sr.qualifying == None and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
-        skater2_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor2) if sr.qualifying == None and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
+        skater1_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor1) if sr.qualifying.name == '' and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
+        skater2_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor2) if sr.qualifying.name == '' and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
         skater1_competitions = [x.competition for x in skater1_skater_results]
         skater2_competitions = [x.competition for x in skater2_skater_results]
         competitions = set(skater1_competitions).intersection(set(skater2_competitions))
@@ -53,7 +53,7 @@ class HeadToHead:
             s2_scores.append(float(s2_res.total_score))
             # TODO: str does not work with chart.js for some reason for the labels
             # need to keep precision for dates (e.g. 4.10 instead of 4.1)
-            date.append(float(str(comp.start_date.month)+'.'+str(comp.start_date.year)[-2:]))
+            date.append(comp.start_date.year)
 
         s1_scores.reverse()
         s2_scores.reverse()

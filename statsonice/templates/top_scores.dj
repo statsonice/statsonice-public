@@ -18,6 +18,13 @@ Top Scores
 {% block main %}
 <form action="/stats/top_scores/" method="POST">
 	{% csrf_token %}
+	<select name="segment">
+		<option value="TOTAL" {% if segment == 'TOTAL' %}selected{% endif %}>TOTAL</option>
+		<option value="SP" {% if segment == 'SP' %}selected{% endif %}>SHORT PROGRAM</option>
+		<option value="FS" {% if segment == 'FS' %}selected{% endif %}>FREE SKATE</option>
+		<option value="SD" {% if segment == 'SD' %}selected{% endif %}>SHORT DANCE</option>
+		<option value="FD" {% if segment == 'FD' %}selected{% endif %}>FREE DANCE</option>
+	</select>
 	<select name="category">
 		<option value="MEN" {% if category == 'MEN' %}selected{% endif %}>MEN</option>
 		<option value="LADIES" {% if category == 'LADIES' %}selected{% endif %}>LADIES</option>
@@ -45,6 +52,7 @@ Top Scores
 {% else %}
 	{{ start_year }} - {{ start_year|add:"1" }}
 {% endif %}
+({{ segment }})
 </h3>
 <table class="table table-condensed">
 <thead>
@@ -52,6 +60,7 @@ Top Scores
 		<th>#</th>
 		<th>Score</th>
 		<th>Name</th>
+		<th>Country</th>
 		<th>Competition</th>
 		<th>Date</th>
 		{% comment %}
@@ -62,18 +71,36 @@ Top Scores
 		{% endcomment %}
 	</tr>
 </thead>
-{% for sr in top_scores.scores %}
-	<tr>
-		<td>{{ forloop.counter }}</td>
-		<td>{{ sr.total_score }}</td>
-		<td>
-			<a href="{{ sr.competitor.get_participants.url }}">{{ sr.competitor.get_participants.view_name }}</a>
-		</td>
-		<td>
-			<a href="{{ sr.competition.url }}">{{ sr.competition.name }}</a>
-		</td>
-		<td>{{ sr.competition.end_date.isoformat }}</td>
-	</tr>
-{% endfor %}
+{% if segment == "TOTAL"%}
+	{% for sr in top_scores.scores %}
+		<tr>
+			<td>{{ forloop.counter }}</td>
+			<td>{{ sr.total_score }}</td>
+			<td>
+				<a href="{{ sr.competitor.get_participants.url }}">{{ sr.competitor.get_participants.view_name }}</a>
+			</td>
+			<td>{{ sr.competitor.get_participants.country.country_name }}</td>
+			<td>
+				<a href="{{ sr.competition.url }}">{{ sr.competition.name }}</a>
+			</td>
+			<td>{{ sr.competition.end_date.isoformat }}</td>
+		</tr>
+	{% endfor %}
+{% else %}
+	{% for res in top_scores.scores %}
+		<tr>
+			<td>{{ forloop.counter }}</td>
+			<td>{{ res.tss }}</td>
+			<td>
+				<a href="{{ res.program.skater_result.competitor.get_participants.url }}">{{ res.program.skater_result.competitor.get_participants.view_name }}</a>
+			</td>
+			<td>{{ res.program.skater_result.competitor.get_participants.country.country_name }}</td>
+			<td>
+				<a href="{{ res.program.skater_result.competition.url }}">{{ res.program.skater_result.competition.name }}</a>
+			</td>
+			<td>{{ res.program.skater_result.competition.end_date.isoformat }}</td>
+		</tr>
+	{% endfor %}
+{% endif %}
 </table>
 {% endblock %}

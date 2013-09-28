@@ -5,6 +5,7 @@ to load.  It also sends an email if it takes longer than 10 seconds to load
 """
 from time import time
 
+from django.conf import settings
 from django.core.mail import send_mail
 
 class TimerMiddleware:
@@ -20,7 +21,7 @@ class TimerMiddleware:
         if total > 10:
             from_address = 'bot@statsonice.com'
             to_address = 'team@statsonice.com'
-            subject = 'Long Running Script'
+            subject = 'Long Running Script on '+settings.ENV
             message = str(total)+" seconds:\n\n"+request.path+"\n\n"+request.body
             send_mail(subject, message, from_address, [to_address])
 

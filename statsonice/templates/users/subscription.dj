@@ -1,14 +1,106 @@
 {% extends "page.dj" %}
-
 {% block header %}
-<h3>Subscribe To StatsOnIce</h3>
+<h3>
+  Subscription Info
+</h3>
 {% endblock %}
 
 {% block main %}
+<!--
 
-You should subscribe.  We have lots of features.
-Information TODO
+Cost: $20/yr
+Pages: Head-to-Head, Element Statistics search tool, Competition Preview tool, score cards (with code you can copy/paste), ...
+Additional Perks: Protocol flags, medal stats by country for competition results
 
-Subscription form TODO
+Show examples of the pages that will be offered for pay only
+Offer a free 3-day trial to test the user only pages
+-->
+
+<hr>
+<p>The following features are provided as part of a subscription:</p>
+<a href="#protocol_flags">Protocol Flags</a>
+
+<div id="protocol_flags"></div>
+<h4>Protocol Flags</h4>
+<p>
+Protocol Flags are markup used in displaying protocols.
+Whenever you load a protocol on Stats on Ice, there will be a column for flags.
+They can help you identify juding patterns at a glance.
+</p>
+<table class="table table-bordered">
+  <thead>
+  	<tr>
+  	  <th>Flag</th>
+  	  <th>Definition</th>
+  	  <th>Example GOE set(s)</th>
+  	</tr>
+  </thead>
+  <tbody>
+  	<tr>
+  	  <th>
+  	  	{% include 'include/flag.dj' with flag='NC' %}
+  	  	<br>
+  	  	No Consensus
+  	  </th>
+  	  <td>The standard deviation of the GOEs exceeds 0.8</td>
+  	  <td>
+  	  0 0-1-2-3-2-1 0 0
+  	  <br>
+  	  1 0 3 1 3 0 1 0 2
+  	  </td>
+  	</tr>
+  	<tr>
+  	  <th>
+  	  	{% include 'include/flag.dj' with flag='PC' %}
+  	  	<br>
+  	  	Perfect Consensus
+  	  </th>
+  	  <td>All the GOEs assigned are the same and not -3</td>
+  	  <td>
+  	  -1-1-1-1-1-1-1-1-1
+  	  <br>
+  	  2 2 2 2 2 2 2 2 2
+  	  </td>
+  	</tr>
+  	<tr>
+  	  <th>
+  	  	{% include 'include/flag.dj' with flag='TO' %}
+  	  	<br>
+  	  	Three and One
+  	  </th>
+  	  <td>
+  	  The standard deviation of the GOEs is less than 0.8
+  	  <br>
+  	  <i>and</i>
+  	  <br>
+  	  A +1 and +3 GOE (or a -1 and a -3) are assigned to the same element
+  	  </td>
+  	  <td>
+  	  2 1 2 2 2 2 3 2 3
+  	  <br>
+  	  -2 -2 -1 -2 -2 -2 -3 -2 -3
+  	  </td>
+  	</tr>
+  	<tr>
+  	  <th>
+  	  	{% include 'include/flag.dj' with flag='OL' %}
+  	  	<br>
+  	  	Outlier
+  	  </th>
+  	  <td>
+  	  Not a No Consensus or a Three and One flag
+  	  <br>
+  	  <i>and</i>
+  	  <br>
+  	  The range in assigned GOEs is 2 or more
+  	  </td>
+  	  <td>
+  	  1 1 1 1 1 1 1 -1 1
+  	  <br>
+  	  -2 -2 -2 -2 1 -2 -2 -2 -2
+  	  </td>
+  	</tr>
+  </tbody>
+</table>
 
 {% endblock %}

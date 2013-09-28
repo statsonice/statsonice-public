@@ -47,7 +47,7 @@ def competitions(request):
     if request.method == 'POST':
         search_params = request.POST.copy()
         # Actually do a search
-        all_competitions = Competition.objects.all()
+        all_competitions = Competition.objects.all().order_by('-start_date')
         search = search_backend.GeneralSearch(all_competitions)
         results = search.general_search(search_params, search_backend.COMPETITION_FIELD_TYPES)
         if type(results) == str or type(results) == unicode:
@@ -62,16 +62,15 @@ def competitions(request):
     })
 
 def head_to_head(request):
+    '''
     skaters_dict = get_options('skaters_dict')
     for view_name, url_name in skaters_dict.items():
         skaters_dict[view_name] = url_name[0]+'/'+url_name[1]
     teams_dict = get_options('teams_dict')
     for view_name, url_name in teams_dict.items():
         teams_dict[view_name] = url_name[0][0]+'/'+url_name[0][1]+'/'+url_name[1][0]+'/'+url_name[1][1]
-    return render(request, 'search_head_to_head.dj', {
-        'skaters_dict': skaters_dict,
-        'teams_dict': teams_dict,
-    })
+    '''
+    return render(request, 'search_head_to_head.dj')
 
 def get_options(option):
     if option == 'countries':

@@ -1,5 +1,5 @@
 # this is a class for computing individual skater stats
-from statsonice.models import Competitor, SkaterResult, Segment, Program
+from statsonice.models import Competitor, SkaterResult, Segment, Program, Qualifying
 from datetime import date
 
 class ProfileResults:
@@ -44,7 +44,7 @@ class ProfileResults:
         min_yr, max_yr = 2013, 0
         now = date.today()
         skater_results = self.skater_results.order_by('competition__name')
-        skater_results = skater_results.filter(qualifying = None)
+        skater_results = skater_results.filter(qualifying = Qualifying.objects.get(name=''))
         skater_results = skater_results.filter(competition__start_date__lte = now)
 
         used_competitions = []

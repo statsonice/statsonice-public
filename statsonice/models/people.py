@@ -189,8 +189,8 @@ class SkaterTeam(models.Model):
 
 class Competitor(models.Model):
     # Do not access these fields directly; use the functions below
-    skater_team = models.ForeignKey(SkaterTeam, null=True, blank=True)
-    skater = models.ForeignKey(Skater, null=True, blank=True)
+    skater_team = models.ForeignKey(SkaterTeam, null=True, blank=True, unique=True)
+    skater = models.ForeignKey(Skater, null=True, blank=True, unique=True)
     is_team = models.BooleanField()
 
     # Set the skater or SkaterTeam for this Competitor

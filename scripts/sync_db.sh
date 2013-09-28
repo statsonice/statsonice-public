@@ -38,9 +38,9 @@ fi
 
 # Make the database
 echo 'CREATING AND POPULATING DATABASE'
-mysql --default-character-set=utf8 --user=$DB_USER --password=$DB_PASSWORD $DB_NAME < data/db_dump.sql
+cat data/db_dump.*.sql | mysql --default-character-set=utf8 --user=$DB_USER --password=$DB_PASSWORD $DB_NAME
 if [[ $auth == 1 ]] ; then
-    mysql --default-character-set=utf8 --user=$DB_USER --password=$DB_PASSWORD $DB_NAME < data/db_dump_auth.sql
+    cat data/db_dump_auth.*.sql | mysql --default-character-set=utf8 --user=$DB_USER --password=$DB_PASSWORD $DB_NAME
 fi
 
 # Clearing memcached

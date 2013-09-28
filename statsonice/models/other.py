@@ -4,7 +4,7 @@ from django.db import models
 #
 class Settings(models.Model):
     key = models.CharField(max_length = 16, primary_key=True)
-    value = models.CharField(max_length = 1000)
+    value = models.CharField(max_length = 500)
     class Meta:
         app_label = 'statsonice'
     def __unicode__(self):

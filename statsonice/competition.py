@@ -1,20 +1,27 @@
 from datetime import datetime
-import urllib
 from time import time
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.http import Http404
 
-from statsonice.models import Competition, Competitor, Skater, SkaterTeam
+from statsonice.models import Competition, Competitor, Skater, SkaterTeam, Program
 from statsonice.backend.programresults import SkaterResults, ProgramResults
-from statsonice.backend.competitionresults import CompResults
+from statsonice.backend.competitionresults import CompResults, SegmentResults
 
 def browse(request):
     now = datetime.now().date()
-    competitions = Competition.objects.filter(end_date__lt = now).order_by('-start_date')
+    competitions = Competition.objects.filter(start_date__lt = now).order_by('-start_date')
+    years = competitions.values_list('start_date', flat=True)
+    years = list(set([start_date.year for start_date in years]))
+    years.sort()
+    years.reverse()
+    competition_years = []
+    for year in years:
+        competition_years.append((year, competitions.filter(start_date__year = year)))
     return render(request, 'competition_browse.dj', {
-        'competitions': competitions
+        'competition_years': competition_years,
+        'total_competitions': competitions.count()
     })
 
 
@@ -77,25 +84,26 @@ def skater_result_profile(request, competition, competitor):
 def segment_summary(request, competition_name, competition_year, category, qualifying, level, segment):
     competition_name = competition_name.replace('-',' ')
     competition = get_object_or_404(Competition, name=competition_name, start_date__year = competition_year)
-
-    comp_results = CompResults(competition)
-    segment_results = comp_results.get_segment_results(category, qualifying, level, segment)
-    if len(segment_results[0]) > 4:
-        programs = [result.program for sp, fs, ms, country, result, pcs in segment_results]
+    if qualifying == 'final':
+        qualifying = None
     else:
-        programs = [result.program for sk, country, result, pcs in segment_results]
+        qualifying = get_object_or_404(Qualifying, name=qualifying)
+    programs = Program.objects.filter(skater_result__competition = competition,
+                                      skater_result__category__category = category,
+                                      skater_result__level__level = level,
+                                      segment__segment = segment,
+                                      skater_result__qualifying = qualifying)
 
-    programs = [ProgramResults(program) for program in programs]
-    [program.calculate_variables() for program in programs]
+    segment_results = SegmentResults.get_results(programs)
+    program_results = [ProgramResults(result.program) for result in segment_results]
+    #[program.calculate_variables() for program in program_results]
 
     return render(request, 'segment.dj', {
         'competition': competition,
-        'competition_name': competition_name,
-        'competition_year': competition_year,
         'category': category,
-        'qulifying':qualifying,
+        'qualifying':qualifying,
         'level': level,
         'segment': segment,
         'segment_results': segment_results,
-        'programs': programs
+        'programs': program_results
     })

@@ -1,20 +1,17 @@
-import random
-import urllib2
-
 from django.core.mail import send_mail
 from django.shortcuts import render_to_response, render
-from django.http import HttpResponse
-from django.http import Http404
 from django.conf import settings
 
 from statsonice.models import Skater, SkaterTeam, SkaterName, Competition, Program, Settings
 
 def home(request):
     competition_sum = Competition.objects.count()
-    skater_sum = Skater.objects.count() + SkaterTeam.objects.count()
+    skater_sum = Skater.objects.count()
+    team_sum = SkaterTeam.objects.count()
     return render(request, 'index.dj', {
         'competition_sum': competition_sum,
         'skater_sum': skater_sum,
+        'team_sum': team_sum,
         'blog_post_url': Settings.get_value('blog_post_url'),
         'blog_post': Settings.get_value('blog_post'),
         'blog_post_date': Settings.get_value('blog_post_date').split(" ")[0]
@@ -49,8 +46,8 @@ def terms_of_use(request):
 def faq(request):
     return render(request, 'faq.dj')
 
-def subscription(request):
-    return render(request, 'subscription.dj')
+def database_completion(request):
+    return render(request, 'database_completion.dj')
 
 # Render a robots.txt file
 def robots(request):

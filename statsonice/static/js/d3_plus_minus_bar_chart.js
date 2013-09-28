@@ -4,22 +4,31 @@
 //var chart_id = "#chart";
 //var dataset = [10,-6,5,1,-10,-3];
 //var years = [2007,2008,2009,2010,2011,2012];
-
+//var headlineGraphic = True;
 
 var h = 300;
+if (headlineGraphic == 1) {
+	h = 200;
+}
 var w = $(chart_id).width();
 
 var barPadding = 6;
-var padding = 55;
+var padding = 65;
 
 // choose the midline position for the graph
 midline = h/2;
+var midPush = 0;
 if (d3.max(dataset, function(d) {return d;}) < 0) {
 	midline = 0;
 } else if (d3.min(dataset, function(d) {return d;}) > 0) {
 	midline = h
 } else if (d3.max(dataset, function(d) {return d;}) > 0 && d3.min(dataset, function(d) {return d;}) < 0) {
-	midline = Math.abs(d3.max(dataset, function(d) {return d;}))/(d3.max(dataset, function(d) {return d;})-d3.min(dataset, function(d) {return d;})) * h;
+	if (Math.abs(d3.min(dataset, function(d) {return d;})) > Math.abs(d3.max(dataset, function(d) {return d;}))) {
+		midPush = Math.abs(d3.max(dataset, function(d) {return d;})/(d3.max(dataset, function(d) {return d;})-d3.min(dataset, function(d) {return d;})))*30;
+	} else {
+		midPush = Math.abs(d3.min(dataset, function(d) {return d;})/(d3.max(dataset, function(d) {return d;})-d3.min(dataset, function(d) {return d;})))*5;
+	}
+	midline = Math.abs(d3.max(dataset, function(d) {return d;}) + midPush)/(d3.max(dataset, function(d) {return d;})-d3.min(dataset, function(d) {return d;})) * h;
 }
 
 var svg = d3.select(chart_id).append("svg")
@@ -27,7 +36,13 @@ var svg = d3.select(chart_id).append("svg")
 			.attr("height",h);
 
 // y scaling variables
-var mag = d3.max(dataset, function(d) {return d;}) - d3.min(dataset, function(d) {return d;});
+if (midline == 0) {
+	var mag = Math.abs(d3.min(dataset, function(d) {return d;}));
+} else if (midline == h) {
+	var mag = Math.abs(d3.max(dataset, function(d) {return d;}));
+} else {
+	var mag = d3.max(dataset, function(d) {return d;}) - d3.min(dataset, function(d) {return d;});
+}
 var yScale = function(d) {
 				return d/mag*(h - padding);
 			}
@@ -91,47 +106,50 @@ bars
 	})
 	.attr("stroke-width", 2);
 
-// add numbers to the bar chart
-var values = svg.selectAll("text")
-		.data(dataset)
-		.enter()
-		.append("text")
-		.text(function(d) {
-			return d;
-		})
-		.attr("x", function(d,i) {
-			return i* w/dataset.length + (w/dataset.length - barPadding)/2;
-		})
-		.attr("text-anchor", "middle")
-		.attr("y", function(d) {
-			if (d > 0) {
-				return midline - padding/2 -  yScale(d) - 5;
-			} else {
-				return midline - padding/2 - yScale(d) + 15;
-			}
-		})
-		.attr("font-family", "sans-serif")
-		.attr("font-size", "14px")
-		.attr("fill", "black");
 
-// add years to the bar chart
-var xAxis = svg.selectAll("text.xAxis")
-		.data(dataset)
-		.enter()
-		.append("text")
-		.text(function(d,i) {
-			return years[i];
-		})
-		.attr("x", function(d,i) {
-			return i* w/dataset.length + (w/dataset.length - barPadding)/2;
-		})
-		.attr("text-anchor", "middle")
-		.attr("y", function(d) {
-			return h - 5;
-		})
-		.attr("font-family", "sans-serif")
-		.attr("font-size", "14px")
-		.attr("fill", "black");
+if (headlineGraphic == 0) {
+	// add numbers to the bar chart
+	var values = svg.selectAll("text")
+			.data(dataset)
+			.enter()
+			.append("text")
+			.text(function(d) {
+				return d;
+			})
+			.attr("x", function(d,i) {
+				return i* w/dataset.length + (w/dataset.length - barPadding)/2;
+			})
+			.attr("text-anchor", "middle")
+			.attr("y", function(d) {
+				if (d > 0) {
+					return midline - padding/2 -  yScale(d) - 5;
+				} else {
+					return midline - padding/2 - yScale(d) + 15;
+				}
+			})
+			.attr("font-family", "sans-serif")
+			.attr("font-size", "14px")
+			.attr("fill", "black");
+
+	// add years to the bar chart
+	var xAxis = svg.selectAll("text.xAxis")
+			.data(dataset)
+			.enter()
+			.append("text")
+			.text(function(d,i) {
+				return years[i];
+			})
+			.attr("x", function(d,i) {
+				return i* w/dataset.length + (w/dataset.length - barPadding)/2;
+			})
+			.attr("text-anchor", "middle")
+			.attr("y", function(d) {
+				return h - 5;
+			})
+			.attr("font-family", "sans-serif")
+			.attr("font-size", "14px")
+			.attr("fill", "black");
+}
 
 // code to resize the chart when the window is resized
 window.onresize = function(event) {

@@ -10,3 +10,4 @@ statsonice/migrations
 statsonice/static/admin
 statsonice/static/bootstrap
 statsonice/static/grappelli
+util/keys/

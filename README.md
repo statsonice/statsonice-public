@@ -9,16 +9,14 @@ There are also several missing directories:
 - data - holds sql dumps and various other data in text format
 - data\_scraping - holds code that scrapes and parses skating results into the database
 - statsonice/migrations - Holds migration files created by Django South
-- statsonice/static/admin - Holds Django admin static files
 - statsonice/static/bootstrap - Holds Twitter bootstrap static files
-- statsonice/static/grappelli - Holds Django Grappelli static files
 
 If you wish to view the hold codebase and maybe contribute, contact @albertyw
 
 Dependencies
 ------------
-System
-- MySQL
+System (`sudo apt-get install`)
+- mysql-server
 - pdftohtml
 - memcached
 - python-mysqldb
@@ -34,8 +32,10 @@ Installation Instructions
 
 1.  Install Dependencies - remember your mysql root password
 2.  Git clone this repository, make sure you are on the master branch
-3.  `cd util` and run `git clone https://github.com/albertyw/statsonice-keys keys`
-4.  Run `mysql -u root --password < data/init_database.sql`
+3.  `cd util` and run `git clone git@github.com:albertyw/statsonice-keys.git keys`
+4.  Copy DB\_PASSWORD from `util/keys/secret_key.py` into `data/init_database.sql`
+    and run `mysql -u root --password < data/init_database.sql`.  Run
+    `git checkout data/init_database.sql` afterwards to remove the changes.
 5.  Run `scripts/sync_db.sh --auth`
 6.  Launch the server by running `scripts/runserver.sh`
 7.  Check that everything is running by going to localhost:9001

@@ -38,7 +38,6 @@ try:
     print "SkaterResult"
     for skaterresult in SkaterResult.objects.all():
         skaterresult.url()
-        skaterresult.withdrawal()
         progress_indicator.next()
 
     print "Program"

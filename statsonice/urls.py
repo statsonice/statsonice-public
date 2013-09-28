@@ -10,7 +10,7 @@ urlpatterns = ('',
     url(r'^privacy_policy/$', 'statsonice.static.privacy_policy', name='privacy_policy'),
     url(r'^terms_of_use/$', 'statsonice.static.terms_of_use', name='terms_of_use'),
     url(r'^faq/$', 'statsonice.static.faq', name='faq'),
-    url(r'^subscription/$', 'statsonice.static.subscription', name='subscription'),
+    url(r'^database_completion/$', 'statsonice.static.database_completion', name='database_completion'),
 
     # Search
     url(r'^search_skaters/$', 'statsonice.search.skaters', name='search_skaters'),
@@ -37,6 +37,8 @@ urlpatterns = ('',
     url(r'^stats/competition_preview/(?P<competition_name>.+)/(?P<competition_year>[0-9]+)/$', 'statsonice.stats.stats_competition_preview_detailed', name='competition_preview_detailed'),
     url(r'^stats/element_stats/$', 'statsonice.stats.stats_element_stats', name='element_stats'),
     url(r'^stats/top_scores/$', 'statsonice.stats.stats_top_scores', name='top_scores'),
+    url(r'^stats/articles/$', 'statsonice.stats.articles', name='articles'),
+    url(r'^stats/articles/(?P<article_name>.+)/$', 'statsonice.stats.articles', name='articles'),
     url(r'^stats/custom/$', 'statsonice.stats.custom_stats', name='custom_stats'),
 
     # Website User Pages

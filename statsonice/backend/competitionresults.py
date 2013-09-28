@@ -1,5 +1,5 @@
 from time import time
-from statsonice.models import Program, Level, Segment, Category, SkaterResult
+from statsonice.models import Competitor,Program, Level, Segment, Category, SkaterResult
 
 # This class counts flags for a category/level/segment in a competition
 #
@@ -67,12 +67,8 @@ class CompResults:
     def __init__(self, competition):
         start = time()
         self.LEVELS = Level.objects.values_list('level', flat=True).reverse()
-        print 'A', time() - start
-        self.SEGMENTS = Segment.objects.values_list('segment', flat=True)
         print 'B', time() - start
         self.CATEGORIES = Category.objects.values_list('category', flat=True)
-        print 'C', time() - start
-        self.CATEGORIES = [category.replace(' ','_') for category in self.CATEGORIES]
         print 'D', time() - start
         self.competition = competition
         print 'E', time() - start
@@ -86,9 +82,8 @@ class CompResults:
         print 'H', time() - start
 
     def get_countries(self):
-        countries = set([])
-        skater_results = SkaterResult.objects.filter(competition = self.competition).select_related('competitor')
-        countries = set([skater_result.competitor.get_participants().country for skater_result in skater_results])
+        competitors = Competitor.objects.filter(skaterresult__competition = self.competition).distinct()
+        countries = set([competitor.get_participants().country for competitor in competitors])
         countries.discard(None)
         return countries
 
@@ -105,61 +100,48 @@ class CompResults:
         for category in self.CATEGORIES:
             results[category] = {}
             for level in self.LEVELS:
-                results[category][level] = []
-            for result in self.competition.skaterresult_set.filter(category=category.replace('_',' ')).select_related('level'):
+                results[category][level] = {}
+                results[category][level]['Final'] = []
+            for result in self.competition.skaterresult_set.filter(category=category).select_related('level'):
                 level = result.level.level
-                results[category][level].append(result)
+                qual = result.qualifying
+                if qual:
+                    if qual in results[category][level]:
+                        results[category][level][qual].append(result)
+                    else:
+                        results[category][level][qual] = []
+                        results[category][level][qual].append(result)
+                else:
+                    results[category][level]['Final'].append(result)
         return results
 
     # method to take sorted dictionary and return combined results
     #
     def get_combined_results(self, results_by_level):
-        for level, skater_results in results_by_level.items():
-            if len(skater_results) == 0:
-                del results_by_level[level]
-                continue
-            # sort by overall score to determine rank
-            skater_results.sort(key=lambda skater_result: (-skater_result.total_score,skater_result.withdrawal()))
+        for level, qual_skater_results in results_by_level.items():
+            for qual, skater_results in qual_skater_results.items():
+                if len(skater_results) == 0:
+                    del results_by_level[level][qual]
+                    continue
+                # sort by overall score to determine rank
+                skater_results.sort(key=lambda skater_result: (-skater_result.total_score,skater_result.withdrawal))
 
-            # move withdrawals behind other skater results
-            #skater_results.sort(key=lambda r: r.withdrawal())
-            results_by_level[level] = skater_results
+                # move withdrawals behind other skater results
+                #skater_results.sort(key=lambda r: r.withdrawal())
+                results_by_level[level][qual] = skater_results
         return results_by_level
 
-    # method to return results for a segment
-    # returns a list where each item is
-    # for pairs: [participant, female_skater, male_skater, country, result, [program component scores]]
-    # for singles: [skater, country, result, [program component scores]]
-    #
-    def get_segment_results(self,category,qualifying,level,segment):
-        programs = Program.objects.filter(skater_result__competition = self.competition,
-                                          skater_result__category__category = category.replace('_',' '),
-                                          skater_result__level__level = level,
-                                          segment__segment = segment)
-        if qualifying == '':
-            programs = programs.filter(skater_result__qualifying__isnull = True)
-        else:
-            programs = programs.filter(skater_result__qualifying__name = qualifying)
-        results = [x.resultijs for x in programs]
-        ordered_results = []
-        for result in results:
-            inner_temp = []
-            participant = result.program.skater_result.competitor.get_participants()
-            country = ''
-            if participant.country != None:
-                country = participant.country.country_name
-            if result.program.skater_result.competitor.is_team:
-                female_skater = participant.female_skater
-                male_skater = participant.male_skater
-                inner_temp.extend([participant,female_skater,male_skater,country,result])
-            else:
-                skater = participant
-                inner_temp.extend([skater,country,result])
-            component_arr = []
-            for pcs in result.programcomponentscore_set.all():
-                component_arr.append(pcs)
-            inner_temp.append(component_arr)
-            ordered_results.append(inner_temp)
 
-        ordered_results.sort(key=lambda x:x[-2].program.rank)
-        return ordered_results
+class SegmentResults:
+    def __init__(self, program):
+        self.program = program
+        self.competitor = self.program.skater_result.competitor
+        self.participant = self.competitor.get_participants()
+        self.resultijs = self.program.resultijs
+        self.pcs = self.resultijs.programcomponentscore_set.all()
+
+    @staticmethod
+    def get_results(programs):
+        programs = programs.order_by('rank').select_related('skater_result__competitor', 'resultijs')
+        return [SegmentResults(program) for program in programs]
+

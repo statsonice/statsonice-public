@@ -268,7 +268,7 @@
   						{% else %}
 							{% for comp_year, skater_result in res_dictionary.items %}
 								{% if comp_year == year %}
-									{% if skater_result.0.final_rank == None %}
+									{% if skater_result.0.withdrawal %}
 										<td>
 										<a href="{{ skater_result.1.url }}">
 										WD
@@ -278,25 +278,25 @@
 										{% if skater_result.0.final_rank == 1 %}
 											<td>
 											<a href="{{ skater_result.1.url }}">
-												<img style="float:left" src="{{ STATIC_PREFIX }}img/gold.png">
+												<img class="medal" style="float:left" src="{{ STATIC_PREFIX }}img/gold.png">
 											</a>
 											</td>
 										{% elif skater_result.0.final_rank == 2 %}
 											<td>
 											<a href="{{ skater_result.1.url }}">
-												<img style="float:left" src="{{ STATIC_PREFIX }}img/silver.png">
+												<img class="medal" style="float:left" src="{{ STATIC_PREFIX }}img/silver.png">
 											</a>
 											</td>
 										{% elif skater_result.0.final_rank == 3 %}
 											<td>
 											<a href="{{ skater_result.1.url }}">
-												<img style="float:left" src="{{ STATIC_PREFIX }}img/bronze.png">
+												<img class="medal" style="float:left" src="{{ STATIC_PREFIX }}img/bronze.png">
 											</a>
 											</td>
 										{% else %}
 											<td>
 											<a href="{{ skater_result.1.url }}">
-											{{ skater_result.0.final_rank }}
+												<span style="padding-left:8px">{{ skater_result.0.final_rank }}</span>
 											</a>
 											</td>
 										{% endif %}
@@ -314,6 +314,35 @@
 
   <hr>
   {% endif %}
+
+<br>
+
+<h4>Results</h4>
+
+<table class="table table-condensed">
+{% for year, skater_results in results.items %}
+  <tbody>
+    <tr>
+      <td colspan=4>{{ year }}</td>
+    </tr>
+  {% for sr in skater_results %}
+  	{% if 'GROUP' not in sr.qualifying.name or sr.qualifying.name == None %}
+  	<tr>
+  	  <td>
+  	  	<a href="{{ sr.competition.url }}">
+  	  	{{ sr.competition.name }} {{ sr.qualifying.name }}
+  	    </a>
+  	  </td>
+  	  <td>{{ sr.level.level }} {{ sr.category.category }}</td>
+  	  <td>{{ sr.final_rank }}</td>
+  	  <td>{{ sr.total_score }}</td>
+  	  <td>{{ sr.competition.start_date.month }}-{{ sr.competition.start_date.year }}</td>
+  	</tr>
+  	{% endif %}
+  {% endfor %}
+  </tbody>
+{% endfor %}
+</table>
 
 <!-- Make this into a matrix
   <div class="row">

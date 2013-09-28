@@ -24,8 +24,9 @@ class ProgramResults:
     #
     def __init__(self, program):
         self.program = program
-        self.element_scores = self.program.resultijs.elementscore_set.all()
-        self.pc_scores = self.program.resultijs.programcomponentscore_set.all()
+        self.element_scores = self.program.resultijs.elementscore_set.all().select_related()
+        self.pc_scores = self.program.resultijs.programcomponentscore_set.all().select_related()
+        self.goes_by_elementscore = {}
         self.goes = []
         self.programcomponentscores = []
         self.elementscores = []
@@ -39,21 +40,23 @@ class ProgramResults:
     # Calculate values for programs
     #
     def calculate_variables(self):
+        self.goes_by_elementscore = self.elementscore_GOE()
         self.goes = ProgramResults.get_stats(self.GOE())
         self.programcomponentscores = self.compute_programcomponent_scores()
         self.elementscores = self.compute_element_scores()
-        self.totals = {'program_base_value_sum':self.program_base_value_sum(), 'program_goe_sum':self.program_GOE_sum()}
+        self.totals = self.get_grade_sums()
         self.bonus = self.second_half_bonus()
 
 
     # Given a list, returns tuple of median, average, and std dev
     #
     @staticmethod
-    def get_stats(arr):
+    def get_stats(arr, remove_outlier_judges = False):
         if len(arr) == 0:
             return {'median': None, 'average':None, 'std_dev':None}
-        # arr.sort()
-        # arr = arr[1:-1] # if want to kill the high and low judge
+        if remove_outlier_judges:
+            arr.sort()
+            arr = arr[1:-1]
         median = round(stats.median(arr), 2)
         average = round(stats.average(arr), 2)
         std_dev = round(stats.std_dev(arr), 2)
@@ -65,40 +68,25 @@ class ProgramResults:
 
     # get the grade of executions for an elementscore
     #
-    @staticmethod
-    def elementscore_GOE(elementscore):
-        return elementscore.elementjudge_set.values_list('judge_grade_of_execution', flat=True)
+    def elementscore_GOE(self):
+        goes_by_elementscore = {}
+        for element_score in self.element_scores:
+            goes_by_elementscore[element_score] = element_score.elementjudge_set.values_list('judge_grade_of_execution', flat=True)
+        return goes_by_elementscore
 
     # get the grade of executions for a program
     #
     def GOE(self):
-        goes = []
-        for element_score in self.element_scores:
-            goes += ProgramResults.elementscore_GOE(element_score)
-        return goes
+        return [goe for goes in self.goes_by_elementscore.values() for goe in goes]
 
-    # max GOE range on an element (for all elements in the program)
-    # returns the maximum GOE range and the element number it corresponds to
+    # sums of different grade values
     #
-    def max_GOE_range(self):
-        max_range = -1
-        max_elementscore = None
-        for elementscore in self.element_scores:
-            goes = ProgramResults.elementscore_GOE(elementscore)
-            temp_range = max(goes) - min(goes)
-            if temp_range > max_range:
-                max_range = temp_range
-                max_elementscore = elementscore
-        return max_range, max_elementscore.execution_order
-
-    # sum of base values for the element scores
-    #
-    def program_base_value_sum(self):
-        return sum(self.element_scores.values_list('base_value',flat=True))
-
-    # sum of goes for the element scores
-    def program_GOE_sum(self):
-        return sum(self.element_scores.values_list('grade_of_execution',flat=True))
+    def get_grade_sums(self):
+        grades = self.element_scores.values_list('base_value','grade_of_execution')
+        sums = {}
+        sums['program_base_value_sum'] = sum([i[0] for i in grades])
+        sums['program_goe_sum'] = sum([i[1] for i in grades])
+        return sums
 
     # return element name given queryset of elements, with modifiers and all properly formatted
     #
@@ -130,7 +118,7 @@ class ProgramResults:
             if elements[0].modifiers.filter(modifier='x').count() > 0:
                 bv += ' x'
             elementscore.base_value_x = bv
-            elementscore.judge_scores = ProgramResults.elementscore_GOE(elementscore)
+            elementscore.judge_scores = self.goes_by_elementscore[elementscore]
             stats = ProgramResults.get_stats(elementscore.judge_scores)
             elementscore.median_goe = stats['median']
             elementscore.average_goe = stats['average']

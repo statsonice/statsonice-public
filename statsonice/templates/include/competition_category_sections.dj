@@ -1,78 +1,75 @@
-{% for lev, skater_results in res.items %}
-  <div class="panel panel-default">
-    <div class="panel-heading">
-      <h4 class="panel-title">
-	{% if not "PRELIMINARY" in category %}
-		<a href="#collapse{{category}}{{lev}}" data-parent="collapse{{category}}{{lev}}" data-toggle="collapse" class="accordion-toggle">
-		  {{ lev }} {{category}}
-		</a>
-	  </h4>
-    </div>
-    <div class="panel-collapse collapse" id="collapse{{category}}{{lev}}" style="height: 0px;">
-    {% else %}
-		<a href="#collapsePRELIM{{category.0}}{{lev}}" data-parent="collapsePRELIM{{category.0}}{{lev}}" data-toggle="collapse" class="accordion-toggle">
-		  {{ lev }} {{category}}
-		</a>
-	  </h4>
-    </div>
-    <div class="panel-collapse collapse" id="collapsePRELIM{{category.0}}{{lev}}" style="height: 0px;">
-    {% endif %}
-      <div class="panel-body">
-        <table class="table table-striped table-condensed">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Name</th>
-              <th>Country</th>
-              {% for program in skater_results.0.program_set.all %}
-                <th>
-                  <a href="{{ program.url_segment_summary }}">
-                    {{ program.segment.segment }}
-                  </a>
-                </th>
-                <th>{{ program.segment.segment }} Score</th>
-              {% endfor %}
-              <th>Total Score</th>
-            </tr>
-          <thead>
-          {% for skater_result in skater_results %}
-            <tr>
-              {% if skater_result.withdrawal %}
-              	{% if category == "MEN" and skater_result.competition.cutoff.singles and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
-              		<td>FNR</td>
-              	{% elif category == "LADIES" and skater_result.competition.cutoff.singles and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
-              		<td>FNR</td>
-              	{% elif category == "PAIRS" and skater_result.competition.cutoff.pairs and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.pairs %}
-              		<td>FNR</td>
-              	{% elif category == "DANCE" and skater_result.competition.cutoff.dance and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.dance %}
-              		<td>FNR</td>
-              	{% else %}
-                	<td>WD</td>
-                {% endif %}
-              {% else %}
-                <td>{{ skater_result.final_rank }}</td>
-              {% endif %}
-              <td>
-                <a href="{{ skater_result.competitor.get_participants.url }}">
-                  {{ skater_result.competitor.get_participants.view_name }}
-                </a>
-              </td>
-              <td>{{ skater_result.competitor.get_participants.country.country_name }}</td>
-              {% for program in skater_result.program_set.all %}
-                <td>
-                  {{ program.rank }}
-                </td>
-                <td>{{ program.resultijs.tss }}</td>
-              {% endfor %}
-              {% if skater_result.withdrawal %}
-                <td></td>
-              {% else %}
-                <td><a href="{{ skater_result.url}}">{{ skater_result.total_score }}</a></td>
-              {% endif %}
-            </tr>
-          {% endfor %}
-        </table>
-      </div>
-    </div>
-  </div>
+{% for lev, qual_skater_results in res.items %}
+	{% for qual, skater_results in qual_skater_results.items %}
+	  <div class="panel panel-default">
+		<div class="panel-heading">
+		  <h4 class="panel-title">
+			<a href="#collapse{{category}}{{lev}}{{qual.id}}" data-parent="collapse{{category}}{{lev}}{{qual.id}}" data-toggle="collapse" class="accordion-toggle">
+			  {{ lev }} {{category}} {{qual.name}}
+			</a>
+		  </h4>
+		</div>
+		<div class="panel-collapse collapse" id="collapse{{category}}{{lev}}{{qual.id}}" style="height: 0px;">
+		  <div class="panel-body">
+			<table class="table table-striped table-condensed">
+			  <thead>
+				<tr>
+				  <th>Rank</th>
+				  <th>Name</th>
+				  {% if 'isu' in skater_results.0.competition.identifier %}
+				  	<th>Country</th>
+				  {% endif %}
+				  {% for program in skater_results.0.program_set.all %}
+					<th>
+					  <a href="{{ program.url_segment_summary }}">
+						{{ program.segment.segment }}
+					  </a>
+					</th>
+					<th>{{ program.segment.segment }} Score</th>
+				  {% endfor %}
+				  <th>Total Score</th>
+				</tr>
+			  <thead>
+			  {% for skater_result in skater_results %}
+				<tr>
+				  {% if skater_result.withdrawal %}
+					{% if category == "MEN" and skater_result.competition.cutoff.singles and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
+						<td>FNR</td>
+					{% elif category == "LADIES" and skater_result.competition.cutoff.singles and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
+						<td>FNR</td>
+					{% elif category == "PAIRS" and skater_result.competition.cutoff.pairs and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.pairs %}
+						<td>FNR</td>
+					{% elif category == "DANCE" and skater_result.competition.cutoff.dance and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.dance %}
+						<td>FNR</td>
+					{% else %}
+						<td>WD</td>
+					{% endif %}
+				  {% else %}
+					<td>{{ skater_result.final_rank }}</td>
+				  {% endif %}
+				  <td>
+					<a href="{{ skater_result.competitor.get_participants.url }}">
+					  {{ skater_result.competitor.get_participants.view_name }}
+					</a>
+				  </td>
+				  {% if 'isu' in skater_results.0.competition.identifier %}
+				  	<td>{{ skater_result.competitor.get_participants.country.country_name }}</td>
+				  {% endif %}
+				  {% for program in skater_result.program_set.all %}
+					<td>
+					  {{ program.rank }}
+					</td>
+					<td>{{ program.resultijs.tss }}</td>
+				  {% endfor %}
+				  {% if skater_result.withdrawal %}
+					<td></td>
+				  {% else %}
+					<td><a href="{{ skater_result.url}}">{{ skater_result.total_score }}</a></td>
+				  {% endif %}
+				</tr>
+			  {% endfor %}
+			</table>
+		  </div>
+		</div>
+	  </div>
+  {% endfor %}
 {% endfor %}

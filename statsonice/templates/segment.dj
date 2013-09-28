@@ -1,12 +1,12 @@
 {% extends "page.dj" %}
 {% block title %}
-- {{ competition_name }} {{ level }} {{ category }} {{ segment }} ({{ competition.start_date.year }})
+- {{ competition.name }} {{ level }} {{ category }} {{ segment }} ({{ competition.start_date.year }})
 {% endblock%}
 
 {% block header %}
 <h3>
 <a href="{{ competition.url }}">
-{{ competition_name }} {{ competition_year }}
+{{ competition.name }} {{ competition.start_date.year }}
 </a>
 </h3>
 <p><b>{{ level }} {{ category }} {{ segment }}</b></p>
@@ -30,70 +30,39 @@ $(document).ready(function()
 			<th>TSS</th>
 			<th>TES</th>
 			<th>PCS</th>
-			{% if segment_results.0.5 %}
-				{% for pcs in segment_results.0.5 %}
-					<th>{{ pcs.component.component }}</th>
-				{% endfor %}
-			{% else %}
-				{% for pcs in segment_results.0.3 %}
-					<th>{{ pcs.component.component }}</th>
-				{% endfor %}
-			{% endif %}
+      {% for pcs in segment_results.0.pcs %}
+        <th>{{ pcs.component.component }}</th>
+      {% endfor %}
 			<th>Ded.</th>
 		</tr>
 	</thead>
 	<tbody>
-	{% if not segment_results.0.5 %}
-		{% for skater, country, result, pcs in segment_results %}
-		<tr>
-			<td>
-			<a href="{{ result.program.skater_result.url }}">
-			{{ result.program.rank }}
-			</a>
-			</td>
-			<td>
-			<a href="{{ skater.url }}">
-			{{ skater.get_default_skater_name.first_name }} {{ skater.get_default_skater_name.last_name }}
-			</a>
-			</td>
-			<td>{{ country }}</td>
-			<td>{{ result.tss }}</td>
-			<td>{{ result.tes }}</td>
-			<td>{{ result.pcs }}</td>
-			{% for pc in pcs %}
-				<td>{{ pc.panel_score }}</td>
-			{% endfor %}
-			<td>{{ result.deductions }}</td>
-		</tr>
-		{% endfor %}
-	{% else %}
-		{% for skater_team, female_skater, male_skater, country, result, pcs in segment_results %}
-		<tr>
-			<td>
-			<a href="{{ result.program.skater_result.url }}">
-			{{ result.program.rank }}
-			</a>
-			</td>
-			<td>
-			<a href="{{ skater_team.url }}">
-			{{ female_skater.get_default_skater_name.first_name }} {{ female_skater.get_default_skater_name.last_name }} /
-			{{ male_skater.get_default_skater_name.first_name }} {{ male_skater.get_default_skater_name.last_name }}
-			</a>
-			</td>
-			<td>{{ country }}</td>
-			<td>{{ result.tss }}</td>
-			<td>{{ result.tes }}</td>
-			<td>{{ result.pcs }}</td>
-			{% for pc in pcs %}
-				<td>{{ pc.panel_score }}</td>
-			{% endfor %}
-			<td>{{ result.deductions }}</td>
-		</tr>
-		{% endfor %}
-	{% endif %}
+    {% for segment_result in segment_results %}
+      <tr>
+        <td>
+          <a href="{{ segment_result.program.skater_result.url }}">
+            {{ segment_result.program.rank }}
+          </a>
+        </td>
+        <td>
+          <a href="{{ segment_result.participant.url }}">
+            {{ segment_result.participant.view_name }}
+          </a>
+        </td>
+        <td>{{ segment_result.participant.country.country_name }}</td>
+        <td>{{ segment_result.resultijs.tss }}</td>
+        <td>{{ segment_result.resultijs.tes }}</td>
+        <td>{{ segment_result.resultijs.pcs }}</td>
+        {% for pc in segment_result.pcs %}
+          <td>{{ pc.panel_score }}</td>
+        {% endfor %}
+        <td>{{ segment_result.resultijs.deductions }}</td>
+      </tr>
+    {% endfor %}
 	</tbody>
 </table>
 
+{% comment %}
 <div class="row">
   <div class="col-lg-12">
     <div id="accordion" class="panel-group">
@@ -116,5 +85,5 @@ $(document).ready(function()
 	</div>
   </div>
 </div>
-
+{% endcomment %}
 {% endblock %}

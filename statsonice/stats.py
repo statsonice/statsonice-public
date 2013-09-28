@@ -98,13 +98,18 @@ def stats_competition_preview(request):
     })
 
 def stats_competition_preview_detailed(request, competition_name, competition_year):
+    start = time()
     competition_name = competition_name.replace('-',' ')
     competition = get_object_or_404(Competition, name=competition_name, start_date__year = competition_year)
 
+    print 'A', time() - start
     comp_preview = CompPreviewStats(competition)
+    print 'B', time() - start
     comp_preview.get_projected_placements()
+    print 'C', time() - start
     comp_preview.get_hth_records()
-    comp_preview.calculate_medal_probability()
+    print 'D', time() - start
+    # comp_preview.calculate_medal_probability()
 
     return render(request, 'competition_preview_detailed.dj', {
         'competition': competition,
@@ -121,6 +126,7 @@ def stats_element_stats(request):
         # - look to db_cleaning_script for some ideas/a start
     # what follows is only example code
     if request.method == 'POST':
+        open_detailed = False
         elem_skater = request.POST.get('elementName')
         if ',' in elem_skater:
             temp = elem_skater.split(',')
@@ -132,44 +138,75 @@ def stats_element_stats(request):
         category = request.POST.get('group1')
         category_name = category.strip().upper()
         element_cat_stats = ElementStats(element_name,skater_name,category)
+        if element_name == '':
+            element_name = 'None'
+            category_name = 'None'
+            skater_name = ''
+            goes = [0]
+            years = [0]
+            time_series = [0]
+            element_scores = None
+        else:
+            goes = element_cat_stats.goe_stats
+            years = element_cat_stats.years
+            time_series = element_cat_stats.attempts_time_series
+            element_scores = element_cat_stats.element_scores
+            if len(element_scores) > 300:
+                element_scores = element_scores[len(element_scores)-300:]
 
+            goes = simplejson.dumps(goes)
+            years = simplejson.dumps(years)
+            time_series = simplejson.dumps(time_series)
+    else:
+        element_name = '4S+2T'
+        category_name = 'MEN'
+        skater_name = 'Max Aaron'
+        element_cat_stats = ElementStats(element_name,skater_name,category_name)
         goes = element_cat_stats.goe_stats
         years = element_cat_stats.years
         time_series = element_cat_stats.attempts_time_series
+        element_scores = element_cat_stats.element_scores
+        if len(element_scores) > 300:
+            element_scores = element_scores[len(element_scores)-300:]
 
         goes = simplejson.dumps(goes)
         years = simplejson.dumps(years)
         time_series = simplejson.dumps(time_series)
+        open_detailed = True
 
-    else:
-        element_name = 'None'
-        category_name = 'None'
-        skater_name = ''
-        goes = [0]
-        years = [0]
-        time_series = [0]
+    print 'goes: ', goes
     return render(request, 'element_stats.dj', {
             'element_name': element_name,
             'category_name': category_name,
             'skater_name': skater_name,
             'goes': goes,
             'years': years,
-            'time_series': time_series
+            'time_series': time_series,
+            'element_scores': element_scores,
+            'open_detailed': open_detailed
         })
 
 @ensure_csrf_cookie
 def stats_top_scores(request):
     if request.method == 'POST':
         category = request.POST.get('category')
+        segment = request.POST.get('segment')
         start_year = int(request.POST.get('season'))
     else:
-        start_year = 2006
         category = 'MEN'
-    top_scores = TopScores(category,start_year)
+        segment = 'TOTAL'
+        start_year = 0
+    top_scores = TopScores(segment,category,start_year)
     return render(request, 'top_scores.dj', {
             'top_scores': top_scores,
+            'segment': segment,
             'category': category,
             'start_year': start_year
+        })
+
+def articles(request, article_name=None):
+    return render(request, 'articles.dj', {
+            'article_name': article_name
         })
 
 def custom_stats(request):

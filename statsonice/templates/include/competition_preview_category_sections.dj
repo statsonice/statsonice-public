@@ -1,11 +1,13 @@
-<div class="accordion-group">
-    <div class="accordion-heading">
-    <a href="#collapse{{category}}" data-parent="collapse{{category}}" data-toggle="collapse" class="accordion-toggle">
-      <p>{{category}}</p>
-    </a>
-    </div>
-    <div class="accordion-body collapse" id="collapse{{category}}" style="height: 0px;">
-      <div class="accordion-inner">
+<div class="panel panel-default">
+		<div class="panel-heading">
+		  <h4 class="panel-title">
+			<a href="#collapse{{category}}" data-parent="collapse{{category}}" data-toggle="collapse" class="accordion-toggle">
+			  {{category}}
+			</a>
+		  </h4>
+		 </div>
+		 <div class="panel-collapse collapse" id="collapse{{category}}" style="height: 0px;">
+		  <div class="panel-body">
       
 <h4>Summary Table</h4>
 <table class="table table-bordered table-condensed">
@@ -13,17 +15,22 @@
 		<tr>
 			<th></th>
 			<th>Country</th>
+			{% if not res.0.competitor.is_team %}
+				<th>Age</th>
+			{% endif %}
+			{% comment %}
 			<th>Chance Win</th>
 			<th>Chance Medal</th>
+			{% endcomment %}
 			<th>
-			Recent Trend
-			<span class="badge badge-info" title="The recent trend is the slope of the last three international scores achieved by a skater. It has units of points/competition.">
+			Recent Consistency
+			<span class="badge" title="Recent consistency is defined as 10/sqrt(x) where x is the standard deviation in the three most recent international scores the skater achieved.">
 			?
 			</span>
 			</th>
 			<th>
-			Recent Consistency
-			<span class="badge badge-info" title="Recent consistency is defined as 10/sqrt(x) where x is the standard deviation in the three most recent international scores the skater achieved.">
+			Recent Trend
+			<span class="badge" title="The recent trend is the slope of the last three international scores achieved by a skater. It has units of points/competition.">
 			?
 			</span>
 			</th>
@@ -39,6 +46,10 @@
 			</a>
 			</td>
 			<td>{{ skater_stat.competitor.get_participants.country.country_name }}</td>
+			{% if not skater_stat.competitor.is_team %}
+				<td>{{ skater_stat.age }}</td>
+			{% endif %}
+			{% comment %}
 			{% if skater_stat.chance_win > 20 %}
 				<td class="success">{{ skater_stat.chance_win }}%</td>
 			{% elif skater_stat.chance_win < 1 %}
@@ -53,20 +64,27 @@
 			{% else %}
 				<td>{{skater_stat.chance_medal}}%</td>
 			{% endif %}
-			{% if skater_stat.slope > 12 %}
-				<td class="success">{{ skater_stat.slope }}</td>
-			{% elif skater_stat.slope == 0 %}
+			{% endcomment %}
+			{% if skater_stat.consistency == None %}
 				<td>-</td>
+			{% elif skater_stat.consistency > 4 %}
+				<td class="cp-success">High</td>
+			{% elif skater_stat.consistency > 3 %}
+				<td class="cp-warning">Med</td>
+			{% else %}
+				<td class="cp-danger">Low</td>
+			{% endif %}
+			{% if skater_stat.slope == 0 %}
+				<td>-</td>
+			{% elif skater_stat.slope >= 5 %}
+				<td class="cp-success">{{ skater_stat.slope }}</td>
+			{% elif skater_stat.slope < 5 and skater_stat.slope > -5 %}
+				<td class="cp-warning">{{ skater_stat.slope }}</td>
+			{% elif skater_stat.slope <= -5 %}
+				<td class="cp-danger">{{ skater_stat.slope }}</td>
 			{% else %}
 				<td>{{ skater_stat.slope }}</td>
 			{% endif%}
-			{% if skater_stat.consistency == None %}
-				<td>-</td>
-			{% elif skater_stat.consistency > 5 %}
-				<td class="success">{{ skater_stat.consistency }}</td>
-			{% else %}
-				<td>{{ skater_stat.consistency }}</td>
-			{% endif %}
 			{% if skater_stat.recent_scores.2 %}
 				<td>{{ skater_stat.recent_scores.2 }}</td>
 			{% elif skater_stat.recent_scores.1 %}

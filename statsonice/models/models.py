@@ -30,10 +30,10 @@ class Qualifying(models.Model):
 
 class Competition(models.Model):
     name = models.CharField(max_length = 100)
-    start_date = models.DateField()
+    start_date = models.DateField(db_index=True)
     end_date = models.DateField(null=True, blank=True)
     country = models.ForeignKey(Country, null=True, blank=True)
-    link = models.CharField(max_length = 1000, null=True, blank=True)
+    link = models.CharField(max_length = 500, null=True, blank=True)
     identifier = models.CharField(max_length = 100, null=True, blank=True)
     cutoff = models.ForeignKey(CompetitionCutoff, null=True, blank=True)
 
@@ -70,11 +70,13 @@ class SkaterResult(models.Model):
     category = models.ForeignKey(Category)
     level = models.ForeignKey(Level)
     qualifying = models.ForeignKey(Qualifying, null=True, blank=True)
-    # Don't save into total_score, final_rank
-    total_score = models.DecimalField(max_digits = 5, decimal_places = 2, null=True, blank=True)
+    # Don't save into total_score, final_rank, withdrawal
+    total_score = models.DecimalField(max_digits = 5, decimal_places = 2, null=True, blank=True, db_index=True)
     final_rank = models.PositiveIntegerField(null=True, blank=True)
+    withdrawal = models.BooleanField(default=False)
     override_total_score = models.DecimalField(max_digits = 5, decimal_places = 2, null=True, blank=True)
     override_final_rank = models.PositiveIntegerField(null=True, blank=True)
+    override_withdrawal = models.NullBooleanField()
 
     @cached_function
     def url(self):
@@ -94,19 +96,19 @@ class SkaterResult(models.Model):
                 'skater_first_name':self.competitor.url_name()[0], \
                 'skater_last_name':self.competitor.url_name()[1]
             })
-    @cached_function
-    def withdrawal(self, expected_programs = None):
-        if expected_programs == None:
-            # Find how many programs there are supposed to be
-            other_skater_results = self.competition.skaterresult_set.filter(category=self.category, level=self.level)
-            expected_programs = max([skater_result.program_set.count() for skater_result in other_skater_results])
-        if self.program_set.count() < expected_programs:
-            return True
-        return False
     class Meta:
         app_label = 'statsonice'
     def __unicode__(self):
         return u'(SkaterResult #%s for %s)' % (self.id, self.competition)
+    def calculate_withdrawal(self):
+        # Find how many programs there are supposed to be
+        other_skater_results = self.competition.skaterresult_set.filter(category=self.category, qualifying=self.qualifying, level=self.level)
+        expected_programs = max([skater_result.program_set.count() for skater_result in other_skater_results])
+        if self.program_set.count() < expected_programs:
+            self.withdrawal = True
+        else:
+            self.withdrawal = False
+        return self.withdrawal
     def calculate_total_score(self):
         if self.override_total_score != None:
             self.total_score = self.override_total_score
@@ -123,10 +125,10 @@ class SkaterResult(models.Model):
         if self.override_final_rank:
             self.final_rank = self.override_final_rank
         else:
-            skater_results = self.competition.skaterresult_set.filter(category = self.category, level = self.level)
+            skater_results = self.competition.skaterresult_set.filter(category = self.category, level = self.level, qualifying = self.qualifying)
             results = []
             for sr in skater_results:
-                results.append([sr, sr.calculate_total_score()])
+                results.append([sr, sr.total_score])
             results.sort(key=lambda x:-x[1])
             comp_name = self.competition.name
             # TODO: This should not be here
@@ -179,7 +181,7 @@ class Program(models.Model):
                 'competition_name':self.skater_result.competition.name.replace(' ','-'), \
                 'competition_year':self.skater_result.competition.start_date.year, \
                 'category': self.skater_result.category.category, \
-                'qualifying': '', \
+                'qualifying': 'final', \
                 'level': self.skater_result.level.level, \
                 'segment': self.segment.segment, \
             })
@@ -205,7 +207,7 @@ class ResultIJS(models.Model):
     program = models.OneToOneField(Program)
     deductions = models.PositiveIntegerField()
     # Don't save into tes, pcs, tss
-    tes = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank = True)
+    tes = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank = True, db_index=True)
     pcs = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank = True)
     tss = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank = True)
     override_tes = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank = True)
@@ -228,9 +230,9 @@ class ResultIJS(models.Model):
             for factor, panel_score in scores:
                 if str(factor)[-1] == '5':
                     factor = Decimal(str(factor)+'001')
-                    total += (factor*panel_score).quantize(Decimal('0.01'))
+                    total += (self.multiplier*factor*panel_score).quantize(Decimal('0.01'))
                 else:
-                    total += (factor*panel_score).quantize(Decimal('0.01'))
+                    total += (self.multiplier*factor*panel_score).quantize(Decimal('0.01'))
             self.pcs = total
         return self.pcs
     def calculate_tss(self):
@@ -261,7 +263,7 @@ class ElementScore(models.Model):
         if len(goes) == 0:
             return
         goe_range = max(goes)-min(goes)
-        goe_std = std_dev(goes,average(goes))
+        goe_std = std_dev(goes)
         if goe_range >= 3 and goe_std <= 0.8:
             self.flag = Flag.objects.get(flag = 'OL')
         elif goe_range >= 2 and goe_std > 0.8:
