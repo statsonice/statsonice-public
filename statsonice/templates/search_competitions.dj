@@ -10,7 +10,7 @@ var search_url = '/search_competitions/';
 <script  type="text/javascript" src="{{ STATIC_PREFIX }}js/search.js"></script>
 
 <div class="row">
-	<div class="col-lg-7">
+	<div class="col-md-7">
 	<div class="form-horizontal">
 	  <div class="control-group">
 		<label class="control-label" for="name">Name</label>
@@ -46,13 +46,13 @@ var search_url = '/search_competitions/';
 
 	</div>
 
-	<div class="col-lg-5">
+	<div class="col-md-5">
 
 		<div class="row">
-			<div class="col-lg-8">
+			<div class="col-md-8">
 				<h3>Results</h3>
 			</div>
-			<div class="col-lg-4">
+			<div class="col-md-4">
 				{% include "include/spinner.dj" %}
 			</div>
 		</div>

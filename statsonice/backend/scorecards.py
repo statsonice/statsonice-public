@@ -26,8 +26,9 @@ class ScoreCard:
             self.pcs = self.get_pcs() # tuple: component score names, component scores
 
     def get_program(self):
-        programs = Program.objects.filter(program__skater_result__competitor=self.competitor,
-                                          program__segment__segment=self.segment).order_by('skater_result__competition__start_date')
+        programs = Program.objects.filter(skater_result__competitor=self.competitor,
+                                          segment__segment=self.segment,
+                                          skater_result__category__category=self.category).order_by('-skater_result__competition__start_date')
         if len(programs) == 0:
             return None
 
@@ -37,19 +38,27 @@ class ScoreCard:
         element_scores = self.program.resultijs.elementscore_set.all()
         element_names = []
         for element_score in element_scores:
-            name = '+'.join([element.base_element for element in element_score.element_set.all()])
-            element_names.append(name)
+            bonus = False
+            print element_score
+            if str(element_score.base_value)[-1] != '0':
+                bonus = True
+            name = element_score.get_element_name()
+            element_names.append((name,bonus))
 
         return element_names
 
     def get_pcs(self):
-        if category == 'DANCE':
-            component_names = DANCE_COMPONENTS[self.segment]
+        if self.category == 'DANCE':
+            component_names = self.DANCE_COMPONENTS[self.segment]
         else:
-            component_names = SINGLES_PAIRS_COMPONENTS
+            component_names = self.SINGLES_PAIRS_COMPONENTS
         component_scores = [pc.panel_score for pc in self.program.resultijs.programcomponentscore_set.all()]
 
-        return component_names, component_scores
+        pcs = []
+        for component_name in component_names:
+            ind = component_names.index(component_name)
+            pcs.append((component_name,component_scores[ind]))
+        return pcs
 
 class ScoreCardOutput:
 

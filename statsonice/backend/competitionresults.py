@@ -107,12 +107,12 @@ class CompResults:
                 qual = result.qualifying
                 if qual:
                     if qual in results[category][level]:
-                        results[category][level][qual].append(result)
+                        results[category][level][qual].append(SortedSkaterResult(result))
                     else:
                         results[category][level][qual] = []
-                        results[category][level][qual].append(result)
+                        results[category][level][qual].append(SortedSkaterResult(result))
                 else:
-                    results[category][level]['Final'].append(result)
+                    results[category][level]['Final'].append(SortedSkaterResult(result))
         return results
 
     # method to take sorted dictionary and return combined results
@@ -124,13 +124,28 @@ class CompResults:
                     del results_by_level[level][qual]
                     continue
                 # sort by overall score to determine rank
-                skater_results.sort(key=lambda skater_result: (-skater_result.total_score,skater_result.withdrawal))
+                skater_results.sort(key=lambda sorted_skater_result: (-sorted_skater_result.skater_result.total_score,sorted_skater_result.skater_result.withdrawal))
 
                 # move withdrawals behind other skater results
                 #skater_results.sort(key=lambda r: r.withdrawal())
                 results_by_level[level][qual] = skater_results
         return results_by_level
 
+
+class SortedSkaterResult:
+    def __init__(self,skater_result):
+        self.skater_result = skater_result
+        self.programs = list(self.skater_result.program_set.all())
+        self.sort()
+
+    def sort(self):
+        program_heirarchy = {'SP':0,
+                             'SD':1,
+                             'CD':2,
+                             'OD':3,
+                             'FD':4,
+                             'FS':5}
+        self.programs.sort(key=lambda program:program_heirarchy[program.segment.segment])
 
 class SegmentResults:
     def __init__(self, program):

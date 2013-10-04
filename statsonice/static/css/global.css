@@ -159,3 +159,6 @@ td.cp-danger {
 img.medal {
 	padding-left:5px;
 }
+
+/* for fixing bottom nav bar */
+footer { padding-bottom: 70px; }

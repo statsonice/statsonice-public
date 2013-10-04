@@ -22,51 +22,57 @@
 
 <div id="search_error" class="alert" style="display:none">
 </div>
-
+<b>This feature is currently unavailable.</b>
+<!--
 <div class="row">
-  <div class="col-lg-6">
+  <div class="col-md-6">
     <div class="form-horizontal">
       <div class="control-group">
         <label class="control-label" for="skater_name">Skater Name</label>
-        {% comment %}
         <div class="controls">
-          {% include "search/autocomplete.dj" with input_id="skater_name" options=skaters_dict.keys %}
+          {% include "search/autocomplete.dj" %}
+          {% comment %}
+          {% include "search/autocomplete.dj" with input_id="matching_skater_name" options=skaters_dict.keys %}
+          {% endcomment %}
         </div>
-        {% endcomment %}
       </div>
       <div class="control-group">
         <label class="control-label" for="matching_skater_name">Skater Name</label>
-        {% comment %}
+
         <div class="controls">
+          {% include "search/autocomplete.dj" %}
+          {% comment %}
           {% include "search/autocomplete.dj" with input_id="matching_skater_name" options=skaters_dict.keys %}
+          {% endcomment %}
         </div>
-        {% endcomment %}
       </div>
     </div>
   </div>
 
-  <div class="col-lg-6">
+  <div class="col-md-6">
     <div class="form-horizontal">
       <div class="control-group">
         <label class="control-label" for="skaterteam_names">Skater Team Name</label>
-        {% comment %}
         <div class="controls">
-          {% include "search/autocomplete.dj" with input_id="skaterteam_names" options=teams_dict.keys %}
+          {% include "search/autocomplete.dj" %}
+          {% comment %}
+          {% include "search/autocomplete.dj" with input_id="matching_skaterteam_names" options=teams_dict.keys %}
+          {% endcomment %}
         </div>
-        {% endcomment %}
       </div>
       <div class="control-group">
         <label class="control-label" for="matching_skaterteam_names">Skater Team Name</label>
-        {% comment %}
         <div class="controls">
+          {% include "search/autocomplete.dj" %}
+          {% comment %}
           {% include "search/autocomplete.dj" with input_id="matching_skaterteam_names" options=teams_dict.keys %}
+          {% endcomment %}
         </div>
-        {% endcomment %}
       </div>
     </div>
   </div>
 </div>
 
 <button onclick="javascript:search()" class="btn btn-primary">Compare</button>
-
+-->
 {% endblock %}

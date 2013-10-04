@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import simplejson
 from django.views.decorators.csrf import ensure_csrf_cookie
 
@@ -8,6 +8,7 @@ from statsonice.backend.headtohead import HeadToHead
 from statsonice.backend.competitionpreview import CompPreviewStats
 from statsonice.backend.elementstats import *
 from statsonice.backend.top_scores import *
+from statsonice.backend.scorecards import *
 from statsonice.backend.stats import *
 from statsonice.models import Skater, SkaterTeam, Competitor, Competition
 
@@ -101,6 +102,8 @@ def stats_competition_preview_detailed(request, competition_name, competition_ye
     start = time()
     competition_name = competition_name.replace('-',' ')
     competition = get_object_or_404(Competition, name=competition_name, start_date__year = competition_year)
+    if competition.end_date < datetime.now().date():
+        return redirect(competition.url())
 
     print 'A', time() - start
     comp_preview = CompPreviewStats(competition)
@@ -207,6 +210,23 @@ def stats_top_scores(request):
 def articles(request, article_name=None):
     return render(request, 'articles.dj', {
             'article_name': article_name
+        })
+
+def score_cards(request):
+    if request.method == 'POST':
+        category = request.POST.get('category')
+        segment = request.POST.get('segment')
+    competitor = Competitor.objects.get(skater__skatername__first_name="Curran")
+    segment = 'FS'
+    category = 'MEN'
+    score_card = ScoreCard(competitor,category,segment)
+    element_names = score_card.element_names
+    pcs = score_card.pcs
+    return render(request, 'score_cards.dj', {
+            'element_names': element_names,
+            'pcs': pcs,
+            'segment': segment,
+            'category': category
         })
 
 def custom_stats(request):

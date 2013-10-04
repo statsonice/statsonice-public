@@ -19,7 +19,10 @@ class CompetitorStats(object):
     def __init__(self,competitor):
         self.competitor = competitor
         if type(self.competitor.get_participants()) is Skater:
-            self.age = self.get_age()
+            if self.competitor.get_participants().dob:
+                self.age = self.get_age()
+            else:
+                self.age = None
         self.skater_results = self.get_skater_results()
         self.competitions = self.get_competitions()
         self.scores = self.get_scores()
@@ -94,6 +97,7 @@ class CompPreviewStats(object):
         self.ladies = self.get_competitor_stats('LADIES')
         self.pairs = self.get_competitor_stats('PAIRS')
         self.dance = self.get_competitor_stats('DANCE')
+        print self.dance
 
     def get_competitor_stats(self, category):
         return [CompetitorStats(sr.competitor) for sr in self.skater_results.filter(category__category=category)]

@@ -20,9 +20,7 @@ SITE_ROOT = os.path.dirname(os.path.realpath(__file__))+'/../statsonice/'
 LOGIN_URL = '/user/login/'
 
 ADMINS = (
-    ('Albert Wang', 'albertyw@statsonice.com'),
-    ('Lekha Kuhananthan', 'lekha@statsonice.com'),
-    ('Curran Oi', 'curranoi@statsonice.com'),
+    ('Albert Wang', 'team@statsonice.com'),
 )
 
 MANAGERS = ADMINS
@@ -41,8 +39,10 @@ DATABASES = {
 
 if ENV == 'staging':
     CACHE_PORT = str(11212)
+    DEBUG = True
 else:
     CACHE_PORT = str(11211)
+
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
@@ -189,6 +189,8 @@ LOGGING = {
         #},
     }
 }
+if ENV == 'staging':
+    LOGGING['disable_existing_loggers'] = True
 
 # Make the statsonice/migrations handle auth migrations
 SOUTH_MIGRATION_MODULES = {

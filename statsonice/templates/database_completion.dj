@@ -6,7 +6,7 @@
 
 {% block main %}
 <div class="row">
-	<div class="col-lg-4">
+	<div class="col-md-4">
 	  <table class="table table-condensed table-bordered">
 		<tr>
 			<th>Definition</th>
@@ -26,13 +26,13 @@
 		</tr>
 	  </table>
 	</div>
-	<div class="col-lg-8">
+	<div class="col-md-8">
 		<p><b>Note</b>: the competitions here are listed by the year in which they took place, not the season in which they take place. For example, US Nationals 2013 takes place before Sectionals and Regionals 2013.</p>
 	</div>
 </div>
 
 <div class="row">
-  <div class="col-lg-12">
+  <div class="col-md-12">
   	<h4>International Competitions</h4>
   	<!-- International Competitions -->
 	<table class="table table-condensed table-bordered table-short">

@@ -17,7 +17,7 @@ Element Stats
 
 {% block main %}
 <div class="row">
-  <div class="col-lg-12">
+  <div class="col-md-12">
   	<button type="button" class="btn btn-large btn-primary" data-toggle="collapse" data-target="#instructions">
 	  Instructions
 	</button>
@@ -78,10 +78,10 @@ Element Stats
 	<br>
   </div>
   <div id="element_codes" class="collapse">
-    <div class="col-lg-12">
+    <div class="col-md-12">
     <h4>Element Codes</h4>
       <div class="row">
-        <div class="col-lg-2">
+        <div class="col-md-2">
 		  <b>Jumps<sup>&dagger;</sup></b>
 		  <table>
 			<thead>
@@ -138,7 +138,7 @@ Element Stats
 			</tbody>
 		  </table>
 		 </div>
-		 <div class="col-lg-5">
+		 <div class="col-md-5">
 		  <b>Spins *</b>
 		  <table>
 			<thead>
@@ -197,7 +197,7 @@ Element Stats
 			</tbody>
 		  </table>
 		 </div>
-		 <div class="col-lg-3">
+		 <div class="col-md-3">
 		  <b>Lifts *</b>
 		  <table>
 			<thead>
@@ -253,7 +253,7 @@ Element Stats
     </div>
   </div><!-- /sov -->
   <div id="tips" class="collapse">
-  	<div class="col-lg-12">
+  	<div class="col-md-12">
       <h4>Tips</h4>
       <p>Try some of these tips for speeding up your queries:</p>
       <ol>
@@ -264,12 +264,12 @@ Element Stats
       </ol>
     </div>
   </div><!-- /tips -->
-  <div class="col-lg-6">
+  <div class="col-md-6">
       <form action="/stats/element_stats/" method="POST">
 		{% csrf_token %}
 		<div class="input-group">
 		  {% if element_name == "None" %}
-		    <input class="form-control" id="elementName" name="elementName" size="30" type="text" />
+
 		  {% else %}
 		  	{% if skater_name != '' %}
 		      <input class="form-control" id="elementName" name="elementName" size="30" type="text" value="{{ element_name }}, {{ skater_name }}" />
@@ -313,9 +313,9 @@ Element Stats
         <input type="radio" name="group2" value="time_series" onchange="draw_radio_chart()"> Time Series<br>
       </span>
     </div><!-- /input-group -->
-  </div><!-- /.col-lg-6 -->
+  </div><!-- /.col-md-6 -->
 
-  <div class="col-lg-6">
+  <div class="col-md-6">
   	<h3 class="center">{{ element_name }}</h3>
   	{% if skater_name != '' %}
   	  <h3 class="center">{{ category_name }}, {{ skater_name }}</h3>
@@ -352,10 +352,9 @@ Element Stats
 		<table class="table table-condensed">
 		  <thead>
 			<tr>
-			  <th>Year</th>
+			  <th>Date</th>
 			  <th>Name</th>
 			  <th>Competition</th>
-			  <th>Date</th>
 			  <th>Element</th>
 			  <th>Base Value</th>
 			  <th>GOE</th>

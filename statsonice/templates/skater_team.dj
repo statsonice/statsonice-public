@@ -12,12 +12,12 @@
       {% else %}
         <div>
       {% endif %}
-        <div class="col-lg-11">
+        <div class="col-md-11">
           <h3>
             {{ skater_team.view_name }}
           </h3>
         </div>
-        <div class="col-lg-1">
+        <div class="col-md-1">
           <h3>
             {{ skater_team.country.country_name }}
           </h3>
@@ -28,92 +28,88 @@
 
 {% block main %}
   <div class="row">
-  	<div class="col-lg-3">
+  	<div class="col-md-3">
   		<h4>
   		<a href="{{first_skater.url}}">
   		{{ first_skater.view_name }}
   		</a>
   		</h4>
-  		<div class="row">
-  			{% if first_skater.dob %}
-				<div class="row">
-				  <div class="col-lg-4">
-					<b>DOB:</b>
-				  </div>
-				  <div class="col-lg-8">
-					{{ first_skater.dob }}
-				  </div>
-				</div>
-			  {% endif %}
-			  {% if first_skater.start_year %}
-				<div class="row">
-				  <div class="col-lg-4">
-					<b>Start year:</b>
-				  </div>
-				  <div class="col-lg-8">
-					{{ first_skater.start_year }}
-				  </div>
-				</div>
-			  {% endif %}
-			  {% if first_skater.height %}
-				<div class="row">
-				  <div class="col-lg-4">
-					<b>Height:</b>
-				  </div>
-				  <div class="col-lg-8">
-					{{ first_skater.height_feet}}' {{ first_skater.height_inches}}" ({{ first_skater.height }} cm)
-				  </div>
-				</div>
-			  {% endif %}
-  		</div>
-  	</div>
-  	<div class="col-lg-3">
+		{% if first_skater.dob %}
+			<div class="row">
+			  <div class="col-md-4">
+				<b>DOB:</b>
+			  </div>
+			  <div class="col-md-8">
+				{{ first_skater.dob }}
+			  </div>
+			</div>
+		  {% endif %}
+		  {% if first_skater.start_year %}
+			<div class="row">
+			  <div class="col-md-4">
+				<b>Start year:</b>
+			  </div>
+			  <div class="col-md-8">
+				{{ first_skater.start_year }}
+			  </div>
+			</div>
+		  {% endif %}
+		  {% if first_skater.height %}
+			<div class="row">
+			  <div class="col-md-4">
+				<b>Height:</b>
+			  </div>
+			  <div class="col-md-8">
+				{{ first_skater.height_feet}}' {{ first_skater.height_inches}}" ({{ first_skater.height }} cm)
+			  </div>
+			</div>
+		  {% endif %}
+  	</div> <!-- /col-md-3 -->
+  	<div class="col-md-3">
   		<h4>
   		<a href="{{ second_skater.url }}">
   		{{ second_skater.view_name }}
   		</a>
   		</h4>
-  		<div class="row">
-  			{% if second_skater.dob %}
-				<div class="row">
-				  <div class="col-lg-4">
-					<b>DOB:</b>
-				  </div>
-				  <div class="col-lg-8">
-					{{ second_skater.dob }}
-				  </div>
-				</div>
-			  {% endif %}
-			  {% if second_skater.start_year %}
-				<div class="row">
-				  <div class="col-lg-4">
-					<b>Start year:</b>
-				  </div>
-				  <div class="col-lg-8">
-					{{ second_skater.start_year }}
-				  </div>
-				</div>
-			  {% endif %}
-			  {% if second_skater.height %}
-				<div class="row">
-				  <div class="col-lg-4">
-					<b>Height:</b>
-				  </div>
-				  <div class="col-lg-8">
-					{{ second_skater.height_feet}}' {{ second_skater.height_inches}}" ({{ second_skater.height }} cm)
-				  </div>
-				</div>
-			  {% endif %}
-  		</div>
-  	</div>
-    <div class="col-lg-3">
+		{% if second_skater.dob %}
+			<div class="row">
+			  <div class="col-md-4">
+				<b>DOB:</b>
+			  </div>
+			  <div class="col-md-8">
+				{{ second_skater.dob }}
+			  </div>
+			</div>
+		  {% endif %}
+		  {% if second_skater.start_year %}
+			<div class="row">
+			  <div class="col-md-4">
+				<b>Start year:</b>
+			  </div>
+			  <div class="col-md-8">
+				{{ second_skater.start_year }}
+			  </div>
+			</div>
+		  {% endif %}
+		  {% if second_skater.height %}
+			<div class="row">
+			  <div class="col-md-4">
+				<b>Height:</b>
+			  </div>
+			  <div class="col-md-8">
+				{{ second_skater.height_feet}}' {{ second_skater.height_inches}}" ({{ second_skater.height }} cm)
+			  </div>
+			</div>
+		  {% endif %}
+  	</div> <!-- /col-md-3 -->
+    <div class="col-md-3">
       <div><b>Coach(es):</b></div>
       {% for coach in  skater_team.coach.all %}
       {{ coach.first_name }} {{ coach.last_name }}
       <br>
       {% endfor %}
     </div>
-    <div class="col-lg-3">
+    <div class="col-md-3">
       <div><b>Choreographer(s):</b></div>
       {% for choreographer in skater_team.choreographer.all %}
       {{ choreographer.first_name }} {{ choreographer.last_name }}
@@ -125,14 +121,14 @@
   <hr>
 
   <div class="row">
-  	<div class="col-lg-3">
+  	<div class="col-md-3">
   	<h4>Team Stats</h4>
   		{% if height_gap %}
 			<div class="row">
-			  <div class="col-lg-4">
+			  <div class="col-md-4">
 				<b>Height gap:</b>
 			  </div>
-			  <div class="col-lg-8">
+			  <div class="col-md-8">
 				{{ height_gap.0 }}' {{ height_gap.1 }}" ({{ height_gap.2 }} cm)
 			  </div>
 			</div>
@@ -144,7 +140,7 @@
   <hr>
 
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-12">
       <h4>Progression of Scores (Example Data)</h4>
       <p><b class="sp">SP</b>, <b class="fs">FS</b>, <b class="sp-fs-total">TOTAL</b></p>
 
@@ -195,7 +191,7 @@
   {% if personal_records %}
   <hr>
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-12">
       <h4>Personal Records</h4>
       <table class="table table-condensed">
       	<thead>
@@ -248,7 +244,7 @@
   {% if isu_years.0 %}
   <hr>
   <div class="row">
-  	<div class="col-lg-12">
+  	<div class="col-md-12">
   	<table class="table table-condensed">
   		<thead>
   			<tr>
@@ -346,7 +342,7 @@
 
 <!-- Make this into a matrix
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-12">
       <h4>Top Lists</h4>
       <table class="table table-bordered">
         <tr>
@@ -392,7 +388,7 @@
   </script>
   <script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-12">
       <h4>Head to Head</h4>
       <div id="search_error"></div>
       <input type="hidden" id="skaterteam_names" value="{{ skater_team.view_name }}">

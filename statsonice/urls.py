@@ -39,6 +39,7 @@ urlpatterns = ('',
     url(r'^stats/top_scores/$', 'statsonice.stats.stats_top_scores', name='top_scores'),
     url(r'^stats/articles/$', 'statsonice.stats.articles', name='articles'),
     url(r'^stats/articles/(?P<article_name>.+)/$', 'statsonice.stats.articles', name='articles'),
+    url(r'^stats/score_cards/$', 'statsonice.stats.score_cards', name='score_cards'),
     url(r'^stats/custom/$', 'statsonice.stats.custom_stats', name='custom_stats'),
 
     # Website User Pages

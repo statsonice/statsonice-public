@@ -30,7 +30,7 @@ def contact(request):
         except:
             return render(request, 'contact.dj')
         from_address = 'bot@statsonice.com'
-        to_address = 'info@statsonice.com'
+        to_address = 'team@statsonice.com'
         subject = 'New Contact: '+subject
         message = "From: "+name+" ("+email+")  \n"+message
         send_mail(subject, message, from_address, [to_address])

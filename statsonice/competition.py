@@ -5,7 +5,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
 from django.http import Http404
 
-from statsonice.models import Competition, Competitor, Skater, SkaterTeam, Program
+from statsonice.models import Competition, Competitor, Skater, SkaterTeam, Program, Qualifying
 from statsonice.backend.programresults import SkaterResults, ProgramResults
 from statsonice.backend.competitionresults import CompResults, SegmentResults
 
@@ -26,23 +26,22 @@ def browse(request):
 
 
 def profile(request, competition_name, competition_year):
-    start = time()
+    #start = time()
     competition_name = competition_name.replace('-',' ')
     competition = get_object_or_404(Competition, name=competition_name, start_date__year = competition_year)
     if competition.end_date > datetime.now().date():
-        data = {'competition_name':competition_name, 'competition_year':competition_year}
-        return redirect(reverse('competition_preview_detailed', kwargs=data))
+        return redirect(competition.preview_url())
 
     comp_results = CompResults(competition)
-    print 'after backend stuffs', time() - start
+    #print 'after backend stuffs', time() - start
     results = comp_results.get_results_by_category_and_level()
-    print 'after get results by cat and level', time() - start
+    #print 'after get results by cat and level', time() - start
     combined_results = {}
     for category, results_in_category in results.items():
         category = category.lower()
         combined_results[category] = comp_results.get_combined_results(results_in_category)
 
-    print 'time to process competition: ', time() - start
+    #print 'time to process competition: ', time() - start
     return render(request, 'competition.dj', {
         'comp_results': comp_results,
         'competition': competition,

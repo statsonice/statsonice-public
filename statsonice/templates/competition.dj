@@ -16,7 +16,7 @@ $('.collapse').collapse({
 </script>
 
 <div class="row">
-  <div class="col-lg-12">
+  <div class="col-md-12">
     <h4>Programs and Results</h4>
     <div id="accordion" class="panel-group">
       <span class="label label-primary">MEN</span>

@@ -167,6 +167,8 @@ class Program(models.Model):
     segment = models.ForeignKey(Segment)
     starting_number = models.PositiveIntegerField()
     rank = models.PositiveIntegerField()
+    # Most names will be None, except for named compulsary dances
+    name = models.CharField(max_length = 100, default='')
 
     @cached_function
     def view_name(self):

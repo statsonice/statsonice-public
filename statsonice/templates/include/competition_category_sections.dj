@@ -15,10 +15,10 @@
 				<tr>
 				  <th>Rank</th>
 				  <th>Name</th>
-				  {% if 'isu' in skater_results.0.competition.identifier %}
+				  {% if 'isu' in skater_results.0.skater_result.competition.identifier %}
 				  	<th>Country</th>
 				  {% endif %}
-				  {% for program in skater_results.0.program_set.all %}
+				  {% for program in skater_results.0.programs %}
 					<th>
 					  <a href="{{ program.url_segment_summary }}">
 						{{ program.segment.segment }}
@@ -29,41 +29,41 @@
 				  <th>Total Score</th>
 				</tr>
 			  <thead>
-			  {% for skater_result in skater_results %}
+			  {% for sorted_skater_result in skater_results %}
 				<tr>
-				  {% if skater_result.withdrawal %}
-					{% if category == "MEN" and skater_result.competition.cutoff.singles and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
+				  {% if sorted_skater_result.skater_result.withdrawal %}
+					{% if category == "MEN" and sorted_skater_result.skater_result.competition.cutoff.singles and sorted_skater_result.skater_result.program_set.all.0.rank > sorted_skater_result.skater_result.competition.cutoff.singles %}
 						<td>FNR</td>
-					{% elif category == "LADIES" and skater_result.competition.cutoff.singles and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.singles %}
+					{% elif category == "LADIES" and sorted_skater_result.skater_result.competition.cutoff.singles and sorted_skater_result.skater_result.program_set.all.0.rank > sorted_skater_result.skater_result.competition.cutoff.singles %}
 						<td>FNR</td>
-					{% elif category == "PAIRS" and skater_result.competition.cutoff.pairs and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.pairs %}
+					{% elif category == "PAIRS" and sorted_skater_result.skater_result.competition.cutoff.pairs and sorted_skater_result.skater_result.program_set.all.0.rank > sorted_skater_result.skater_result.competition.cutoff.pairs %}
 						<td>FNR</td>
-					{% elif category == "DANCE" and skater_result.competition.cutoff.dance and skater_result.program_set.all.0.rank > skater_result.competition.cutoff.dance %}
+					{% elif category == "DANCE" and sorted_skater_result.skater_result.competition.cutoff.dance and sorted_skater_result.skater_result.program_set.all.0.rank > sorted_skater_result.skater_result.competition.cutoff.dance %}
 						<td>FNR</td>
 					{% else %}
 						<td>WD</td>
 					{% endif %}
 				  {% else %}
-					<td>{{ skater_result.final_rank }}</td>
+					<td>{{ sorted_skater_result.skater_result.final_rank }}</td>
 				  {% endif %}
 				  <td>
-					<a href="{{ skater_result.competitor.get_participants.url }}">
-					  {{ skater_result.competitor.get_participants.view_name }}
+					<a href="{{ sorted_skater_result.skater_result.competitor.get_participants.url }}">
+					  {{ sorted_skater_result.skater_result.competitor.get_participants.view_name }}
 					</a>
 				  </td>
-				  {% if 'isu' in skater_results.0.competition.identifier %}
-				  	<td>{{ skater_result.competitor.get_participants.country.country_name }}</td>
+				  {% if 'isu' in skater_results.0.skater_result.competition.identifier %}
+				  	<td>{{ sorted_skater_result.skater_result.competitor.get_participants.country.country_name }}</td>
 				  {% endif %}
-				  {% for program in skater_result.program_set.all %}
+				  {% for program in sorted_skater_result.programs %}
 					<td>
 					  {{ program.rank }}
 					</td>
 					<td>{{ program.resultijs.tss }}</td>
 				  {% endfor %}
-				  {% if skater_result.withdrawal %}
+				  {% if sorted_skater_result.skater_result.withdrawal %}
 					<td></td>
 				  {% else %}
-					<td><a href="{{ skater_result.url}}">{{ skater_result.total_score }}</a></td>
+					<td><a href="{{ sorted_skater_result.skater_result.url}}">{{ sorted_skater_result.skater_result.total_score }}</a></td>
 				  {% endif %}
 				</tr>
 			  {% endfor %}

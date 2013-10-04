@@ -12,12 +12,12 @@
       {% else %}
         <div>
       {% endif %}
-        <div class="col-lg-11">
+        <div class="col-md-11">
           <h3>
             {{ skater_name.first_name}} {{skater_name.last_name}}
           </h3>
         </div>
-        <div class="col-lg-1">
+        <div class="col-md-1">
           <h3>
             {{ skater.country.country_name }}
           </h3>
@@ -30,43 +30,43 @@
 
 
   <div class="row">
-    <div class="col-lg-4">
+    <div class="col-md-4">
       {% if skater.dob %}
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-md-4">
             <b>DOB:</b>
           </div>
-          <div class="col-lg-8">
+          <div class="col-md-8">
             {{ skater.dob }}
           </div>
         </div>
       {% endif %}
       {% if skater.start_year %}
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-md-4">
             <b>Start year:</b>
           </div>
-          <div class="col-lg-8">
+          <div class="col-md-8">
             {{ skater.start_year }}
           </div>
         </div>
       {% endif %}
       {% if skater.height %}
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-md-4">
             <b>Height:</b>
           </div>
-          <div class="col-lg-8">
+          <div class="col-md-8">
             {{ skater.height_feet}}' {{ skater.height_inches}}" ({{ skater.height }} cm)
           </div>
         </div>
       {% endif %}
       {% if skater.gender %}
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-md-4">
             <b>Gender:</b>
           </div>
-          <div class="col-lg-8">
+          <div class="col-md-8">
             {% if skater.gender == 'F' %}
               Female
             {% else %}
@@ -77,33 +77,33 @@
       {% endif %}
       {% if skater.training_city %}
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-md-4">
             <b>Training city:</b>
           </div>
-          <div class="col-lg-8">
+          <div class="col-md-8">
             {{ skater.training_city.city_name }}, {{skater.training_city.country.get_country_name }}
           </div>
         </div>
       {% endif %}
       {% if skater.home_city %}
         <div class="row">
-          <div class="col-lg-4">
+          <div class="col-md-4">
             <b>Home city:</b>
           </div>
-          <div class="col-lg-8">
+          <div class="col-md-8">
             {{ skater.home_city.city_name }}, {{skater.home_city.country.get_country_name }}
           </div>
         </div>
       {% endif %}
     </div>
-    <div class="col-lg-4">
+    <div class="col-md-4">
       <div><b>Coach(es):</b></div>
       {% for coach in  skater.coach.all %}
       {{ coach.first_name }} {{ coach.last_name }}
       <br>
       {% endfor %}
     </div>
-    <div class="col-lg-4">
+    <div class="col-md-4">
       <div><b>Choreographer(s):</b></div>
       {% for choreographer in skater.choreographer.all %}
       {{ choreographer.first_name }} {{ choreographer.last_name }}
@@ -121,7 +121,7 @@
       {% endif %}
     </div>
     <!--
-    <div class="col-lg-3">
+    <div class="col-md-3">
       <div><b>Alternative Names: </b></div>
       {% for name in skater.other_names %}
         {{ name.view_name }}
@@ -135,7 +135,7 @@
   <hr>
 
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-12">
       <h4>Progression of Scores (Example Data)</h4>
       <p><b class="sp">SP</b>, <b class="fs">FS</b>, <b class="sp-fs-total">TOTAL</b></p>
 
@@ -186,7 +186,7 @@
   {% if personal_records %}
   <hr>
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-12">
       <h4>Personal Records</h4>
       <table class="table table-condensed">
       	<thead>
@@ -238,7 +238,7 @@
 
   <hr>
   <div class="row">
-  	<div class="col-lg-12">
+  	<div class="col-md-12">
   	{% if isu_years.0 %}
   	<table class="table table-condensed">
   		<thead>
@@ -337,7 +337,7 @@
   <hr>
 
   <div class="row">
-    <div class="col-lg-12">
+    <div class="col-md-12">
       <h4>Top Lists</h4>
       <table class="table table-bordered">
         <tr>
@@ -383,7 +383,7 @@
 </script>
 <script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
 <div class="row">
-  <div class="col-lg-12">
+  <div class="col-md-12">
     <h4>Head to Head</h4>
     <div id="search_error"></div>
     <input type="hidden" id="skater_name" value="{{ skater_name.view_name }}">

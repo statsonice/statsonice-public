@@ -1,9 +1,8 @@
 {% extends "page.dj" %}
 {% block main %}
-<br></br>
 <br>
 <div class="row">
-  <div class="col-lg-6">
+  <div class="col-md-6">
     <a href="{% url 'head_to_head_singles' skater1_first_name="Mao" skater1_last_name="Asada" skater2_first_name="Miki" skater2_last_name="Ando" %}">
     <div class="center" id="chart">
       <script src="{{STATIC_PREFIX }}js/index.js"></script>
@@ -12,7 +11,7 @@
       </a>
     <p style="color:grey" class="center">Difference in total score: Mao Asada and Miki Ando Head-to-Head Results</p>
   </div>
-  <div class="col-lg-6">
+  <div class="col-md-6">
     <h4 class="center">
       <a href="{% url 'search_competitions' %}">
       {{ competition_sum }}
@@ -35,14 +34,20 @@
       </a>
     </div>
     <br>
-    <p class="center">or <a href="{% url 'login' %}">Sign In</a></p>
+    <p class="center">or <a href="{% url 'login' %}">Login</a></p>
   </div>
 </div> <!-- row -->
 
 <br></br>
 
+<p class="center"><a href="#learn_more">Learn more</a></p>
+
+<hr id="learn_more">
+
+<br></br>
+
 <div class="row">
-  <div class="col-lg-10 col-lg-offset-1">
+  <div class="col-md-10 col-md-offset-1">
     <p class="center homepage-center">Stats on Ice is a <b>toolkit</b> designed for coaches, skaters, and fans.</p>
     <p class="center homepage-center">We provide applications for analyzing competition, element, and skater data.</p>
   </div>
@@ -51,7 +56,7 @@
 <br>
 
 <div class="row">
-  <div class="col-lg-5 col-lg-offset-1">
+  <div class="col-md-5 col-md-offset-1">
     <h3><i class="glyphicon glyphicon-floppy-disk"></i> Results Database</h3>
     <p>We aim to have the first comprehensive database for figure skating <a href="{% url 'search_competitions' %}">results</a>. We are adding more data all the time. To see which competitions we have in our database, click <a href="{% url 'database_completion' %}">here</a>.</p>
 
@@ -67,7 +72,7 @@
 
     <br>
   </div>
-  <div class="col-lg-5">
+  <div class="col-md-5">
     <h3><i class="glyphicon glyphicon-flag"></i> Protocol Flags</h3>
     <p>Our <a href="/competition/World-Junior-Championships/2013/Yasmin/Siraj/">detailed protocols</a> use flags to highlight judging patterns so protocols can be read and interpreted more quickly. Flag definitions can be found here.</p>
 

@@ -1288,8 +1288,7 @@ class BaseElement(models.Model):
 
     element_name = models.CharField(max_length = 10,
                                     choices = BASE_ELEMENT_CHOICES,
-                                    primary_key=True,
-                                    blank=True)
+                                    unique=True)
 
     class Meta:
         app_label = 'statsonice'
