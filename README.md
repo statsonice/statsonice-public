@@ -86,3 +86,7 @@ it crashes
 - `old/remove_skater_name_periods.py` - Change skater names to not have periods
 
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/statsonice/statsonice-public/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
