@@ -32,7 +32,10 @@ def profile(request, competition_name, competition_year):
     if competition.end_date > datetime.now().date():
         return redirect(competition.preview_url())
 
-    comp_results = CompResults(competition)
+    try:
+        comp_results = CompResults(competition)
+    except:
+        raise Http404
     #print 'after backend stuffs', time() - start
     results = comp_results.get_results_by_category_and_level()
     #print 'after get results by cat and level', time() - start
@@ -41,10 +44,21 @@ def profile(request, competition_name, competition_year):
         category = category.lower()
         combined_results[category] = comp_results.get_combined_results(results_in_category)
 
+    category_results = {}
+    for category, cat_results in combined_results.items():
+        category_results[category] = False
+        for level, results in cat_results.items():
+            if results:
+                category_results[category] = True
+                break
+
+    print category_results
+
     #print 'time to process competition: ', time() - start
     return render(request, 'competition.dj', {
         'comp_results': comp_results,
         'competition': competition,
+        'category_results': category_results,
         'results': combined_results,
     })
 
@@ -84,14 +98,12 @@ def segment_summary(request, competition_name, competition_year, category, quali
     competition_name = competition_name.replace('-',' ')
     competition = get_object_or_404(Competition, name=competition_name, start_date__year = competition_year)
     if qualifying == 'final':
-        qualifying = None
-    else:
-        qualifying = get_object_or_404(Qualifying, name=qualifying)
+        qualifying = ''
     programs = Program.objects.filter(skater_result__competition = competition,
                                       skater_result__category__category = category,
                                       skater_result__level__level = level,
                                       segment__segment = segment,
-                                      skater_result__qualifying = qualifying)
+                                      skater_result__qualifying__name = qualifying)
 
     segment_results = SegmentResults.get_results(programs)
     program_results = [ProgramResults(result.program) for result in segment_results]

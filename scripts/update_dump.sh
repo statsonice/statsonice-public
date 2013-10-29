@@ -18,6 +18,8 @@ for i in "$*" ; do
 done
 
 if [ $calculateVariables = 1 ]; then
+    echo "Checking for Duplicate Skaters"
+    python scripts/old/duplicate_skater_check.py
     echo "Recalculating cached values"
     python scripts/recalculate_cached_variables.py
 fi

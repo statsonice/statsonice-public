@@ -30,41 +30,41 @@ progress_indicator = progressindicator.ProgressIndicator(total_count)
 
 try:
     print "Competition"
-    for competition in Competition.objects.all():
+    for competition in Competition.objects.iterator():
         competition.view_name()
         competition.url()
         progress_indicator.next()
 
     print "SkaterResult"
-    for skaterresult in SkaterResult.objects.all():
+    for skaterresult in SkaterResult.objects.iterator():
         skaterresult.url()
         progress_indicator.next()
 
     print "Program"
-    for program in Program.objects.all():
+    for program in Program.objects.iterator():
         program.view_name()
         program.url_segment_summary()
         progress_indicator.next()
 
     print "ElementScore"
-    for elementscore in ElementScore.objects.all():
+    for elementscore in ElementScore.objects.iterator():
         elementscore.get_element_name()
         progress_indicator.next()
 
     print "Skater"
-    for skater in Skater.objects.all():
+    for skater in Skater.objects.iterator():
         skater.view_name()
         skater.url()
         progress_indicator.next()
 
     print "SkaterName"
-    for skatername in SkaterName.objects.all():
+    for skatername in SkaterName.objects.iterator():
         skater.view_name()
         skater.url_name()
         progress_indicator.next()
 
     print "SkaterTeam"
-    for skaterteam in SkaterTeam.objects.all():
+    for skaterteam in SkaterTeam.objects.iterator():
         skaterteam.view_name()
         skaterteam.url_name()
         skaterteam.url()

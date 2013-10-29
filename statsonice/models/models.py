@@ -69,7 +69,7 @@ class SkaterResult(models.Model):
     competition = models.ForeignKey(Competition)
     category = models.ForeignKey(Category)
     level = models.ForeignKey(Level)
-    qualifying = models.ForeignKey(Qualifying, null=True, blank=True)
+    qualifying = models.ForeignKey(Qualifying)
     # Don't save into total_score, final_rank, withdrawal
     total_score = models.DecimalField(max_digits = 5, decimal_places = 2, null=True, blank=True, db_index=True)
     final_rank = models.PositiveIntegerField(null=True, blank=True)
@@ -110,17 +110,22 @@ class SkaterResult(models.Model):
             self.withdrawal = False
         return self.withdrawal
     def calculate_total_score(self):
-        if self.override_total_score != None:
-            self.total_score = self.override_total_score
-        else:
-            total = 0
-            # rules for qual rounds at worlds change year by year
-            # sometimes no qual rounds, other times do not count towards total score, etc.
-            programs = self.program_set.all().select_related('resultijs')
-            for program in programs:
-                total += program.resultijs.tss * program.resultijs.multiplier
-            self.total_score = total
-        return self.total_score
+        programs = self.program_set.all()
+        try:
+            result = programs[0].result60
+            return None
+        except:
+            if self.override_total_score != None:
+                self.total_score = self.override_total_score
+            else:
+                total = 0
+                # rules for qual rounds at worlds change year by year
+                # sometimes no qual rounds, other times do not count towards total score, etc.
+                programs = self.program_set.all().select_related('resultijs')
+                for program in programs:
+                    total += program.resultijs.tss * program.resultijs.multiplier
+                self.total_score = total
+            return self.total_score
     def calculate_final_rank(self):
         if self.override_final_rank:
             self.final_rank = self.override_final_rank
@@ -178,7 +183,7 @@ class Program(models.Model):
         return name
     @cached_function
     def url_segment_summary(self):
-        if self.skater_result.qualifying == None:
+        if self.skater_result.qualifying.name == '':
             return reverse('segment_summary', kwargs={\
                 'competition_name':self.skater_result.competition.name.replace(' ','-'), \
                 'competition_year':self.skater_result.competition.start_date.year, \
@@ -248,6 +253,40 @@ class ResultIJS(models.Model):
     def __unicode__(self):
         return u'(ResultIJS #%s for Competition %s)' % (self.id, self.program.skater_result.competition)
 
+class Result60(models.Model):
+    program = models.OneToOneField(Program)
+
+class JudgeScore60(models.Model):
+    result = models.ForeignKey(Result60)
+    technical_score = models.DecimalField(max_digits=2, decimal_places=1)
+    artistic_score = models.DecimalField(max_digits=2, decimal_places=1)
+    judge_number = models.PositiveIntegerField()
+
+    ordinal = models.PositiveIntegerField(null=True, blank=True)
+    country = models.ForeignKey(Country, null=True, blank=True)
+
+    # method to calculate ordinal from scores
+    def calculate_ordinal(self):
+        segment = self.result.program.segment # object
+        category = self.result.program.skater_result.category # object
+        level = self.result.program.skater_result.level # object
+        qualifying = self.result.program.skater_result.qualifying # object
+        total = self.technical_score + self.artistic_score
+
+        judges = JudgeScore60.objects.filter(result__program__segment=segment,
+                                             result__program__skater_result__category=category,
+                                             result__program__skater_result__level=level,
+                                             result__program__skater_result__qualifying=qualifying,
+                                             judge_number=self.judge_number)
+        judges.sort(key=lambda judge:(judge.technical_score+judge.artistic_score, judge.artistic_score))
+        rank = judges.index(self)+1
+        if judges[rank-2].technical_score + judges[rank-2].artistic_score == total:
+            if judges[rank-2].artistic_score == self.artistic_score:
+                rank -= 1
+
+        self.ordinal = rank
+
+
 class ElementScore(models.Model):
     result = models.ForeignKey(ResultIJS)
     execution_order = models.PositiveIntegerField()
@@ -296,7 +335,7 @@ class ElementScore(models.Model):
         for mod in mod_after:
             combo_temp += '+'+mod
         return combo_temp
-            
+
     def clean(self):
         ModelValidator.validate_element_panel_score(self.base_value, self.grade_of_execution, self.panel_score)
     class Meta:

@@ -316,7 +316,7 @@
 <h4>Results</h4>
 
 <table class="table table-condensed">
-{% for year, skater_results in results.items %}
+{% for year, skater_results in results %}
   <tbody>
     <tr>
       <td colspan=4>{{ year }}</td>

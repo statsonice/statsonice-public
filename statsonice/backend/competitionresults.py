@@ -47,15 +47,26 @@ class CountryCompStats:
 	# TODO: fix following line bc it causes no medal stats for most comps (e.g. NHK Trophy 2010)
         skater_results = skater_results.exclude(qualifying__isnull=True)
         for skater_result in skater_results:
-            if not skater_result.competitor.get_participants().country:
-                continue
-            if skater_result.competitor.get_participants().country == self.country:
-                if skater_result.final_rank == 1:
-                    gold_count += 1
-                elif skater_result.final_rank == 2:
-                    silver_count += 1
-                elif skater_result.final_rank == 3:
-                    bronze_count += 1
+            if skater_result.competitor.is_team:
+                if not skater_result.competitor.skater_team.country:
+                    continue
+                if skater_result.competitor.skater_team.country == self.country:
+                    if skater_result.final_rank == 1:
+                        gold_count += 1
+                    elif skater_result.final_rank == 2:
+                        silver_count += 1
+                    elif skater_result.final_rank == 3:
+                        bronze_count += 1
+            else:
+                if not skater_result.competitor.skater.country:
+                    continue
+                if skater_result.competitor.skater.country == self.country:
+                    if skater_result.final_rank == 1:
+                        gold_count += 1
+                    elif skater_result.final_rank == 2:
+                        silver_count += 1
+                    elif skater_result.final_rank == 3:
+                        bronze_count += 1
         return gold_count, silver_count, bronze_count
 
     def get_total_medal_count(self):
@@ -83,7 +94,13 @@ class CompResults:
 
     def get_countries(self):
         competitors = Competitor.objects.filter(skaterresult__competition = self.competition).distinct()
-        countries = set([competitor.get_participants().country for competitor in competitors])
+        countries = []
+        for competitor in competitors:
+            if competitor.is_team:
+                countries.append(competitor.skater_team.country)
+            else:
+                countries.append(competitor.skater.country)
+        countries = set(countries)
         countries.discard(None)
         return countries
 
@@ -151,7 +168,10 @@ class SegmentResults:
     def __init__(self, program):
         self.program = program
         self.competitor = self.program.skater_result.competitor
-        self.participant = self.competitor.get_participants()
+        if self.competitor.is_team:
+            self.participant = self.competitor.skater_team
+        else:
+            self.participant = self.competitor.skater
         self.resultijs = self.program.resultijs
         self.pcs = self.resultijs.programcomponentscore_set.all()
 

@@ -1,7 +1,7 @@
 {% extends "page.dj" %}
 {% block header %}
 <h3>Database Completion</h3>
-<p>Page last updated 9/21/13</p>
+<p>Page last updated 10/27/13</p>
 {% endblock %}
 
 {% block main %}
@@ -122,7 +122,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Skate Canada</td>
@@ -133,7 +133,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Cup of China</td>
@@ -236,7 +236,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 5</td>
@@ -247,7 +247,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 6</td>
@@ -258,7 +258,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 7</td>
@@ -269,7 +269,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 8</td>
@@ -314,10 +314,10 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Gardena Spring Trophy</td>
@@ -327,8 +327,8 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>US Classic</td>
@@ -361,7 +361,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Ondrej Nepela Trophy</td>
@@ -372,18 +372,18 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Finlandia Trophy</td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Coupe de Nice</td>
@@ -391,9 +391,9 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 			</tr>
 			<tr>
@@ -525,7 +525,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Central Pacific Regional Championships</td>
@@ -536,7 +536,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Southwest Pacific Regional Championships</td>
@@ -547,7 +547,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Upper Great Lakes Regional Championships</td>
@@ -558,7 +558,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Eastern Great Lakes Regional Championships</td>
@@ -569,7 +569,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Southwestern Regional Championships</td>
@@ -580,7 +580,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>New England Regional Championships</td>
@@ -591,7 +591,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>North Atlantic Regional Championships</td>
@@ -602,7 +602,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>South Atlantic Regional Championships</td>
@@ -613,7 +613,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 		</tbody>
 	</table>

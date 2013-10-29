@@ -24,6 +24,10 @@ def median(scores):
 # standard deviation
 #
 def std_dev(scores):
+    if scores == None:
+        return None
+    if len(scores) < 1:
+        return None
     scores = [float(score) for score in scores]
     if len(scores) == 1:
         return 0

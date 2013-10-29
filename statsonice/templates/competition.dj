@@ -19,16 +19,16 @@ $('.collapse').collapse({
   <div class="col-md-12">
     <h4>Programs and Results</h4>
     <div id="accordion" class="panel-group">
-      <span class="label label-primary">MEN</span>
+      {% if category_results.men %}<span class="label label-primary">MEN</span>{% endif %}
       {% include "include/competition_category_sections.dj" with res=results.men_pre category="MEN PRELIMINARY ROUND" %}
       {% include "include/competition_category_sections.dj" with res=results.men category="MEN" %}
-      <span class="label label-danger">LADIES</span>
+      {% if category_results.ladies %}<span class="label label-danger">LADIES</span>{% endif %}
       {% include "include/competition_category_sections.dj" with res=results.ladies_pre category="LADIES PRELIMINARY ROUND" %}
       {% include "include/competition_category_sections.dj" with res=results.ladies category="LADIES" %}
-      <span class="label label-warning">DANCE</span>
+      {% if category_results.dance %}<span class="label label-warning">DANCE</span>{% endif %}
       {% include "include/competition_category_sections.dj" with res=results.dance_pre category="DANCE PRELIMINARY ROUND" %}
       {% include "include/competition_category_sections.dj" with res=results.dance category="DANCE" %}
-      <span class="label label-success">PAIRS</span>
+      {% if category_results.pairs %}<span class="label label-success">PAIRS</span>{% endif %}
       {% include "include/competition_category_sections.dj" with res=results.pairs_pre category="PAIRS PRELIMINARY ROUND" %}
       {% include "include/competition_category_sections.dj" with res=results.pairs category="PAIRS" %}
     </div> <!-- /accordion -->

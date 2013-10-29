@@ -71,6 +71,9 @@ def profile(request, skater_first_name, skater_last_name):
             result_dic[year] = []
         result_dic[year].append(result)
 
+    result_dic = result_dic.items()
+    result_dic.sort(key=lambda x:-x[0])
+
 
     # Get head to head autocomplete
     # TODO: this part is too slow, takes on the order of 15s
@@ -94,17 +97,13 @@ def profile(request, skater_first_name, skater_last_name):
 # View to display information about a skater team
 #
 def team_profile(request, first_skater_first_name, first_skater_last_name, second_skater_first_name, second_skater_last_name):
-    #try:
-    first_skater = Skater.find_skater_by_url_name(first_skater_first_name, first_skater_last_name)
-    print first_skater
-    second_skater = Skater.find_skater_by_url_name(second_skater_first_name, second_skater_last_name)
-    print second_skater
-    skater_team = SkaterTeam.objects.get(female_skater=first_skater, male_skater=second_skater)
-    print skater_team
-    competitor = Competitor.find_competitor(skater_team)
-    print competitor
-    #except:
-    #    raise Http404
+    try:
+        first_skater = Skater.find_skater_by_url_name(first_skater_first_name, first_skater_last_name)
+        second_skater = Skater.find_skater_by_url_name(second_skater_first_name, second_skater_last_name)
+        skater_team = SkaterTeam.objects.get(female_skater=first_skater, male_skater=second_skater)
+        competitor = Competitor.find_competitor(skater_team)
+    except:
+        raise Http404
 
     # skater heights
     first_skater.height_feet, first_skater.height_inches = unitconversion.metric_to_imperial(first_skater.height)
@@ -144,6 +143,9 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
         if year not in result_dic:
             result_dic[year] = []
         result_dic[year].append(result)
+
+    result_dic = result_dic.items()
+    result_dic.sort(key=lambda x:-x[0])
 
     # Get head to head autocomplete
     # TODO: this part is too slow, takes on the order of 15s

@@ -216,6 +216,7 @@ def score_cards(request):
     if request.method == 'POST':
         category = request.POST.get('category')
         segment = request.POST.get('segment')
+    skater_name = 'Curran Oi'
     competitor = Competitor.objects.get(skater__skatername__first_name="Curran")
     segment = 'FS'
     category = 'MEN'
@@ -224,6 +225,7 @@ def score_cards(request):
     pcs = score_card.pcs
     return render(request, 'score_cards.dj', {
             'element_names': element_names,
+            'skater_name': skater_name,
             'pcs': pcs,
             'segment': segment,
             'category': category

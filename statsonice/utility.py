@@ -1,6 +1,8 @@
 import urllib2
 
+from django.core.urlresolvers import reverse
 from django.http import HttpResponse
+from django.shortcuts import redirect
 
 from statsonice.models import Settings
 from statsonice import user
@@ -24,6 +26,8 @@ def cache_blog(request):
     except:
         return HttpResponse('Not Found')
 
+def pair_profile(*args, **kwargs):
+    return redirect(reverse('team_profile', kwargs=kwargs), permanent=True)
 
 def require_subscribe(f):
     def wrapped(*args, **kwargs):

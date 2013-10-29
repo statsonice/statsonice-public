@@ -155,6 +155,12 @@ class ScoreCardOutput:
             for element in elements:
                 under_rotated = False
 
+                # if * in element name, it gets no points
+                if '*' in element:
+                    goe = 0
+                    goe_factor = 0
+                    base_value = 0
+
                 # if << in element name
                 if '<<' in element:
                     element = element.replace('<<','')

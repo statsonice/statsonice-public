@@ -44,8 +44,9 @@ class ProfileResults:
         min_yr, max_yr = 2013, 0
         now = date.today()
         skater_results = self.skater_results.order_by('competition__name')
-        skater_results = skater_results.filter(qualifying = Qualifying.objects.get(name=''))
-        skater_results = skater_results.filter(competition__start_date__lte = now)
+        skater_results = skater_results.filter(qualifying = Qualifying.objects.get(name=''),
+                                               competition__end_date__lte = now,
+                                               final_rank__gte = 1)
 
         used_competitions = []
         for ordered_competition in self.ORDERED_COMPETITIONS:

@@ -21,10 +21,10 @@ CACHES = {
 MIDDLEWARE_CLASSES += (
     #'debug_toolbar.middleware.DebugToolbarMiddleware',
     'util.middleware.profiling.ProfileMiddleware',
+    'util.middleware.profilingsql.ProfileSQLMiddleware',
 )
 
 INSTALLED_APPS += (
-    'django.contrib.admin',
     #'debug_toolbar',
 )
 

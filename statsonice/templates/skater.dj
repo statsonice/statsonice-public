@@ -305,32 +305,31 @@
   </div>
 
 <br>
-
 <h4>Results</h4>
 
 <table class="table table-condensed">
-{% for year, skater_results in results.items %}
-  <tbody>
-    <tr>
-      <td colspan=4>{{ year }}</td>
-    </tr>
-  {% for sr in skater_results %}
-  	{% if 'GROUP' not in sr.qualifying.name or sr.qualifying.name == None %}
-  	<tr>
-  	  <td>
-  	  	<a href="{{ sr.competition.url }}">
-  	  	{{ sr.competition.name }} {{ sr.qualifying.name }}
-  	    </a>
-  	  </td>
-  	  <td>{{ sr.level.level }} {{ sr.category.category }}</td>
-  	  <td>{{ sr.final_rank }}</td>
-  	  <td>{{ sr.total_score }}</td>
-  	  <td>{{ sr.competition.start_date.month }}-{{ sr.competition.start_date.year }}</td>
-  	</tr>
-  	{% endif %}
+  {% for year, skater_results in results %}
+	  <tbody>
+		<tr>
+		  <td colspan=4>{{ year }}</td>
+		</tr>
+	  {% for sr in skater_results %}
+		{% if 'GROUP' not in sr.qualifying.name or sr.qualifying.name == None %}
+		<tr>
+		  <td>
+			<a href="{{ sr.competition.url }}">
+			{{ sr.competition.name }} {{ sr.qualifying.name }}
+			</a>
+		  </td>
+		  <td>{{ sr.level.level }} {{ sr.category.category }}</td>
+		  <td>{{ sr.final_rank }}</td>
+		  <td>{{ sr.total_score }}</td>
+		  <td>{{ sr.competition.start_date.month }}-{{ sr.competition.start_date.year }}</td>
+		</tr>
+		{% endif %}
   {% endfor %}
   </tbody>
-{% endfor %}
+  {% endfor %}
 </table>
 
   <!-- Make this into a matrix

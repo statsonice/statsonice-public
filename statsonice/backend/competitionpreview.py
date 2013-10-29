@@ -18,19 +18,26 @@ from includes import stats
 class CompetitorStats(object):
     def __init__(self,competitor):
         self.competitor = competitor
-        if type(self.competitor.get_participants()) is Skater:
-            if self.competitor.get_participants().dob:
-                self.age = self.get_age()
-            else:
-                self.age = None
+        if not self.competitor.is_team:
+            self.age = self.competitor.skater.age()
+        else:
+            self.age = None
         self.skater_results = self.get_skater_results()
         self.competitions = self.get_competitions()
         self.scores = self.get_scores()
-        self.recent_scores = self.get_recent_scores()
-        self.highest_total_score = self.get_highest_total_score()
-        self.slope, self.intercept = self.line_of_best_fit()
-        self.next_score = self.get_next_score()
-        self.consistency = self.get_consistency()
+        if len(self.scores) == 0:
+            self.recent_scores = None
+            self.highest_total_score = None
+            self.slope = None
+            self.intercept = None
+            self.next_score = 0
+            self.consistency = None
+        else:
+            self.recent_scores = self.get_recent_scores()
+            self.highest_total_score = self.get_highest_total_score()
+            self.slope, self.intercept = self.line_of_best_fit()
+            self.next_score = self.get_next_score()
+            self.consistency = self.get_consistency()
 
         # values dependent on which other competitors involved
         self.chance_win = None
@@ -38,18 +45,6 @@ class CompetitorStats(object):
         self.projected_placement = None
         self.hth_record = {}
         self.hth_probabilities = {}
-
-    def get_age(self):
-        born = self.competitor.get_participants().dob
-        today = date.today()
-        try:
-            birthday = born.replace(year=today.year)
-        except ValueError: # raised when birth date is February 29 and the current year is not a leap year
-            birthday = born.replace(year=today.year, day=born.day-1)
-        if birthday > today:
-            return today.year - born.year - 1
-        else:
-            return today.year - born.year
 
     def get_skater_results(self):
         results = SkaterResult.objects.filter(competitor=self.competitor)
@@ -144,16 +139,16 @@ class CompPreviewStats(object):
                     if skater_stat1 not in skater_stat2.hth_record:
                         self.get_hth(skater_stat1,skater_stat2)
 
-                        prob1_win, prob2_win = determine_win_probability(skater_stat1.recent_scores,skater_stat2.recent_scores,len(skater_stats))
-                        skater_stat1.hth_probabilities[skater_stat2.competitor] = prob1_win
-                        skater_stat2.hth_probabilities[skater_stat1.competitor] = prob2_win
+                        #prob1_win, prob2_win = determine_win_probability(skater_stat1.recent_scores,skater_stat2.recent_scores,len(skater_stats))
+                        #skater_stat1.hth_probabilities[skater_stat2.competitor] = prob1_win
+                        #skater_stat2.hth_probabilities[skater_stat1.competitor] = prob2_win
 
-                    product *= skater_stat1.hth_probabilities[skater_stat2.competitor]/100.0
-                skater_stat1.chance_win = product
-                normalization_total += product
-            for skater_stat1 in skater_stats:
-                skater_stat1.chance_win /= normalization_total
-                skater_stat1.chance_win = round(100.0*skater_stat1.chance_win,1)
+                    #product *= skater_stat1.hth_probabilities[skater_stat2.competitor]/100.0
+                #skater_stat1.chance_win = product
+                #normalization_total += product
+            #for skater_stat1 in skater_stats:
+                #skater_stat1.chance_win /= normalization_total
+                #skater_stat1.chance_win = round(100.0*skater_stat1.chance_win,1)
 
     #-------------------------
     # Summary Stats Methods
@@ -163,7 +158,8 @@ class CompPreviewStats(object):
     #
     def get_projected_placements(self):
         for category in [self.men,self.ladies,self.pairs,self.dance]:
-            category.sort(key=lambda x:-x.next_score)
+            #category.sort(key=lambda x:-x.next_score)
+            category.sort(key=lambda x:x.competitor.get_participants().country.country_name)
             i = 1
             for skater in category:
                 skater.projected_placement = i

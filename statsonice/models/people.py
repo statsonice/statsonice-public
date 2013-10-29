@@ -44,14 +44,21 @@ class Skater(models.Model):
         })
     @staticmethod
     def find_skater_by_url_name(first_name, last_name):
+        skater = Skater.objects.distinct()
         first_name = SkaterName.get_search_string(first_name)
+        if len(first_name) == 1:
+            skater = skater.filter(skatername__first_name=first_name[0])
+        else:
+            for name in first_name:
+                skater = skater.filter(skatername__first_name__contains=name)
         last_name = SkaterName.get_search_string(last_name)
-        search_dict = {}
-        for name in first_name:
-            search_dict['skatername__first_name__contains'] = name
-        for name in last_name:
-            search_dict['skatername__last_name__contains'] = name
-        return Skater.objects.distinct().get(**search_dict)
+        if len(last_name) == 1:
+            skater = skater.get(skatername__last_name=last_name[0])
+        else:
+            for name in last_name[0:-1]:
+                skater = skater.filter(skatername__last_name__contains=name)
+            skater = skater.get(skatername__last_name__contains=last_name[-1])
+        return skater
     def get_default_skater_name(self):
         return self.skatername_set.get(is_default_name=True)
     def teams(self):
@@ -59,6 +66,18 @@ class Skater(models.Model):
             return SkaterTeam.objects.filter(male_skater__id = self.id)
         else:
             return SkaterTeam.objects.filter(female_skater__id = self.id)
+    def age(self):
+        if self.dob == None:
+            return None
+        today = datetime.date.today()
+        try:
+            birthday = self.dob.replace(year=today.year)
+        except ValueError: # raised when birth date is February 29 and the current year is not a leap year
+            birthday = self.dob.replace(year=today.year, day=self.bob.day-1)
+        if birthday > today:
+            return today.year - self.dob.year - 1
+        else:
+            return today.year - self.dob.year
     def competitor(self):
         return Competitor.find_competitor(self)
     class Meta:
@@ -188,7 +207,6 @@ class SkaterTeam(models.Model):
 
 
 class Competitor(models.Model):
-    # Do not access these fields directly; use the functions below
     skater_team = models.ForeignKey(SkaterTeam, null=True, blank=True, unique=True)
     skater = models.ForeignKey(Skater, null=True, blank=True, unique=True)
     is_team = models.BooleanField()

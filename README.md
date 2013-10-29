@@ -60,7 +60,6 @@ to the repository so that your changes will be reflected on statsonice.com
 do this:
     - Use a SQL shell (`python manage.py dbshell`)
     - Use a Django shell (`python manage.py shell`)
-    - Use the Django administration interface (http://localhost:port/admin)
     - Edit the sql `data/db_dump.sql` file *not recommended*
     - Run the data parsing scripts
 2.  Check to make sure your data is correct.
