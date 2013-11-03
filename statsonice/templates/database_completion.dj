@@ -350,7 +350,7 @@
 				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Nebelhorn Trophy</td>
@@ -394,7 +394,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Ice Challenge</td>
@@ -402,10 +402,10 @@
 				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Merano Cup</td>
@@ -415,8 +415,8 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>NRW Trophy</td>
@@ -466,10 +466,10 @@
 			</tr>
 			<tr>
 				<td>US National Championships</td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>

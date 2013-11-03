@@ -141,7 +141,7 @@ class CompResults:
                     del results_by_level[level][qual]
                     continue
                 # sort by overall score to determine rank
-                skater_results.sort(key=lambda sorted_skater_result: (-sorted_skater_result.skater_result.total_score,sorted_skater_result.skater_result.withdrawal))
+                skater_results.sort(key=lambda sorted_skater_result: (sorted_skater_result.skater_result.final_rank,sorted_skater_result.skater_result.withdrawal))
 
                 # move withdrawals behind other skater results
                 #skater_results.sort(key=lambda r: r.withdrawal())

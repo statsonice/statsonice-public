@@ -29,6 +29,8 @@ class HeadToHead:
                     skater2_res = skater_result
             if skater1_res.total_score == 0:
                 continue
+            if skater1_res.level.level != skater2_res.level.level:
+                continue
             if skater1_res.total_score > skater2_res.total_score:
                 s1_count += 1
             else:

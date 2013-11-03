@@ -120,6 +120,7 @@ class Country(models.Model):
         ('LES', 'Lesotho'),
         ('LIB', 'Lebanon'),
         ('LIE', 'Liechtenstein'),
+        ('LIT', 'Lithuania'),
         ('LTU', 'Lithuania'),
         ('LUX', 'Luxembourg'),
         ('MAD', 'Madagascar'),

@@ -134,7 +134,13 @@ class SkaterResult(models.Model):
             results = []
             for sr in skater_results:
                 results.append([sr, sr.total_score])
-            results.sort(key=lambda x:-x[1])
+            try:
+                if self.category.category == 'MEN' or self.category.category == 'LADIES' or self.category.category == 'PAIRS':
+                    results.sort(key=lambda x:(-x[1],-x[0].program_set.get(segment__segment='FS').resultijs.tss))
+                elif self.category.category == 'DANCE':
+                    results.sort(key=lambda x:(-x[1],-x[0].program_set.get(segment__segment='FD').resultijs.tss))
+            except:
+                results.sort(key=lambda x:-x[1])
             comp_name = self.competition.name
             # TODO: This should not be here
             comp_names = ['World Championships', 'World Junior Championships', 'Four Continents Championships', 'European Championships']

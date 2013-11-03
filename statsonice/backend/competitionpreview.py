@@ -158,7 +158,6 @@ class CompPreviewStats(object):
     #
     def get_projected_placements(self):
         for category in [self.men,self.ladies,self.pairs,self.dance]:
-            #category.sort(key=lambda x:-x.next_score)
             category.sort(key=lambda x:x.competitor.get_participants().country.country_name)
             i = 1
             for skater in category:
