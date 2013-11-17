@@ -47,10 +47,10 @@ urlpatterns = ('',
         'statsonice.competition.profile', name='competition_profile'),
     url(r'^competition/'+competition_regex()+r'/(?P<category>[A-Z]{3,6})/(?P<qualifying>.*)/(?P<level>[A-Z]{2,3})/(?P<segment>[A-Z]{2})/$',
         'statsonice.competition.segment_summary', name='segment_summary'),
-    url(r'^competition/'+competition_regex()+r'/'+skater_url('skater')+r'/$',
-        'statsonice.competition.skater_result_profile_single', name='skater_result_profile_single'),
     url(r'^competition/'+competition_regex()+r'/'+skater_url('first_skater')+r'/'+skater_url('second_skater')+r'/$',
         'statsonice.competition.skater_result_profile_team', name='skater_result_profile_team'),
+    url(r'^competition/'+competition_regex()+r'/'+skater_url('skater')+r'/$',
+        'statsonice.competition.skater_result_profile_single', name='skater_result_profile_single'),
 
 
     # Stats

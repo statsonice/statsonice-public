@@ -100,7 +100,6 @@ class SkaterName(models.Model):
     URL_NAME_CHARACTERS_TO_REPLACE = [' ', '\'', ',']
     REPLACEMENT_CHAR = '.'
 
-    @cached_function
     def view_name(self):
         return self.first_name + ' ' + self.last_name
     @cached_function

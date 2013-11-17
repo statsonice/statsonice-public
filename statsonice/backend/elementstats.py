@@ -57,7 +57,8 @@ class ElementCompetitorStats:
                 self.single_dg += 1
 
             # find goe statistics
-            judge_goes = element_score.elementjudge_set.values_list('judge_grade_of_execution', flat=True).order_by('judge_grade_of_execution')
+            judge_goes = element_score.get_goes()
+            judge_goes.sort()
             judge_goes = list(judge_goes)[1:-1]
             average_goe = average(judge_goes)
             average_goe = int(math.floor(average_goe))
@@ -311,16 +312,10 @@ class ElementStats:
     #-----------------------------------------
     # methods to retrieve element data
     #-----------------------------------------
-    def calculate_goe(self, element_judges):
-        try:
-            element_judges = list(element_judges)
-            element_judges.sort(key=lambda x:x.judge_grade_of_execution)
-            element_judges = element_judges[1:-1]
-            element_goes = [x.judge_grade_of_execution for x in element_judges]
-            tot = sum(element_goes)
-            return float(tot)/len(element_goes)
-        except:
-            return None # find a better fix than this
+    def calculate_goe(self, elementscore):
+        goes = elementscore.get_goes()
+        goes = goes[1:-1]
+        return average(goes)
 
     def get_goe_stats(self):
         goe_stats = {}
@@ -331,7 +326,7 @@ class ElementStats:
         goe_detailed_stats = {}
         for es in self.element_scores:
             year = es.result.program.skater_result.competition.start_date.year
-            goe = self.calculate_goe(es.elementjudge_set.all())
+            goe = self.calculate_goe(es)
             if goe == None:
                 continue
             goe_range = math.floor(goe)

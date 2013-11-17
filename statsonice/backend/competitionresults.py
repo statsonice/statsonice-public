@@ -144,7 +144,7 @@ class CompResults:
                 skater_results.sort(key=lambda sorted_skater_result: (sorted_skater_result.skater_result.final_rank,sorted_skater_result.skater_result.withdrawal))
 
                 # move withdrawals behind other skater results
-                #skater_results.sort(key=lambda r: r.withdrawal())
+                skater_results.sort(key=lambda r: int(r.skater_result.withdrawal))
                 results_by_level[level][qual] = skater_results
         return results_by_level
 

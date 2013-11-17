@@ -1,7 +1,0 @@
-{% extends "page.dj" %}
-{% block main %}
-
-<legend><h3>Payment Processing</h3></legend>
-<p>Patment processing forthcoming</p>
-
-{% endblock %}

@@ -1,7 +1,7 @@
 {% extends "page.dj" %}
 {% block header %}
 <h3>Database Completion</h3>
-<p>Page last updated 10/27/13</p>
+<p>Page last updated 11/11/13</p>
 {% endblock %}
 
 {% block main %}
@@ -39,6 +39,7 @@
 		<thead>
 			<tr>
 				<th>Competition</th>
+				<th>2005</th>
 				<th>2006</th>
 				<th>2007</th>
 				<th>2008</th>
@@ -52,11 +53,12 @@
 		<tbody>
 			<!-- ISU Championships -->
 			<tr>
-				<td colspan=9 class="title-block">ISU Championships</td>
+				<td colspan=10 class="title-block">ISU Championships</td>
 			</tr>
 			<tr>
 				<td>Olympics</td>
-				<td class="not-in-db"></td>
+				<td class="not-held"></td>
+				<td class="in-db"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
@@ -67,6 +69,7 @@
 			</tr>
 			<tr>
 				<td>World Championships</td>
+				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -86,10 +89,12 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Four Continents Championships</td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -100,7 +105,8 @@
 			</tr>
 			<tr>
 				<td>European Championships</td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -111,10 +117,11 @@
 			</tr>
 			<!-- Grand Prix Events -->
 			<tr>
-				<td colspan=9 class="title-block">Grand Prix Series</td>
+				<td colspan=10 class="title-block">Grand Prix Series</td>
 			</tr>
 			<tr>
 				<td>Skate America</td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -134,9 +141,35 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Cup of China</td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+			</tr>
+			<tr>
+				<td>NHK Trophy</td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+			</tr>
+			<tr>
+				<td>Trophee Eric Bompard</td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -155,27 +188,6 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
-			</tr>
-			<tr>
-				<td>Trophee Eric Bompard</td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="not-in-db"></td>
-			</tr>
-			<tr>
-				<td>NHK Trophy</td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
-				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 			</tr>
@@ -188,14 +200,16 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
+				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 			</tr>
 			<!-- Junior Grand Prix Events -->
 			<tr>
-				<td colspan=9 class="title-block">Junior Grand Prix Series</td>
+				<td colspan=10 class="title-block">Junior Grand Prix Series</td>
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 1</td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -215,6 +229,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 3</td>
@@ -226,9 +241,11 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 4</td>
+				<td class="not-in-db">CAN</td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -248,6 +265,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 6</td>
@@ -259,9 +277,11 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 7</td>
+				<td class="not-in-db">POL</td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -273,6 +293,7 @@
 			</tr>
 			<tr>
 				<td>Junior Grand Prix 8</td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -291,18 +312,20 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
+				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 			</tr>
 			<!-- Other Internationals -->
 			<tr>
-				<td colspan=9 class="title-block">Other International Competitions</td>
+				<td colspan=10 class="title-block">Other International Competitions</td>
 			</tr>
 			<tr>
 				<td>World Team Trophy</td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
-				<td class="not-in-db"></td>
+				<td class="not-held"></td>
+				<td class="in-db"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="in-db"></td>
@@ -310,6 +333,7 @@
 			</tr>
 			<tr>
 				<td>Triglav Trophy</td>
+				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -327,11 +351,13 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>US Classic</td>
+				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
@@ -350,10 +376,12 @@
 				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
+				<td class="not-held"></td>
 				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Nebelhorn Trophy</td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -364,7 +392,20 @@
 				<td class="in-db"></td>
 			</tr>
 			<tr>
+				<td>Karl Schaefer Memorial</td>
+				<td class="in-db"></td>
+				<td class="not-in-db"></td>
+				<td class="not-held"></td>
+				<td class="not-in-db"></td>
+				<td class="not-held"></td>
+				<td class="not-held"></td>
+				<td class="not-held"></td>
+				<td class="not-held"></td>
+				<td class="not-held"></td>
+			</tr>
+			<tr>
 				<td>Ondrej Nepela Trophy</td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -376,6 +417,7 @@
 			</tr>
 			<tr>
 				<td>Finlandia Trophy</td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -391,6 +433,7 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -398,6 +441,7 @@
 			</tr>
 			<tr>
 				<td>Ice Challenge</td>
+				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-held"></td>
@@ -415,11 +459,13 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>NRW Trophy</td>
+				<td class="not-held"></td>
 				<td class="not-held"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -439,6 +485,7 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
+				<td class="not-in-db"></td>
 			</tr>
 		</tbody>
 	</table>
@@ -449,6 +496,7 @@
 		<thead>
 			<tr>
 				<th>Competition</th>
+				<th>2005</th>
 				<th>2006</th>
 				<th>2007</th>
 				<th>2008</th>
@@ -462,10 +510,11 @@
 		<tbody>
 			<!-- National Competitions -->
 			<tr>
-				<td colspan=9 class="title-block">National</td>
+				<td colspan=10 class="title-block">National</td>
 			</tr>
 			<tr>
 				<td>US National Championships</td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -477,10 +526,11 @@
 			</tr>
 			<!-- Sectional Competitions -->
 			<tr>
-				<td colspan=9 class="title-block">Sectional</td>
+				<td colspan=10 class="title-block">Sectional</td>
 			</tr>
 			<tr>
 				<td>Eastern Sectional Championships</td>
+				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -492,6 +542,7 @@
 			</tr>
 			<tr>
 				<td>Midwestern Sectional Championships</td>
+				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -503,6 +554,7 @@
 			</tr>
 			<tr>
 				<td>Pacific Coast Sectional Championships</td>
+				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -514,10 +566,11 @@
 			</tr>
 			<!-- Regional Competitions -->
 			<tr>
-				<td colspan=9 class="title-block">Regional</td>
+				<td colspan=10 class="title-block">Regional</td>
 			</tr>
 			<tr>
 				<td>Northwest Pacific Regional Championships</td>
+				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -533,6 +586,7 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -540,6 +594,7 @@
 			</tr>
 			<tr>
 				<td>Southwest Pacific Regional Championships</td>
+				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -555,6 +610,7 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -562,6 +618,7 @@
 			</tr>
 			<tr>
 				<td>Eastern Great Lakes Regional Championships</td>
+				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -577,6 +634,7 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -584,6 +642,7 @@
 			</tr>
 			<tr>
 				<td>New England Regional Championships</td>
+				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -599,6 +658,7 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
+				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -606,6 +666,7 @@
 			</tr>
 			<tr>
 				<td>South Atlantic Regional Championships</td>
+				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>

@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404, redirect
-from django.utils import simplejson
-from django.views.decorators.csrf import ensure_csrf_cookie
-
 from datetime import datetime, timedelta
+import json
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from statsonice.backend.headtohead import HeadToHead
 from statsonice.backend.competitionpreview import CompPreviewStats
@@ -32,9 +32,9 @@ def stats_head_to_head_singles(request, skater1_first_name, skater1_last_name, s
     s1_count, s2_count, hth_results = hth.get_head_to_head_results()
     s1_scores, s2_scores, num = hth.get_hth_graph_stats()
 
-    s1_scores, s2_scores, num = s1_scores, s2_scores, simplejson.dumps(num)
+    s1_scores, s2_scores, num = s1_scores, s2_scores, json.dumps(num)
     diff_scores = [round(s1 - s2,2) for s1, s2 in zip(s1_scores,s2_scores)]
-    diff_scores = simplejson.dumps(diff_scores)
+    diff_scores = json.dumps(diff_scores)
 
     hth_table_stats = hth.get_hth_table_stats()
 
@@ -70,9 +70,9 @@ def stats_head_to_head_teams(request, skater1_first_name, skater1_last_name, ska
     s1_count, s2_count, hth_results = hth.get_head_to_head_results()
     s1_scores, s2_scores, num = hth.get_hth_graph_stats()
 
-    s1_scores, s2_scores, num = s1_scores, s2_scores, simplejson.dumps(num)
+    s1_scores, s2_scores, num = s1_scores, s2_scores, json.dumps(num)
     diff_scores = [round(s1 - s2,2) for s1, s2 in zip(s1_scores,s2_scores)]
-    diff_scores = simplejson.dumps(diff_scores)
+    diff_scores = json.dumps(diff_scores)
 
     hth_table_stats = hth.get_hth_table_stats()
 
@@ -157,9 +157,9 @@ def stats_element_stats(request):
             if len(element_scores) > 300:
                 element_scores = element_scores[len(element_scores)-300:]
 
-            goes = simplejson.dumps(goes)
-            years = simplejson.dumps(years)
-            time_series = simplejson.dumps(time_series)
+            goes = json.dumps(goes)
+            years = json.dumps(years)
+            time_series = json.dumps(time_series)
     else:
         element_name = '4S+2T'
         category_name = 'MEN'
@@ -172,9 +172,9 @@ def stats_element_stats(request):
         if len(element_scores) > 300:
             element_scores = element_scores[len(element_scores)-300:]
 
-        goes = simplejson.dumps(goes)
-        years = simplejson.dumps(years)
-        time_series = simplejson.dumps(time_series)
+        goes = json.dumps(goes)
+        years = json.dumps(years)
+        time_series = json.dumps(time_series)
         open_detailed = True
 
     print 'goes: ', goes

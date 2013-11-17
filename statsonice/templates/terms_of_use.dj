@@ -82,4 +82,7 @@ this will not affect any other terms and conditions.</p>
 <p>For information about how to contact us at StatsOnIce, please visit our
 <a href="{% url 'statsonice.static.contact' %}">contact page</a>.</p>
 
+<br />
+<p>&copy; 2013, Stats On Ice</p>
+
 {% endblock %}

@@ -71,7 +71,7 @@ class ProgramResults:
     def elementscore_GOE(self):
         goes_by_elementscore = {}
         for element_score in self.element_scores:
-            goes_by_elementscore[element_score] = element_score.elementjudge_set.values_list('judge_grade_of_execution', flat=True)
+            goes_by_elementscore[element_score] = element_score.get_goes()
         return goes_by_elementscore
 
     # get the grade of executions for a program
@@ -88,34 +88,14 @@ class ProgramResults:
         sums['program_goe_sum'] = sum([i[1] for i in grades])
         return sums
 
-    # return element name given queryset of elements, with modifiers and all properly formatted
-    #
-    def get_el_name(self,elements):
-        combo = []
-        for element in elements:
-            b_elem = element.base_element.element_name
-            if element.modifiers:
-                modifiers = element.modifiers.all()
-                mods = modifiers.filter(modifier__in=self.MODIFIES_ONE).values_list('modifier', flat=True)
-                mod_after = modifiers.filter(modifier__in=self.MODIFIES_AFTER).values_list('modifier', flat=True)
-                mod_all = modifiers.filter(modifier__in=self.MODIFIES_ALL).exclude(modifier='x').values_list('modifier', flat=True)
-                b_elem += ''.join(mods)
-                combo.append(b_elem)
-        combo_temp = '+'.join(combo)
-        for mod in mod_after:
-            combo_temp += '+'+mod
-        for mod in mod_all:
-            combo_temp += ' ('+mod+')'
-        return combo_temp
-
     # returns element scores with median/average/stddev goe, base value, and element name
     #
     def compute_element_scores(self):
         for elementscore in self.element_scores:
-            elements = elementscore.element_set.all()
-            elementscore.element_name = self.get_el_name(elements)
+            elementscore.element_name = elementscore.get_element_name()
             bv = str(elementscore.base_value)
-            if elements[0].modifiers.filter(modifier='x').count() > 0:
+            element = elementscore.element_set.first()
+            if element != None and element.modifiers.filter(modifier='x').count() > 0:
                 bv += ' x'
             elementscore.base_value_x = bv
             elementscore.judge_scores = self.goes_by_elementscore[elementscore]

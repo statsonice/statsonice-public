@@ -11,6 +11,7 @@ load_settings(sys.argv)
 import traceback
 
 from django.conf import settings
+from django import db
 
 from statsonice.models import *
 from includes import progressindicator
@@ -19,22 +20,15 @@ if 'dummy' in settings.CACHES['default']['BACKEND']:
     print 'Running dummy backend - not caching'
     sys.exit()
 
-total_count = Competition.objects.count()
-total_count += SkaterResult.objects.count()
+total_count = SkaterResult.objects.count()
 total_count += Program.objects.count()
 total_count += ElementScore.objects.count()
 total_count += Skater.objects.count()
 total_count += SkaterName.objects.count()
 total_count += SkaterTeam.objects.count()
-progress_indicator = progressindicator.ProgressIndicator(total_count)
+progress_indicator = progressindicator.ProgressIndicator(total_count, db)
 
 try:
-    print "Competition"
-    for competition in Competition.objects.iterator():
-        competition.view_name()
-        competition.url()
-        progress_indicator.next()
-
     print "SkaterResult"
     for skaterresult in SkaterResult.objects.iterator():
         skaterresult.url()
@@ -55,12 +49,6 @@ try:
     for skater in Skater.objects.iterator():
         skater.view_name()
         skater.url()
-        progress_indicator.next()
-
-    print "SkaterName"
-    for skatername in SkaterName.objects.iterator():
-        skater.view_name()
-        skater.url_name()
         progress_indicator.next()
 
     print "SkaterTeam"

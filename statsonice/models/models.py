@@ -37,10 +37,8 @@ class Competition(models.Model):
     identifier = models.CharField(max_length = 100, null=True, blank=True)
     cutoff = models.ForeignKey(CompetitionCutoff, null=True, blank=True)
 
-    @cached_function
     def view_name(self):
         return self.name + ' ('+str(self.end_date.year)+')'
-    @cached_function
     def url(self):
         return reverse('competition_profile', kwargs={
                 'competition_name': self.name.replace(' ','-'),
@@ -232,7 +230,7 @@ class ResultIJS(models.Model):
         if self.override_tes:
             self.tes = self.override_tes
         else:
-            self.tes = sum(self.elementscore_set.values_list('panel_score', flat=True))
+            self.tes = sum(self.elementscore_set.values_list('panel_score', flat=True)).quantize(Decimal('0.01'))
         return self.tes
     def calculate_pcs(self):
         if self.override_pcs:
@@ -243,9 +241,9 @@ class ResultIJS(models.Model):
             for factor, panel_score in scores:
                 if str(factor)[-1] == '5':
                     factor = Decimal(str(factor)+'001')
-                    total += (self.multiplier*factor*panel_score).quantize(Decimal('0.01'))
+                    total += (factor*panel_score).quantize(Decimal('0.01'))
                 else:
-                    total += (self.multiplier*factor*panel_score).quantize(Decimal('0.01'))
+                    total += (factor*panel_score).quantize(Decimal('0.01'))
             self.pcs = total
         return self.pcs
     def calculate_tss(self):
@@ -300,13 +298,13 @@ class ElementScore(models.Model):
     grade_of_execution = models.DecimalField(max_digits = 10, decimal_places = 3)
     panel_score = models.DecimalField(max_digits = 10, decimal_places = 3) # total element score
     flag = models.ForeignKey(Flag, null=True, blank=True)
+    goes = models.CharField(max_length = 100, null=True, blank=True)
 
-    # grade of execution is icky to calculate from sub-elements, so we just scrape them
-    # TODO
-    def calculate_panel_score(self):
-        pass
+    MODIFIES_ONE = ['<','<<']
+    MODIFIES_AFTER = ['SEQ','COMBO','TRANS','kpNNN','kpYNN','kpNYN','kpNNY','kpYYN','kpYNY','kpNYY','kpYYY']
+
     def calculate_flag(self):
-        goes = self.elementjudge_set.values_list('judge_grade_of_execution', flat=True)
+        goes = self.get_goes()
         if len(goes) == 0:
             return
         goe_range = max(goes)-min(goes)
@@ -325,22 +323,30 @@ class ElementScore(models.Model):
         return self.flag
     @cached_function
     def get_element_name(self):
-        MODIFIES_ONE = ['<','<<']
-        MODIFIES_AFTER = ['SEQ','COMBO','TRANS','kpNNN','kpYNN','kpNYN','kpNNY','kpYYN','kpYNY','kpNYY','kpYYY']
-        elements = self.element_set.all()
-        combo = []
-        for element in elements:
-            b_elem = element.base_element.element_name
-            if element.modifiers:
-                modifiers = element.modifiers.all()
-                mods = modifiers.filter(modifier__in=MODIFIES_ONE).values_list('modifier', flat=True)
-                mod_after = modifiers.filter(modifier__in=MODIFIES_AFTER).values_list('modifier', flat=True)
-                b_elem += ''.join(mods)
-                combo.append(b_elem)
-        combo_temp = '+'.join(combo)
-        for mod in mod_after:
-            combo_temp += '+'+mod
-        return combo_temp
+        name = ''
+        modifiers = []
+        for element in self.element_set.select_related('base_element').iterator():
+            modifiers = element.modifiers.values_list('modifier', flat=True)
+            mods = [m for m in modifiers if m in ElementScore.MODIFIES_ONE]
+            name += element.base_element.element_name + ''.join(mods) + '+'
+        for m in modifiers:
+            if m in ElementScore.MODIFIES_AFTER:
+                name += m + '+'
+        if len(modifiers) != 0:
+            name = name[:-1]
+        return name
+    def get_goes(self):
+        if self.goes == None or self.goes == '':
+            return []
+        goes = self.goes.split(',')
+        goes = [int(x) for x in goes if x != 'None']
+        return goes
+    def set_goes(self, goes_list):
+        if goes_list == []:
+            self.goes = None
+        else:
+            goes_list = [x if x != '' and x != '-' else None for x in goes_list]
+            self.goes = ','.join([str(x) for x in goes_list])
 
     def clean(self):
         ModelValidator.validate_element_panel_score(self.base_value, self.grade_of_execution, self.panel_score)
@@ -351,23 +357,6 @@ class ElementScore(models.Model):
     def save(self, *args, **kwargs):
         self.full_clean()
         super(ElementScore, self).save(*args, **kwargs)
-
-
-class ElementJudge(models.Model):
-    element_score = models.ForeignKey(ElementScore)
-    judge = models.PositiveIntegerField()
-    judge_grade_of_execution = models.IntegerField()
-
-    class Meta:
-        app_label = 'statsonice'
-    def __unicode__(self):
-        return u'(ElementJudge #%s %s)' % (self.id, self.judge)
-    def clean(self):
-        ModelValidator.validate_element_judge_goe(self.judge_grade_of_execution)
-    def save(self, *args, **kwargs):
-        self.full_clean()
-        super(ElementJudge, self).save(*args, **kwargs)
-
 
 # Provides additional details about the base element (e.g. modifiers)
 # and allows the representation of combinations

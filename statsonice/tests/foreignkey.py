@@ -79,9 +79,6 @@ foreign_keys = {
         ('result_id', get_values_list(ResultIJS), None),
         ('flag_id', get_values_list(Flag), 'allow_none'),
     ],
-    ElementJudge : [
-        ('element_score_id', get_values_list(ElementScore), None),
-    ],
     Element : [
         ('element_score_id', get_values_list(ElementScore), None),
         ('base_element_id', get_values_list(BaseElement), None),

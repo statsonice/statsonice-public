@@ -157,15 +157,9 @@
 						<th>Base Value</th>
 						<th>GOE</th>
 						<th>Flag</th>
-						{% if programresult.elementscores.0.elementjudge_set.all %}
-							{% for num in programresult.elementscores.0.elementjudge_set.all %}
-							  <th>J{{ forloop.counter }}</th>
-							{% endfor %}
-						{% else %}
-							{% for num in programresult.elementscores.1.elementjudge_set.all %}
-							  <th>J{{ forloop.counter }}</th>
-							{% endfor %}
-						{% endif %}
+            {% for num in programresult.elementscores.0.get_goes %}
+              <th>J{{ forloop.counter }}</th>
+            {% endfor %}
 						<th>Panel Score</th>
 					</tr>
 				</thead>

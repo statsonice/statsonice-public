@@ -1328,7 +1328,12 @@ class BaseElement(models.Model):
         ('CCiSt1', 'CCiSt1'),
         ('CCiSt2', 'CCiSt2'),
         ('CCiSt3', 'CCiSt3'),
-        ('CCiSt4', 'CCiSt4')
+        ('CCiSt4', 'CCiSt4'),
+        ('S3', 'S3'),
+        ('S4', 'S4'),
+        ('ACiSt1', 'ACiSt1'),
+        ('5Li1', '5Li1'),
+        ('5Li2', '5Li2')
     )
 
 
