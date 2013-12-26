@@ -1,6 +1,7 @@
 """
 These classes encapsulate logic surrounding skater results and program results
 """
+from datetime import datetime
 from statsonice.models import SkaterResult
 from includes import stats
 
@@ -45,7 +46,7 @@ class ProgramResults:
         self.programcomponentscores = self.compute_programcomponent_scores()
         self.elementscores = self.compute_element_scores()
         self.totals = self.get_grade_sums()
-        self.bonus = self.second_half_bonus()
+        #self.bonus = self.second_half_bonus()
 
 
     # Given a list, returns tuple of median, average, and std dev

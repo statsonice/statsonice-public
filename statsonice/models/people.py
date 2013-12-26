@@ -73,7 +73,7 @@ class Skater(models.Model):
         try:
             birthday = self.dob.replace(year=today.year)
         except ValueError: # raised when birth date is February 29 and the current year is not a leap year
-            birthday = self.dob.replace(year=today.year, day=self.bob.day-1)
+            birthday = self.dob.replace(year=today.year, day=self.dob.day-1)
         if birthday > today:
             return today.year - self.dob.year - 1
         else:
