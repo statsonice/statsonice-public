@@ -141,6 +141,21 @@ td.title-block {
 	background-color:#F5F5BE;
 }
 
+/* td medal background colors */
+td.gold {
+	background-color:#FFD700;
+}
+td.silver {
+	background-color:#C0C0C0;
+}
+td.bronze {
+	background-color:#CD7F32;
+}
+td.pewter {
+	background-color:#a9aeb6;
+}
+
+
 .table-short td {
 	line-height:50px;
 }

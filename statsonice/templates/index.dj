@@ -1,4 +1,10 @@
 {% extends "page.dj" %}
+{% block title %}
+Home
+{% endblock %}
+{% block header %}
+<h1 class="center">Stats On Ice</h1>
+{% endblock %}
 {% block main %}
 <br>
 <div class="row">

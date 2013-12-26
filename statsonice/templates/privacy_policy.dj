@@ -1,7 +1,11 @@
 {% extends "page.dj" %}
+{% block title %}
+Privacy Policy
+{% endblock %}
+{% block header %}
+<h1>Privacy Policy</h1>
+{% endblock %}
 {% block main %}
-
-<legend><h3>Privacy Policy</h3></legend>
 
 <p>Our privacy policy explains what information we collect from users, why we
 collect it, how we use that information, and the choices we offer for accessing

@@ -1,27 +1,19 @@
 {% extends "page.dj" %}
 {% block title %}
-- {{ competition.name }} {{ level }} {{ category }} {{ segment }} ({{ competition.start_date.year }})
+{{ competition.name }} {{ level }} {{ category }} {{ segment }} ({{ competition.start_date.year }})
 {% endblock%}
-
 {% block header %}
-<h3>
-<a href="{{ competition.url }}">
-{{ competition.name }} {{ competition.start_date.year }}
-</a>
-</h3>
+<h1>
+  <a href="{{ competition.url }}">
+    {{ competition.name }} {{ competition.start_date.year }}
+  </a>
+</h1>
 <p><b>{{ level }} {{ category }} {{ segment }}</b></p>
 {% endblock %}
 
 {% block main %}
-<script>
-$(document).ready(function()
-    {
-        $("#segment").tablesorter();
-    }
-);
-</script>
 
-<table id="segment" class="table table-condensed table-striped">
+<table id="segment" class="table table-condensed table-striped table_sorter">
 	<thead>
 		<tr>
 			<th>Rank</th>

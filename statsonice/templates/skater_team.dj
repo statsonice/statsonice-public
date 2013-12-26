@@ -1,29 +1,28 @@
 {% extends "page.dj" %}
 {% block title %}
-- {{ skater_team.view_name }}
+{{ skater_team.view_name }}
 {% endblock%}
-
 {% block header %}
 <div class="row">
-      {% if category == 'DANCE' %}
-        <div class="dance">
-      {% elif category == 'PAIRS' %}
-        <div class="pairs">
-      {% else %}
-        <div>
-      {% endif %}
-        <div class="col-md-11">
-          <h3>
-            {{ skater_team.view_name }}
-          </h3>
-        </div>
-        <div class="col-md-1">
-          <h3>
-            {{ skater_team.country.country_name }}
-          </h3>
-        </div>
+    {% if category == 'DANCE' %}
+      <div class="dance">
+    {% elif category == 'PAIRS' %}
+      <div class="pairs">
+    {% else %}
+      <div>
+    {% endif %}
+      <div class="col-md-11">
+        <h1>
+          {{ skater_team.view_name }}
+        </h1>
+      </div>
+      <div class="col-md-1">
+        <h1>
+          {{ skater_team.country.country_name }}
+        </h1>
       </div>
     </div>
+  </div>
 {% endblock %}
 
 {% block main %}
@@ -40,7 +39,7 @@
 				<b>DOB:</b>
 			  </div>
 			  <div class="col-md-8">
-				{{ first_skater.dob }}
+				{{ first_skater.dob }} ({{ first_skater.age }})
 			  </div>
 			</div>
 		  {% endif %}
@@ -77,7 +76,7 @@
 				<b>DOB:</b>
 			  </div>
 			  <div class="col-md-8">
-				{{ second_skater.dob }}
+				{{ second_skater.dob }} ({{ second_skater.age }})
 			  </div>
 			</div>
 		  {% endif %}
@@ -136,7 +135,7 @@
   	</div>
   </div>
 
-<!--
+{% comment %}
   <hr>
 
   <div class="row">
@@ -186,7 +185,7 @@
       </script>
     </div>
   </div>
--->
+{% endcomment %}
 
   {% if personal_records %}
   <hr>
@@ -378,23 +377,22 @@
   </div>
 -->
 
-{% comment %}
-  <hr>
-  <script type="text/javascript">
-    teams_dict = {};
-    {% for view_name, url_name in teams_dict.items %}
-      teams_dict['{{ view_name|escapejs }}'] = '{{ url_name }}';
-    {% endfor %}
-  </script>
-  <script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
-  <div class="row">
-    <div class="col-md-12">
-      <h4>Head to Head</h4>
-      <div id="search_error"></div>
-      <input type="hidden" id="skaterteam_names" value="{{ skater_team.view_name }}">
-      {% include "search/autocomplete.dj" with input_id="matching_skaterteam_names" options=teams_dict.keys %}
-      <input type="submit" onclick="javascript:teams_skater()" />
-    </div>
+
+
+<hr>
+<script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
+<div class="row">
+  <div class="col-md-12">
+    <h2>Head to Head</h2>
+    <div id="search_error" class="alert" style="display:none"></div>
+    <input type="hidden" id="hth_type" value="skater" />
+    <input type="hidden" id="skaterteam_names" value="{{ skater_team.url_name_json }}" />
+    <input type="text" id="matching_skater_name" size="50" />
+    <select id="matching_skater_name_partner" disabled="true">
+      <option value="">Select A Skater</option>
+    </select>
+    <button class="btn btn-primary" onclick="javascript:teams_hth()">Compare</button>
   </div>
-{% endcomment %}
+</div>
+
 {% endblock %}

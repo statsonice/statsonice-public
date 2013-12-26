@@ -1,29 +1,28 @@
 {% extends "page.dj" %}
 {% block title %}
-- {{ skater.view_name }}
+{{ skater.view_name }}
 {% endblock%}
-
 {% block header %}
 <div class="row">
-      {% if skater.gender == 'F' %}
-        <div class="ladies">
-      {% elif skater.gender == 'M' %}
-        <div class="men">
-      {% else %}
-        <div>
-      {% endif %}
-        <div class="col-md-11">
-          <h3>
-            {{ skater_name.first_name}} {{skater_name.last_name}}
-          </h3>
-        </div>
-        <div class="col-md-1">
-          <h3>
-            {{ skater.country.country_name }}
-          </h3>
-        </div>
-      </div>
+  {% if skater.gender == 'F' %}
+    <div class="ladies">
+  {% elif skater.gender == 'M' %}
+    <div class="men">
+  {% else %}
+    <div>
+  {% endif %}
+    <div class="col-md-11">
+      <h1>
+        {{ skater_name.first_name}} {{skater_name.last_name}}
+      </h1>
     </div>
+    <div class="col-md-1">
+      <h1>
+        {{ skater.country.country_name }}
+      </h1>
+    </div>
+  </div>
+</div>
 {% endblock %}
 
 {% block main %}
@@ -37,7 +36,7 @@
             <b>DOB:</b>
           </div>
           <div class="col-md-8">
-            {{ skater.dob }}
+            {{ skater.dob }} ({{ skater.age }})
           </div>
         </div>
       {% endif %}
@@ -136,7 +135,7 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h4>Progression of Scores (Example Data)</h4>
+      <h2>Progression of Scores (Example Data)</h2>
       <p><b class="sp">SP</b>, <b class="fs">FS</b>, <b class="sp-fs-total">TOTAL</b></p>
 
       <canvas id="canvas" height="400" width="800"></canvas>
@@ -187,7 +186,7 @@
   <hr>
   <div class="row">
     <div class="col-md-12">
-      <h4>Personal Records</h4>
+      <h2>Personal Records</h2>
       <table class="table table-condensed">
       	<thead>
       		<tr>
@@ -305,8 +304,45 @@
   </div>
 
 <br>
-<h4>Results</h4>
+<h2>Results</h2>
 
+<table class="table table-condensed">
+  <tbody>
+  {% for year, skater_results in results %}
+    <tr>
+  	  <td>{{ year }}</td>
+  	  {% for sr in skater_results %}
+  	  	{% if sr.final_rank == 1 %}
+  	  	<td class="gold">
+  	  	{% elif sr.final_rank == 2 %}
+  	  	<td class="silver">
+  	  	{% elif sr.final_rank == 3 %}
+  	  	<td class="bronze">
+  	  	{% elif sr.final_rank == 4 and 'usfs' in sr.competition.identifier %}
+  	  	<td class="pewter">
+  	  	{% else %}
+  	  	<td>
+  	  	{% endif %}
+  	  		<a href="{{ sr.competition.url }}">
+  	  		  {{ sr.competition.name }}
+  	  		</a> ({{ sr.competition.start_date|date:"M" }})
+  	  		<br>
+  	  		{% if sr.qualifying.name != '' %}
+  	  		{{ sr.qualifying.name }}
+  	  		<br>
+  	  		{% endif %}
+			{{ sr.final_rank }}
+			{% if sr.level.level != 'SR' %}
+			({{ sr.level.level }})
+			{% endif %}
+  	  	</td>
+  	  {% endfor %}
+  	</tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<!--
 <table class="table table-condensed">
   {% for year, skater_results in results %}
 	  <tbody>
@@ -331,13 +367,14 @@
   </tbody>
   {% endfor %}
 </table>
+-->
 
   <!-- Make this into a matrix
   <hr>
 
   <div class="row">
     <div class="col-md-12">
-      <h4>Top Lists</h4>
+      <h2>Top Lists</h2>
       <table class="table table-bordered">
         <tr>
           <td>Highest SP score of 2012-2013</td>
@@ -372,24 +409,17 @@
   </div>
   -->
 
-{% comment %}
 <hr>
-<script type="text/javascript">
-  skaters_dict = {};
-  {% for view_name, url_name in skaters_dict.items %}
-    skaters_dict['{{ view_name|escapejs }}'] = '{{ url_name }}';
-  {% endfor %}
-</script>
 <script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
 <div class="row">
   <div class="col-md-12">
-    <h4>Head to Head</h4>
-    <div id="search_error"></div>
-    <input type="hidden" id="skater_name" value="{{ skater_name.view_name }}">
-    {% include "search/autocomplete.dj" with input_id="matching_skater_name" options=skaters_dict.keys %}
-    <input type="submit" onclick="javascript:single_skater()" />
+    <h2>Head to Head</h2>
+    <div id="search_error" class="alert" style="display:none"></div>
+    <input type="hidden" id="hth_type" value="skater" />
+    <input type="hidden" id="skater_name" value="{{ skater_name.url_name_json }}" />
+    <input type="text" id="matching_skater_name" size="50" />
+    <button class="btn btn-primary" onclick="javascript:skater_hth()">Compare</button>
   </div>
 </div>
-{% endcomment %}
 
 {% endblock %}

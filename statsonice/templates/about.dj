@@ -1,9 +1,12 @@
 {% extends "page.dj" %}
-{% block header %}
-<h3>About</h3>
+{% block title %}
+About
 {% endblock %}
+{% block header %}
+<h1>About</h1>
+{% endblock %}
+
 {% block main %}
-    <legend><h4>Mission</h4></legend>
     <p>
     Stats on Ice is dedicated to figure skating data and statistics. It has many goals, but the primary ones are:
     </p>

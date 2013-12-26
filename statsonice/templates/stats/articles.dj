@@ -1,7 +1,9 @@
 {% extends "page.dj" %}
-
+{% block title %}
+Articles
+{% endblock %}
 {% block header %}
-<h3>Articles</h3>
+<h1>Articles</h1>
 {% endblock %}
 
 {% block main %}

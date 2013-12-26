@@ -1,19 +1,17 @@
 {% extends "page.dj" %}
+{% block title %}
+Competition - {{ competition.name }}
+{% endblock %}
 {% block header %}
-<h3>
+<h1>
   {{ competition.name }}
-</h3>
-<h4>
+</h1>
+<h2>
   {{ competition.start_date }} - {{ competition.end_date }}
-</h4>
+</h2>
 {% endblock %}
 
 {% block main %}
-<script type="text/javascript">
-$('.collapse').collapse({
-    toggle: false
-});
-</script>
 
 <div class="row">
   <div class="col-md-12">
@@ -36,6 +34,8 @@ $('.collapse').collapse({
 </div>
 
 {% if user.is_authenticated %}
+
+{% comment %}
 <br>
 
 <h4>Medal Statistics</h4>
@@ -63,7 +63,7 @@ $('.collapse').collapse({
   </tbody>
 </table>
 
-{% comment %} THIS IS TOO SLOW
+
 <h4>Flag Statistics</h4>
 
 <table class="table table-bordered table-condensed">
@@ -88,7 +88,7 @@ $('.collapse').collapse({
     </tbody>
   </thead>
   <tbody>
-    {% for cls in comp_results.catlevseg_stats %}
+    {% for cls in comp_results.catlevseg_stats.stats %}
       {% if cls.num_elements > 0 %}
         <tr>
           <td>{{ cls.category.category }}</td>
@@ -121,7 +121,8 @@ $('.collapse').collapse({
       {% endif %}
     {% endfor %}
   </tbody>
-{% endcomment %}
-{% endif %}
 </table>
+{% endcomment %}
+
+{% endif %}
 {% endblock %}

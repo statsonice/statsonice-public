@@ -1,6 +1,9 @@
 {% extends "page.dj" %}
+{% block title %}
+Search Competitions
+{% endblock %}
 {% block header %}
-<h3>Search Competitions</h3>
+<h1>Search Competitions</h1>
 {% endblock %}
 
 {% block main %}

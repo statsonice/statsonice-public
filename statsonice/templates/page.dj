@@ -5,13 +5,13 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Stats on Ice {% block title %}{% endblock %}</title>
+    <title>Stats on Ice - {% block title %}{% endblock %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" type="image/x-icon" href="{{ STATIC_PREFIX }}img/favicon.ico" />
 
     <!-- Stylesheets !-->
     <link href="{{ STATIC_PREFIX }}bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="//code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css" rel="stylesheet" />
+    <link href="//code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css" rel="stylesheet" />
     <link href="{{ STATIC_PREFIX }}css/global.css" rel="stylesheet" />
 
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -20,15 +20,16 @@
     <![endif]-->
 
     <!-- Javascript !-->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
     <script src="{{ STATIC_PREFIX }}bootstrap/js/bootstrap.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/csrf.js"></script>
     <script src="{{ STATIC_PREFIX }}js/Chart.min.js"></script>
     <script src="{{ STATIC_PREFIX }}js/jquery.tablesorter.js"></script>
+    <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="{{ STATIC_PREFIX }}js/global.js"></script>
 
-    <!-- d3js -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/d3/3.3.3/d3.min.js" charset="utf-8"></script>
+    <!-- Google Analytics !-->
     <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-40105817-1']);
@@ -64,16 +65,19 @@
                 <ul class="dropdown-menu">
                   <li><a href="{% url 'search_skaters' %}">Skaters</a></li>
                   <li><a href="{% url 'search_competitions' %}">Competitions</a></li>
-                  <li><a href="{% url 'search_head_to_head' %}">Head To Head</a></li>
                 </ul>
+              </li>
+              <li>
+                <a href="{% url 'skater_browse' %}">Skaters</a>
               </li>
               <li>
                 <a href="{% url 'competition_browse' %}">Competitions</a>
               </li>
               <li class="dropdown">
-                <a href="{% url 'stats' %}" class="dropdown-toggle" data-toggle="dropdown">Statistics <b class="caret"></b></a>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Statistics <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                  <li><a href="{% url 'search_head_to_head' %}">Head-to-Head</a></li>
+                  <li><a href="{% url 'stats' %}">Overview</a></li>
+                  <li><a href="{% url 'head_to_head' %}">Head-to-Head</a></li>
                   <li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>
                   <li><a href="{% url 'element_stats' %}">Element Statistics</a></li>
                   <li><a href="{% url 'top_scores' %}">Top Scores</a></li>
@@ -115,7 +119,16 @@
           </a>!
         </div>
 
-        {% block header %}{% endblock %}
+        <legend>
+          {% if subscription_required %}
+            <span title="This feature will require a subscription to access in the future">
+              <button type="button" class="btn btn-large btn-info pull-right">
+              <span class="glyphicon glyphicon-usd"></span>
+              </button>
+            </span>
+          {% endif %}
+          {% block header %}{% endblock %}
+        </legend>
 
         {% block main %}{% endblock %}
 

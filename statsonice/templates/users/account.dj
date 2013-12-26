@@ -1,7 +1,11 @@
 {% extends "page.dj" %}
-
+{% block title %}
+Account Information
+{% endblock %}
 {% block header %}
-<h3>Account</h3>
+<h1>
+  Account Information
+</h1>
 {% endblock %}
 
 {% block main %}
@@ -13,6 +17,8 @@
       <b>Name:</b> {{ user.first_name }} {{ user.last_name }}
       <br />
       <b>E-mail:</b> {{ user.email }}
+      <br />
+      <b>Subscribed to E-mail List:</b> {{ user.userinfo.mailing_list }}
       <br />
     </div>
   </div>

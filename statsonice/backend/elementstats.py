@@ -4,7 +4,8 @@ from time import time
 import math
 
 from includes.stats import *
-from statsonice.models import ElementScore, Element, BaseElement, Category, Skater, Competitor
+from includes.base_elements import BaseElement
+from statsonice.models import ElementScore, Element, Category, Skater, Competitor
 
 # TODO: completely redo element competitor stats
 
@@ -83,7 +84,7 @@ class ElementCompetitorStats:
             levels = ['B','1','2','3','4']
             for es in self.element_scores:
                 year = es.result.program.skater_result.competition.start_date.year
-                level = es.element_set.all()[0].base_element.element_name[-1]
+                level = es.element_set.all()[0].base_element[-1]
                 if level not in levels:
                     continue
                 if year in level_stats:
@@ -256,14 +257,14 @@ class ElementStats:
                 else:
                     if self.competitor:
                         if self.leveled[ind] == 1:
-                            elements = list(Element.objects.filter(base_element__element_name__icontains=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
+                            elements = list(Element.objects.filter(base_element__icontains=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
                         else:
-                            elements = list(Element.objects.filter(base_element__element_name=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
+                            elements = list(Element.objects.filter(base_element=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
                     else:
                         if self.leveled[ind] == 1:
-                            elements = list(Element.objects.filter(base_element__element_name__icontains=element_name,combination_order=combo_order))
+                            elements = list(Element.objects.filter(base_element__icontains=element_name,combination_order=combo_order))
                         else:
-                            elements = list(Element.objects.filter(base_element__element_name=element_name,combination_order=combo_order))
+                            elements = list(Element.objects.filter(base_element=element_name,combination_order=combo_order))
                     if self.category != None:
                         elements = [el for el in elements if el.element_score.result.program.skater_result.category == self.category]
                     e_scores = [el.element_score for el in elements]
@@ -288,14 +289,14 @@ class ElementStats:
             element_name = self.element_names[0]
             if self.competitor:
                 if self.leveled[0] == 1:
-                    elements = list(Element.objects.filter(base_element__element_name__icontains=element_name,combination_order=0,element_score__result__program__skater_result__competitor=self.competitor))
+                    elements = list(Element.objects.filter(base_element__icontains=element_name,combination_order=0,element_score__result__program__skater_result__competitor=self.competitor))
                 else:
-                    elements = list(Element.objects.filter(base_element__element_name=element_name,combination_order=0,element_score__result__program__skater_result__competitor=self.competitor))
+                    elements = list(Element.objects.filter(base_element=element_name,combination_order=0,element_score__result__program__skater_result__competitor=self.competitor))
             else:
                 if self.leveled[0] == 1:
-                    elements = list(Element.objects.filter(base_element__element_name__icontains=element_name,combination_order=0))
+                    elements = list(Element.objects.filter(base_element__icontains=element_name,combination_order=0))
                 else:
-                    elements = list(Element.objects.filter(base_element__element_name=element_name,combination_order=0))
+                    elements = list(Element.objects.filter(base_element=element_name,combination_order=0))
             if self.category != None:
                 elements = [el for el in elements if el.element_score.result.program.skater_result.category == self.category]
             e_scores = [el.element_score for el in elements]
@@ -384,7 +385,7 @@ class ElementStats:
             levels = ['B','1','2','3','4']
             for es in self.element_scores:
                 year = es.result.program.skater_result.competition.start_date.year
-                level = es.element_set.all()[0].base_element.element_name[-1]
+                level = es.element_set.all()[0].base_element[-1]
                 if level not in levels:
                     continue
                 if year in level_stats:

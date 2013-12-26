@@ -1,22 +1,21 @@
 {% extends "page.dj" %}
+{% block title %}
+Head To Head Comparisons
+{% endblock %}
 {% block header %}
-<span title="This feature will require a subscription to access in the future">
-  <button type="button" class="btn btn-large btn-info pull-right">
-	<span class="glyphicon glyphicon-usd"></span>
-  </button>
-</span>
-<h4>
-<div class="center">
-<a href="{{ hth.competitor1.get_participants.url }}">
-{{ hth.competitor1.get_participants.view_name }}
-</a>
-vs.
-<a href="{{ hth.competitor2.get_participants.url }}">
-{{ hth.competitor2.get_participants.view_name }}
-</a>
-({{ s1_count }} - {{ s2_count }})
-</div>
-</h4>
+<h1>
+  <a href="{{ hth.competitor1.get_participants.url }}">
+    {{ hth.competitor1.get_participants.view_name }}
+  </a>
+  vs.
+  <a href="{{ hth.competitor2.get_participants.url }}">
+    {{ hth.competitor2.get_participants.view_name }}
+  </a>
+  ({{ s1_count }} - {{ s2_count }})
+</h1>
+{% endblock %}
+
+{% block main %}
 <div class="row">
   <div class="col-md-4 col-md-offset-4">
 	<div class="center" id="headline">
@@ -32,9 +31,6 @@ vs.
 	</div>
   </div>
 </div>
-{% endblock %}
-
-{% block main %}
 <h4><div class="center">Results Table</div></h4>
 
 <hr>

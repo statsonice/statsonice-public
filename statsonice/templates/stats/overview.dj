@@ -1,0 +1,43 @@
+{% extends "page.dj" %}
+{% block title %}
+Statistics Overview
+{% endblock %}
+{% block header %}
+<h1>
+  Statistics Overview
+</h1>
+{% endblock %}
+
+{% block main %}
+<p>
+  We compute statistics and forecasts in many different areas of figure skating.
+  Below are the descriptions of the available analyses we have available for you.
+</p>
+<h2><a href="{% url 'head_to_head' %}">Head-to-Head Comparisons</a></h2>
+Here you can compare scores and personal attributes of skaters and teams against
+other skaters and teams.  You can see the differences in scores, age, and other
+factors to see which skaters have an edge.
+
+<h2><a href="{% url 'competition_preview' %}">Competition Preview</a></h2>
+We forecast results of various future competitions based on the results of
+competitions.  We use several strategies to guess at the probability of competitors
+placing first, second, and third place in competitions.
+
+<h2><a href="{% url 'element_stats' %}">Element Statistics</a></h2>
+We run statistics on each element that is performed since the International
+Judging System was established.  You can find aggregated scores filtered by
+element and/or skater.
+
+<h2><a href="{% url 'top_scores' %}">Top Scores</a></h2>
+Under Top Scores, the best scores for competitors are listed.  They can be
+total scores or scores for particular segments.
+
+<h2><a href="{% url 'articles' %}">Articles</a></h2>
+We sometimes write articles that delve into particular sets of scores.  Sometimes
+we (or other users) notice interesting patterns or anomalies in the scores that
+we see at competitions so they are written up here.
+
+<h2><a href="{% url 'custom_stats' %}">Custom Statistics</a></h2>
+Information about requesting custom statistics is available here.
+
+{% endblock %}

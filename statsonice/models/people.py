@@ -85,7 +85,7 @@ class Skater(models.Model):
     def __unicode__(self):
         return u'(Skater #%s)' % (self.id)
     def clean(self):
-        PeopleValidator.validate_gender(self.gender)
+        PeopleValidator.validate_gender(self)
     def save(self, *args, **kwargs):
         self.full_clean()
         super(Skater, self).save(*args, **kwargs)

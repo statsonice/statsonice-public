@@ -1,6 +1,11 @@
 {% extends "page.dj" %}
+{% block title %}
+Past Competitions
+{% endblock %}
 {% block header %}
-<h3>Past Competitions</h3>
+<h1>
+  Past Competitions
+</h1>
 {% endblock %}
 
 {% block main %}

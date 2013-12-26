@@ -1,17 +1,14 @@
 {% extends "page.dj" %}
+{% block title %}
+Competition Preview - {{ competition.name }}
+{% endblock %}
 {% block header %}
-<span title="This feature will require a subscription to access in the future">
-  <button type="button" class="btn btn-large btn-info pull-right">
-	<span class="glyphicon glyphicon-usd"></span>
-  </button>
-</span>
-<h3>Competition Preview</h3>
-<h4>
-<a href="{{ competition.url }}">
-{{ competition.name }}
-</a>
-</h4>
-<h5>{{ competition.start_date }} - {{ competition.end_date }}</h5>
+<h1>
+  {{ competition.name }} (Competition Preview)
+</h1>
+<h2>
+  {{ competition.start_date }} - {{ competition.end_date }}
+</h2>
 {% endblock %}
 
 {% block main %}

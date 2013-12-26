@@ -90,6 +90,9 @@ def change_account_settings(request):
         if request.POST['password'] != '':
             user.set_password(request.POST['password'])
         user.save()
+        userinfo = user.userinfo
+        userinfo.mailing_list = 'mailing_list' in request.POST
+        userinfo.save()
     return render(request, 'users/change_account_settings.dj')
 
 """

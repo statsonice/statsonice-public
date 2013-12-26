@@ -1,36 +1,30 @@
-from time import time
-from statsonice.models import Competitor,Program, Level, Segment, Category, SkaterResult
+from statsonice.models import Competitor,Program, Level, Segment, Category, SkaterResult, ElementScore
 
 # This class counts flags for a category/level/segment in a competition
 #
 class CatLevSegStats:
-    def __init__(self,competition,category,level,segment):
-        start = time()
-        self.competition = competition
-        self.category = category
-        self.level = level
-        self.segment = segment
-        self.programs = Program.objects.filter(skater_result__competition=self.competition,
-                                               skater_result__category=self.category,
-                                               skater_result__level=self.level,
-                                               segment=self.segment)
-        flags = list(self.programs.values_list('resultijs__elementscore__flag', flat=True))
-        self.flag_ol = flags.count('OL')
-        self.flag_nc = flags.count('NC')
-        self.flag_pc = flags.count('PC')
-        self.flag_to = flags.count('TO')
-        self.num_elements = len(flags)
-
-        if self.num_elements > 0:
-            self.flag_ol = (self.flag_ol, round(self.flag_ol*100.0/self.num_elements,1))
-            self.flag_nc = (self.flag_nc, round(self.flag_nc*100.0/self.num_elements,1))
-            self.flag_pc = (self.flag_pc, round(self.flag_pc*100.0/self.num_elements,1))
-            self.flag_to = (self.flag_to, round(self.flag_to*100.0/self.num_elements,1))
-        else:
-            self.flag_ol = (0, 0)
-            self.flag_nc = (0, 0)
-            self.flag_pc = (0, 0)
-            self.flag_to = (0, 0)
+    def __init__(self,competition):
+        programs = Program.objects.filter(skater_result__competition=competition)
+        programs = programs.select_related('skater_result', 'resultijs')
+        self.stats = []
+        for program in programs:
+            stat = {}
+            stat['category'] = program.skater_result.category
+            stat['level'] = program.skater_result.level
+            stat['segment'] = program.segment
+            flags = list(ElementScore.objects.filter(result = program.resultijs).values_list('flag', flat=True))
+            stat['flag_ol'] = [flags.count('OL'),0]
+            stat['flag_nc'] = [flags.count('NC'),0]
+            stat['flag_pc'] = [flags.count('PC'),0]
+            stat['flag_to'] = [flags.count('TO'),0]
+            stat['num_elements'] = len(flags)
+            self.stats.append(stat)
+        for stat in self.stats:
+            if stat['num_elements'] > 0:
+                stat['flag_ol'][1] = round(stat['flag_ol'][0]*100.0/stat['num_elements'],1)
+                stat['flag_nc'][1] = round(stat['flag_nc'][0]*100.0/stat['num_elements'],1)
+                stat['flag_pc'][1] = round(stat['flag_pc'][0]*100.0/stat['num_elements'],1)
+                stat['flag_to'][1] = round(stat['flag_to'][0]*100.0/stat['num_elements'],1)
 
 class CountryCompStats:
 
@@ -76,21 +70,13 @@ class CompResults:
     # comp results class takes a competition object
     #
     def __init__(self, competition):
-        start = time()
         self.LEVELS = Level.objects.values_list('level', flat=True).reverse()
-        print 'B', time() - start
         self.CATEGORIES = Category.objects.values_list('category', flat=True)
-        print 'D', time() - start
         self.competition = competition
-        print 'E', time() - start
-        # TODO: this is too slow
-        # self.catlevseg_stats = [CatLevSegStats(competition,category,level,segment) for category in Category.objects.all() for level in Level.objects.all() for segment in Segment.objects.all()]
-        print 'F', time() - start
 
-        self.countries = self.get_countries()
-        print 'G', time() - start
-        self.country_comp_stats = self.get_country_comp_stats()
-        print 'H', time() - start
+        #self.catlevseg_stats = CatLevSegStats(competition)
+        #self.countries = self.get_countries()
+        #self.country_comp_stats = self.get_country_comp_stats()
 
     def get_countries(self):
         competitors = Competitor.objects.filter(skaterresult__competition = self.competition).distinct()

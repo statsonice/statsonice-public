@@ -1,5 +1,4 @@
 from datetime import datetime
-from time import time
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.core.urlresolvers import reverse
@@ -26,19 +25,15 @@ def browse(request):
 
 
 def profile(request, competition_name, competition_year):
-    #start = time()
     competition_name = competition_name.replace('-',' ')
     competition = get_object_or_404(Competition, name=competition_name, start_date__year = competition_year)
+    if competition.skaterresult_set.values_list('program').count() == 0:
+        return redirect(competition.preview_url())
     if competition.end_date > datetime.now().date():
         return redirect(competition.preview_url())
 
-    try:
-        comp_results = CompResults(competition)
-    except:
-        raise Http404
-    #print 'after backend stuffs', time() - start
+    comp_results = CompResults(competition)
     results = comp_results.get_results_by_category_and_level()
-    #print 'after get results by cat and level', time() - start
     combined_results = {}
     for category, results_in_category in results.items():
         category = category.lower()
@@ -52,9 +47,6 @@ def profile(request, competition_name, competition_year):
                 category_results[category] = True
                 break
 
-    print category_results
-
-    #print 'time to process competition: ', time() - start
     return render(request, 'competition.dj', {
         'comp_results': comp_results,
         'competition': competition,

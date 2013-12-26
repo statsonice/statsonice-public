@@ -144,10 +144,11 @@ class ProgramResults:
         bonus = 0
         num = 0
         for elementscore in self.element_scores:
-            element = elementscore.element_set.all()[0]
-            if element.modifiers.filter(modifier='x').count() > 0:
-                num += 1
-                bonus += round(float(elementscore.base_value)*0.1/1.1, 2)
+            element = elementscore.element_set.first()
+            if element:
+                if element.modifiers.filter(modifier='x').count() > 0:
+                    num += 1
+                    bonus += round(float(elementscore.base_value)*0.1/1.1, 2)
         return {'number_of_elements':num, 'bonus':bonus}
 
     # Return programcomponent score with goes and median/average/std_dev

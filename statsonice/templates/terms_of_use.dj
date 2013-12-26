@@ -1,8 +1,14 @@
 {% extends "page.dj" %}
+{% block title %}
+Terms of Use
+{% endblock %}
+{% block header %}
+<h1>
+  Terms of Use
+</h1>
+{% endblock %}
+
 {% block main %}
-
-<legend><h3>Terms of Use</h3></legend>
-
 <h4>Welcome to Stats on Ice!</h4>
 <p>Thank you for using our products and services ("Services"). The Services are
 produced by StatsOnIce. By using our Services, you are agreeing to these terms and conditions of

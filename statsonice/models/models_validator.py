@@ -8,10 +8,14 @@ class LocationValidator:
 
 class PeopleValidator:
     @staticmethod
-    def validate_gender(value):
+    def validate_gender(skater):
         possible_genders = ['M','F']
-        if value not in possible_genders:
-            raise ValidationError(str(value)+" is not a valid gender")
+        if skater.gender not in possible_genders:
+            raise ValidationError(str(skater.gender)+" for skater "+str(skater.id)+" is not a valid gender")
+        if skater.gender == 'M' and skater.female_skater.count() != 0:
+           raise ValidationError("Male skater "+str(skater)+" is the female skater for a team")
+        if skater.gender == 'F' and skater.male_skater.count() != 0:
+           raise ValidationError("Female skater "+str(skater)+" is the male skater for a team")
 
     @staticmethod
     def validate_name_unique(skater_name):
@@ -98,9 +102,10 @@ class ModelValidator:
         # Create a separate validator for GOE from judge scores? I'm leaning towards no.
 
     @staticmethod
-    def validate_element_judge_goe(goe):
-        if goe not in range(-3, 4):
-            raise ValidationError("The element judge grade of execution must be within [-3,3]")
+    def validate_element_judge_goes(goes):
+        for goe in goes:
+            if goe not in range(-3, 4):
+                raise ValidationError("The element judge grade of execution must be within [-3,3]")
 
     @staticmethod
     def validate_pc_judge_goe(goe):
@@ -124,21 +129,4 @@ class EnumValidator:
             if chosen == choice:
                 return
         raise ValidationError(chosen+" is not a valid choice")
-
-def validate_isu_identifier(isu_identifier):
-    # TODO: Curran, this one's all you
-    pass
-
-def validate_number_of_judges():
-    # TODO: Ensure that the same number of element/program_component scores are stored for each judge per result
-    #       OR ensure that each element/program_component score per result has the same number of judges
-    pass
-
-def validate_combination(combination):
-    # this assumes combination is stored as a string, not an array, e.g. '3T+2T+2Lo'
-    if '<' in combination: combination.replace('<','')
-    if not (is_jump_combination(combination) or is_jump_sequence(combination)):
-        raise ValidationError(str(combination)+" is not a valid combination.")
-    # TODO: Ensure that combination modifiers only modify valid elements
-    #       e.g. * can only modify jumps (right?)
 

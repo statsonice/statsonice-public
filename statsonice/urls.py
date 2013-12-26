@@ -27,8 +27,6 @@ urlpatterns = ('',
         'statsonice.search.skaters', name='search_skaters'),
     url(r'^search_competitions/$',
         'statsonice.search.competitions', name='search_competitions'),
-    url(r'^search_head_to_head/$',
-        'statsonice.search.head_to_head', name='search_head_to_head'),
 
     # Skater Profiles
     url(r'^skater/$',
@@ -56,10 +54,12 @@ urlpatterns = ('',
     # Stats
     url(r'^stats/$',
         'statsonice.stats.stats', name='stats'),
+    url(r'^stats/hth/$',
+        'statsonice.stats.head_to_head', name='head_to_head'),
     url(r'^stats/hth/singles/'+skater_url('skater1')+r'/'+skater_url('skater2')+r'/$',
-        'statsonice.stats.stats_head_to_head_singles', name='head_to_head_singles'),
+        'statsonice.stats.head_to_head_singles', name='head_to_head_singles'),
     url(r'^stats/hth/teams/'+skater_url('skater1')+r'/'+skater_url('skater2')+r'/'+skater_url('skater3')+r'/'+skater_url('skater4')+r'/$',
-        'statsonice.stats.stats_head_to_head_teams', name='head_to_head_teams'),
+        'statsonice.stats.head_to_head_teams', name='head_to_head_teams'),
     url(r'^stats/competition_preview/$',
         'statsonice.stats.stats_competition_preview', name='competition_preview'),
     url(r'^stats/competition_preview/'+competition_regex()+r'/$',
@@ -90,6 +90,12 @@ urlpatterns = ('',
         'statsonice.user.subscribe', name='subscribe'),
     url(r'^user/change_account_settings/$',
         'statsonice.user.change_account_settings', name='change_account_settings'),
+
+    # API Pages
+    url(r'^api/skater_name_search/$',
+        'statsonice.api.skater_name_search', name='api_skater_name_search'),
+    url(r'^api/skater_team_search/$',
+        'statsonice.api.skater_team_search', name='api_skater_team_search'),
 
     # Utility pages
     url(r'^cache_blog/$',

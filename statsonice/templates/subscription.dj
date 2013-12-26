@@ -1,8 +1,10 @@
 {% extends "page.dj" %}
+{% block title %}
+  Subscription Information
 {% block header %}
-<h3>
-  Subscription Info
-</h3>
+<h1>
+  Subscription Information
+</h1>
 {% endblock %}
 
 {% block main %}

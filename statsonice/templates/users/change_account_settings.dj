@@ -1,7 +1,11 @@
 {% extends "page.dj" %}
-
+{% block title %}
+  Account Settings
+{% endblock %}
 {% block header %}
-<h3>Account</h3>
+<h1>
+  Account Settings
+</h1>
 {% endblock %}
 
 {% block main %}
@@ -19,6 +23,12 @@
         <b>E-mail:</b> <input type="text" name="email" value="{{ user.email }}" />
         <br />
         <b>Password:</b> <input type="password" name="password" />
+        <br />
+        <b>Subscribe To Mailing List:</b> <input type="checkbox" name="mailing_list"
+        {% if user.userinfo.mailing_list %}
+          checked
+        {% endif %}
+        />
         <br />
         <input type="submit" class="btn btn-primary" />
       </form>

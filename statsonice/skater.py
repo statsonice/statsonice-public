@@ -3,10 +3,10 @@ from django.http import Http404
 from django.shortcuts import render, redirect
 from time import time
 from datetime import datetime
+import json
 
-from statsonice.models import Skater, SkaterTeam, SkaterName, Competitor, Program, SkaterResult
+from statsonice.models import Skater, SkaterTeam, Competitor, Program, SkaterResult
 from statsonice.backend.profileresults import ProfileResults
-from statsonice import search
 from includes import unitconversion
 
 
@@ -42,6 +42,7 @@ def profile(request, skater_first_name, skater_last_name):
     except:
         raise Http404
     skater_name = skater.get_default_skater_name()
+    skater_name.url_name_json = json.dumps(skater_name.url_name())
 
     # Redirect to canonical name (and url) if not default skater name
     if skater.url_name() != (skater_first_name, skater_last_name):
@@ -75,14 +76,6 @@ def profile(request, skater_first_name, skater_last_name):
     result_dic.sort(key=lambda x:-x[0])
 
 
-    # Get head to head autocomplete
-    # TODO: this part is too slow, takes on the order of 15s
-    '''
-    skaters_dict = search.get_options('skaters_dict')
-    for view_name, url_name in skaters_dict.items():
-        skaters_dict[view_name] = url_name[0]+'/'+url_name[1]
-    '''
-
     return render(request, 'skater.dj', {
         'skater_name': skater_name,
         'skater': skater,
@@ -90,8 +83,7 @@ def profile(request, skater_first_name, skater_last_name):
         'isu_years': isu_years,
         'personal_records': personal_records,
         'best_total': best_total,
-        'results': result_dic,
-        #'skaters_dict': skaters_dict,
+        'results': result_dic
     })
 
 # View to display information about a skater team
@@ -104,6 +96,7 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
         competitor = Competitor.find_competitor(skater_team)
     except:
         raise Http404
+    skater_team.url_name_json = json.dumps(first_skater.url_name()+second_skater.url_name())
 
     # skater heights
     first_skater.height_feet, first_skater.height_inches = unitconversion.metric_to_imperial(first_skater.height)
@@ -147,14 +140,6 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
     result_dic = result_dic.items()
     result_dic.sort(key=lambda x:-x[0])
 
-    # Get head to head autocomplete
-    # TODO: this part is too slow, takes on the order of 15s
-    '''
-    teams_dict = search.get_options('teams_dict')
-    for view_name, url_name in teams_dict.items():
-        teams_dict[view_name] = url_name[0][0]+'/'+url_name[0][1]+'/'+url_name[1][0]+'/'+url_name[1][1]
-    '''
-
     return render(request, 'skater_team.dj', {
             'first_skater': first_skater,
             'second_skater': second_skater,
@@ -166,6 +151,5 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
             'isu_years': isu_years,
             'personal_records': personal_records,
             'best_total': best_total,
-            'results': result_dic,
-            #'teams_dict': teams_dict,
+            'results': result_dic
         })

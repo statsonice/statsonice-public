@@ -1,7 +1,14 @@
 {% extends "page.dj" %}
-{% block main %}
-  <h3>Login</h3>
+{% block title %}
+Login
+{% endblock %}
+{% block header %}
+<h1>
+  Login
+</h1>
+{% endblock %}
 
+{% block main %}
   {% for error in errors %}
     <div class="alert alert-error">
       {{ error }}

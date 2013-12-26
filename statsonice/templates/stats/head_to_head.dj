@@ -1,0 +1,61 @@
+{% extends "page.dj" %}
+{% block title %}
+Search Head To Head %}
+{% endblock %}
+{% block header %}
+<h1>
+  Search Head To Head
+</h1>
+{% endblock %}
+
+{% block main %}
+<script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
+
+<div id="search_error" class="alert" style="display:none">
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="skater_name">First Skater's Name</label>
+        <div class="controls">
+          <input type="text" id="skater_name" size="50" />
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="matching_skater_name">Second Skater's Name</label>
+
+        <div class="controls">
+          <input type="text" id="matching_skater_name" size="50" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="form-horizontal">
+      <div class="control-group">
+        <label class="control-label" for="skaterteam_names">First Skater's Partner's Name (Optional)</label>
+        <div class="controls">
+          <select id="skater_name_partner" disabled="true">
+            <option value="">Select A Skater</option>
+          </select>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="matching_skaterteam_names">Second Skater's Partner's Name (Optional)</label>
+        <div class="controls">
+          <select id="matching_skater_name_partner" disabled="true">
+            <option value="">Select A Skater</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<br />
+<input type="hidden" id="hth_type" value="full" />
+<button onclick="javascript:search()" class="btn btn-primary">Compare</button>
+
+{% endblock %}

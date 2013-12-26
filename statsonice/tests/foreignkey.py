@@ -81,7 +81,6 @@ foreign_keys = {
     ],
     Element : [
         ('element_score_id', get_values_list(ElementScore), None),
-        ('base_element_id', get_values_list(BaseElement), None),
         ('modifiers', get_values_list(Modifier), 'many'),
     ],
     ProgramComponentScore : [

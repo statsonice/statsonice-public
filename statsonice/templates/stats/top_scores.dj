@@ -1,22 +1,15 @@
 {% extends "page.dj" %}
-
 {% block title %}
-- Top Scores
-{% endblock%}
-
-{% block header %}
-<span title="This feature will require a subscription to access in the future">
-  <button type="button" class="btn btn-large btn-info pull-right">
-	<span class="glyphicon glyphicon-usd"></span>
-  </button>
-</span>
-<h3>
 Top Scores
-</h3>
+{% endblock%}
+{% block header %}
+<h1>
+  Top Scores
+</h1>
 {% endblock %}
 
 {% block main %}
-<form action="/stats/top_scores/" method="POST">
+<form action="{% url 'top_scores' %}" method="POST">
 	{% csrf_token %}
 	<select name="segment">
 		<option value="TOTAL" {% if segment == 'TOTAL' %}selected{% endif %}>TOTAL</option>
@@ -45,15 +38,15 @@ Top Scores
 	<button type="submit" class="btn btn-mini btn-primary">Search</button>
 </form>
 
-<h3>
-{{ top_scores.scores.0.category.category }}
-{% if start_year == 0 %}
-	All Time
-{% else %}
-	{{ start_year }} - {{ start_year|add:"1" }}
-{% endif %}
-({{ segment }})
-</h3>
+<h2>
+  {{ category }}
+  {% if start_year == 0 %}
+    All Time
+  {% else %}
+    {{ start_year }} - {{ start_year|add:"1" }}
+  {% endif %}
+  ({{ segment }})
+</h2>
 <table class="table table-condensed">
 <thead>
 	<tr>
@@ -63,44 +56,29 @@ Top Scores
 		<th>Country</th>
 		<th>Competition</th>
 		<th>Date</th>
-		{% comment %}
-		<th>OQ</th>
-		<th>WQ</th>
-		<th>WJQ</th>
-		<th>FCQ/ECQ</th>
-		{% endcomment %}
 	</tr>
 </thead>
-{% if segment == "TOTAL"%}
-	{% for sr in top_scores.scores %}
-		<tr>
-			<td>{{ forloop.counter }}</td>
-			<td>{{ sr.total_score }}</td>
-			<td>
-				<a href="{{ sr.competitor.get_participants.url }}">{{ sr.competitor.get_participants.view_name }}</a>
-			</td>
-			<td>{{ sr.competitor.get_participants.country.country_name }}</td>
-			<td>
-				<a href="{{ sr.competition.url }}">{{ sr.competition.name }}</a>
-			</td>
-			<td>{{ sr.competition.end_date.isoformat }}</td>
-		</tr>
-	{% endfor %}
-{% else %}
-	{% for res in top_scores.scores %}
-		<tr>
-			<td>{{ forloop.counter }}</td>
-			<td>{{ res.tss }}</td>
-			<td>
-				<a href="{{ res.program.skater_result.competitor.get_participants.url }}">{{ res.program.skater_result.competitor.get_participants.view_name }}</a>
-			</td>
-			<td>{{ res.program.skater_result.competitor.get_participants.country.country_name }}</td>
-			<td>
-				<a href="{{ res.program.skater_result.competition.url }}">{{ res.program.skater_result.competition.name }}</a>
-			</td>
-			<td>{{ res.program.skater_result.competition.end_date.isoformat }}</td>
-		</tr>
-	{% endfor %}
-{% endif %}
+{% for result in top_scores.scores %}
+  <tr>
+    <td>{{ forloop.counter }}</td>
+    <td>
+      <a href="{{ result.url }}">{{ result.score }}</a>
+    </td>
+    <td>
+      <a href="{{ result.participant.url }}">{{ result.participant.view_name }}</a>
+    </td>
+    <td>{{ result.participant.country.country_name }}</td>
+    <td>
+      <a href="{{ result.competition.url }}">{{ result.competition.name }}</a>
+    </td>
+    <td>{{ result.competition.end_date.isoformat }}</td>
+  </tr>
+{% empty %}
+  <tr>
+    <td colspan="6" class="center">
+      No results found - perhaps your selected category and segment don't make sense together?
+    </td>
+  </tr>
+{% endfor %}
 </table>
 {% endblock %}

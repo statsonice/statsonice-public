@@ -1,7 +1,0 @@
-{% extends "page.dj" %}
-{% block main %}
-
-<legend><h3>Search</h3></legend>
-<p>Search function forthcoming</p>
-
-{% endblock %}

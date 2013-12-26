@@ -1,14 +1,14 @@
 <script>
-  $(function() {
-    var availableTags = [
-      {% for option in options %}
-        "{{ option|safe }}",
-      {% endfor %}
-    ];
-    $( "#{{ input_id }}" ).autocomplete({
-      source: availableTags
-    });
+$(function() {
+  var availableTags = [
+    {% for option in options %}
+      "{{ option|safe }}",
+    {% endfor %}
+  ];
+  $( "#{{ input_id }}" ).autocomplete({
+    source: availableTags
   });
-  </script>
+});
+</script>
 
 <input id="{{ input_id }}" size="50" type="text"/>

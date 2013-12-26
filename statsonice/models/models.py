@@ -98,6 +98,8 @@ class SkaterResult(models.Model):
         app_label = 'statsonice'
     def __unicode__(self):
         return u'(SkaterResult #%s for %s)' % (self.id, self.competition)
+    def clean(self):
+        ModelValidator.validate_program(self.competitor, self.category)
     def calculate_withdrawal(self):
         # Find how many programs there are supposed to be
         other_skater_results = self.competition.skaterresult_set.filter(category=self.category, qualifying=self.qualifying, level=self.level)
@@ -227,10 +229,12 @@ class ResultIJS(models.Model):
     multiplier = models.DecimalField(max_digits = 5, decimal_places = 2, default = 1.0)
 
     def calculate_tes(self):
+        if self.tes == 0:
+            self.override_tes = 0
         if self.override_tes:
             self.tes = self.override_tes
         else:
-            self.tes = sum(self.elementscore_set.values_list('panel_score', flat=True)).quantize(Decimal('0.01'))
+            self.tes = Decimal(sum(self.elementscore_set.values_list('panel_score', flat=True))).quantize(Decimal('0.01'))
         return self.tes
     def calculate_pcs(self):
         if self.override_pcs:
@@ -239,7 +243,7 @@ class ResultIJS(models.Model):
             total = Decimal(0)
             scores = self.programcomponentscore_set.values_list('factor', 'panel_score')
             for factor, panel_score in scores:
-                if str(factor)[-1] == '5':
+                if str(factor)[-1] == '5' or str(factor) == '0.90':
                     factor = Decimal(str(factor)+'001')
                     total += (factor*panel_score).quantize(Decimal('0.01'))
                 else:
@@ -247,6 +251,8 @@ class ResultIJS(models.Model):
             self.pcs = total
         return self.pcs
     def calculate_tss(self):
+        if 'Regional' in self.program.skater_result.competition.name and (self.program.skater_result.level.level == 'JUV' or self.program.skater_result.level.level == 'INT'):
+            self.override_tss = self.tss
         if self.override_tss:
             self.tss = self.override_tss
         else:
@@ -328,12 +334,15 @@ class ElementScore(models.Model):
         for element in self.element_set.select_related('base_element').iterator():
             modifiers = element.modifiers.values_list('modifier', flat=True)
             mods = [m for m in modifiers if m in ElementScore.MODIFIES_ONE]
-            name += element.base_element.element_name + ''.join(mods) + '+'
+            name += element.base_element + ''.join(mods) + '+'
         for m in modifiers:
             if m in ElementScore.MODIFIES_AFTER:
                 name += m + '+'
         if len(modifiers) != 0:
             name = name[:-1]
+        if name != '':
+            if name[-1] == '+':
+                name = name[:-1]
         return name
     def get_goes(self):
         if self.goes == None or self.goes == '':
@@ -350,6 +359,7 @@ class ElementScore(models.Model):
 
     def clean(self):
         ModelValidator.validate_element_panel_score(self.base_value, self.grade_of_execution, self.panel_score)
+        ModelValidator.validate_element_judge_goes(self.get_goes())
     class Meta:
         app_label = 'statsonice'
     def __unicode__(self):
@@ -362,7 +372,7 @@ class ElementScore(models.Model):
 # and allows the representation of combinations
 class Element(models.Model):
     element_score = models.ForeignKey(ElementScore)
-    base_element = models.ForeignKey(BaseElement)
+    base_element = models.CharField(max_length = 10)
     modifiers = models.ManyToManyField(Modifier)
     combination_order = models.IntegerField(null=True)
 

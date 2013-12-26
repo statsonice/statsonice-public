@@ -186,6 +186,7 @@ class Country(models.Model):
         ('STP', 'Sao Tome and Principe'),
         ('SUD', 'Sudan'),
         ('SUI', 'Switzerland'),
+        ('SWI', 'Switzerland'),
         ('SUR', 'Suriname'),
         ('SVK', 'Slovakia'),
         ('SWE', 'Sweden'),

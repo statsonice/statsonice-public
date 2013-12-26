@@ -1,0 +1,20 @@
+{% extends "page.dj" %}
+{% block title %}
+Head To Head Comparisons
+{% endblock %}
+{% block header %}
+<h1>
+  <a href="{{ hth.competitor1.get_participants.url }}">
+    {{ hth.competitor1.get_participants.view_name }}
+  </a>
+  vs.
+  <a href="{{ hth.competitor2.get_participants.url }}">
+    {{ hth.competitor2.get_participants.view_name }}
+  </a>
+  ({{ s1_count }} - {{ s2_count }})
+</h1>
+{% endblock %}
+
+{% block main %}
+<h4 class="center">Perform a different <a href="{% url 'head_to_head' %}">head-to-head search</a>.</h4>
+{% endblock %}

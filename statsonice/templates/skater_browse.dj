@@ -1,10 +1,14 @@
 {% extends "page.dj" %}
-{% block main %}
-  <h1>
-    Browse Skaters And Skater Teams
-  </h1>
+{% block title %}
+Browse Skaters
+{% endblock %}
+{% block header %}
+<h1>
+  Browse Skaters and Teams
+</h1>
+{% endblock %}
 
-  <hr />
+{% block main %}
   <div>
     Number of skaters:
     {{ skaters|length }}

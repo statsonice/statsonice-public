@@ -7,7 +7,7 @@ from datetime import date
 from django.db.models import Count
 
 from statsonice.models import Skater, Competitor, Competition, SkaterResult
-from statsonice.backend.stats import *
+from statsonice.backend.stats import determine_win_probability
 from includes import stats
 
 #-----------------------

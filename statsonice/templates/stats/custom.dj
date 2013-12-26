@@ -1,7 +1,11 @@
 {% extends "page.dj" %}
-
+{% block title %}
+Custom Statistics
+{% endblock %}
 {% block header %}
-  <h3>Custom Stats</h3>
+<h1>
+  Custom Statistics
+</h1>
 {% endblock %}
 
 {% block main %}
