@@ -15,8 +15,8 @@ class HeadToHead:
         hth_results = []
         s1_count = 0
         s2_count = 0
-        skater1_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor1) if sr.qualifying.name == '' and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
-        skater2_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor2) if sr.qualifying.name == '' and len(sr.program_set.all()) is not 1 and sr.final_rank is not None]
+        skater1_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor1) if sr.qualifying.name == '' and not sr.withdrawal]
+        skater2_skater_results = [sr for sr in SkaterResult.objects.filter(competitor = self.competitor2) if sr.qualifying.name == '' and not sr.withdrawal]
         skater1_competitions = [x.competition for x in skater1_skater_results]
         skater2_competitions = [x.competition for x in skater2_skater_results]
         competitions = set(skater1_competitions).intersection(set(skater2_competitions))

@@ -1,17 +1,5 @@
-Stats On Ice - Public
+Stats On Ice
 ==========
-
-This repository is a partial mirror of my StatsOnIce private repository.  It is manually 
-updated from time to time - it is not a realtime reflection of the private repository.  
-It therefore doesn't contain all the commits and branches that are used in development.  
-
-There are also several missing directories:
-- data - holds sql dumps and various other data in text format
-- data\_scraping - holds code that scrapes and parses skating results into the database
-- statsonice/migrations - Holds migration files created by Django South
-- statsonice/static/bootstrap - Holds Twitter bootstrap static files
-
-If you wish to view the hold codebase and maybe contribute, contact @albertyw
 
 Dependencies
 ------------

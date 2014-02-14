@@ -1,6 +1,6 @@
 {% extends "page.dj" %}
 {% block title %}
-Search Head To Head %}
+Search Head To Head
 {% endblock %}
 {% block header %}
 <h1>

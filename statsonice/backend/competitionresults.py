@@ -121,6 +121,8 @@ class CompResults:
     # method to take sorted dictionary and return combined results
     #
     def get_combined_results(self, results_by_level):
+        ordered_level_names = ['SR','JR','NOV','INT','JUV','PJ','PR','PP','NO']
+        sorted_res_by_level = []
         for level, qual_skater_results in results_by_level.items():
             for qual, skater_results in qual_skater_results.items():
                 if len(skater_results) == 0:
@@ -131,8 +133,19 @@ class CompResults:
 
                 # move withdrawals behind other skater results
                 skater_results.sort(key=lambda r: int(r.skater_result.withdrawal))
-                results_by_level[level][qual] = skater_results
-        return results_by_level
+                sorted_res_by_level.append((level,qual,skater_results))
+
+        sorted_res_by_level.sort(key=lambda x:x[1].name)
+
+        temp = []
+        for lev in ordered_level_names:
+            for res_by_level in sorted_res_by_level:
+                if res_by_level[0] == lev:
+                    temp.append(res_by_level)
+
+        sorted_res_by_level = temp
+
+        return sorted_res_by_level
 
 
 class SortedSkaterResult:

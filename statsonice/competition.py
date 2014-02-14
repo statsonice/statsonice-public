@@ -25,6 +25,7 @@ def browse(request):
 
 
 def profile(request, competition_name, competition_year):
+    start = datetime.now()
     competition_name = competition_name.replace('-',' ')
     competition = get_object_or_404(Competition, name=competition_name, start_date__year = competition_year)
     if competition.skaterresult_set.values_list('program').count() == 0:
@@ -42,10 +43,12 @@ def profile(request, competition_name, competition_year):
     category_results = {}
     for category, cat_results in combined_results.items():
         category_results[category] = False
-        for level, results in cat_results.items():
-            if results:
+        for lev_qual_srs in cat_results:
+            if lev_qual_srs:
                 category_results[category] = True
                 break
+
+    print 'time: ', datetime.now() - start
 
     return render(request, 'competition.dj', {
         'comp_results': comp_results,

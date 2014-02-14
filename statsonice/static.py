@@ -2,16 +2,32 @@ from django.core.mail import send_mail
 from django.shortcuts import render_to_response, render
 from django.conf import settings
 
-from statsonice.models import Skater, SkaterTeam, SkaterName, Competition, Program, Settings
+from statsonice.models import Skater, SkaterTeam, Competitor, SkaterName, Competition, SkaterResult, Program, Settings
 
 def home(request):
+    recent_competitions = Competition.objects.order_by('-start_date')[:8]
     competition_sum = Competition.objects.count()
     skater_sum = Skater.objects.count()
     team_sum = SkaterTeam.objects.count()
+
+    # get random skater profile
+    srs_num = 0
+    while srs_num < 5:
+        sr = SkaterResult.objects.filter(total_score__gt=150).order_by('?')[0]
+        competitor = sr.competitor
+        srs = SkaterResult.objects.filter(competitor=competitor,withdrawal=False,qualifying__name='')
+        srs_num = srs.count()
+
+    # best total score skater result
+    srs = srs.order_by('-competition__start_date')[:5]
+
     return render(request, 'index.dj', {
+        'recent_competitions': recent_competitions,
         'competition_sum': competition_sum,
         'skater_sum': skater_sum,
         'team_sum': team_sum,
+        'competitor': competitor,
+        'srs': srs,
         'blog_post_url': Settings.get_value('blog_post_url'),
         'blog_post': Settings.get_value('blog_post'),
         'blog_post_date': Settings.get_value('blog_post_date').split(" ")[0]

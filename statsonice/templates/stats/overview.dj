@@ -25,6 +25,10 @@ competitions.  We use several strategies to guess at the probability of competit
 placing first, second, and third place in competitions.
 -->
 
+<h2><a href="{% url 'compare' %}">Compare Skaters</a></h2>
+Compare the recent scores for up to six skaters. Recent short program and free skate
+scores are displayed in tables and a summary head-to-head matrix is generated.
+
 <h2><a href="{% url 'element_stats' %}">Element Statistics</a></h2>
 We run statistics on each element that is performed since the International
 Judging System was established.  You can find aggregated scores filtered by

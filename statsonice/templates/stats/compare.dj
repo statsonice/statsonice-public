@@ -1,0 +1,179 @@
+{% extends "page.dj" %}
+{% block title %}
+Comparison Tool
+{% endblock %}
+{% block header %}
+<h1>
+  Comparison Tool
+</h1>
+{% endblock %}
+
+{% block main %}
+<script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
+<div class="row">
+	<div class="col-md-5">
+		<div class="row">
+		  <div class="col-md-10">
+			<h4>Compare Skaters</h4>
+			{% csrf_token %}
+				<div id="search_error" class="alert" style="display:none"></div>
+				<div class="input-group">
+					<input type="hidden" id="hth_type" value="compare" />
+					<input type="hidden" id="skater_name" value="{{ skater_name_obj.url_name_json }}" />
+					<input type="text" class="form-control" id="skater_name1" size="30" />
+					<span class="input-group-btn">
+					</span>
+				</div>
+				<div class="input-group">
+					<input type="hidden" id="hth_type" value="compare" />
+					<input type="hidden" id="skater_name" value="{{ skater_name_obj.url_name_json }}" />
+					<input type="text" class="form-control" id="skater_name2" size="30" />
+					<span class="input-group-btn">
+					</span>
+				</div>
+				<div class="input-group">
+					<input type="hidden" id="hth_type" value="compare" />
+					<input type="hidden" id="skater_name" value="{{ skater_name_obj.url_name_json }}" />
+					<input type="text" class="form-control" id="skater_name3" size="30" />
+					<span class="input-group-btn">
+					</span>
+				</div>
+				<div class="input-group">
+					<input type="hidden" id="hth_type" value="compare" />
+					<input type="hidden" id="skater_name" value="{{ skater_name_obj.url_name_json }}" />
+					<input type="text" class="form-control" id="skater_name4" size="30" />
+					<span class="input-group-btn">
+					</span>
+				</div>
+				<div class="input-group">
+					<input type="hidden" id="hth_type" value="compare" />
+					<input type="hidden" id="skater_name" value="{{ skater_name_obj.url_name_json }}" />
+					<input type="text" class="form-control" id="skater_name5" size="30" />
+					<span class="input-group-btn">
+					</span>
+				</div>
+				<div class="input-group">
+					<input type="hidden" id="hth_type" value="compare" />
+					<input type="hidden" id="skater_name" value="{{ skater_name_obj.url_name_json }}" />
+					<input type="text" class="form-control" id="skater_name6" size="30" />
+				</div>
+				<br>
+				<button onclick="javascript:compare()" class="btn btn-primary" >Compare</button>
+		  </div>
+		</div>
+    </div>
+    <div class="col-md-7">
+		{% if skaters %}
+			<!-- hth matrix -->
+			<h3>Head-to-Head Matrix</h3>
+			<table class="table table-condensed">
+				<thead>
+					<tr>
+						<th></th>
+						{% for competitor, row in matrix.items %}
+						  <th>{{ competitor.skater.view_name }}</th>
+						{% endfor %}
+					</tr>
+				</thead>
+				<tbody>
+					{% for competitor, row in matrix.items %}
+					<tr>
+						<td>{{ competitor.skater.view_name }}</td>
+						{% for competitor2, tuple in row.items %}
+							{% if not tuple %}
+								<td></td>
+							{% else %}
+								<td>
+									<a href="{% url 'head_to_head_singles' skater1_first_name=competitor.skater.get_default_skater_name.first_name skater1_last_name=competitor.skater.get_default_skater_name.last_name skater2_first_name=competitor2.skater.get_default_skater_name.first_name skater2_last_name=competitor2.skater.get_default_skater_name.last_name %}">
+									{{ tuple.0 }}-{{ tuple.1 }}
+									</a>
+								</td>
+							{% endif %}
+						{% endfor %}
+					</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+			<!-- legend -->
+			<h3>Legend for Score Tables</h3>
+			<table class="table table-condensed table-bordered">
+				<tr>
+					<td class="success">ISU Competition</td>
+					<td>Other Competition</td>
+				</tr>
+			</table>
+
+			<!-- sp scores -->
+			<h3>Short Program Scores</h3>
+			<p>Hover over any table cell to get competition name and TES/PCS breakdown.</p>
+			<table class="table table-condensed">
+				<thead>
+				  <tr>
+					<th>Skater</th>
+					<th>Most Recent</th>
+					<th></th>
+					<th>Least Recent</th>
+				  </tr>
+				</thead>
+				{% for competitor_compare in competitor_compares %}
+				  <tr>
+				  	<td><a href="{{ competitor_compare.competitor.skater.url }}">{{ competitor_compare.competitor.skater.view_name }}</a></td>
+				  	{% for sp in competitor_compare.scores.sp_scores %}
+				  		<td class="{% if "isu_" in sp.program.skater_result.competition.identifier %}success{% endif %}" title="{{ sp.program.skater_result.competition.name }}: {{ sp.tes }} | {{ sp.pcs }}">
+				  			{{ sp.tss }} [<a href="{{ sp.program.skater_result.url }}">{{ sp.program.rank }}</a>] <a href="{{ sp.program.skater_result.competition.url }}">{{ sp.program.skater_result.competition.start_date|date:"n-Y" }}</a>
+				  		</td>
+				  	{% endfor %}
+				  </tr>
+				{% endfor %}
+			</table>
+			<!-- fs scores -->
+			<h3>Free Skate Scores</h3>
+			<p>Hover over any table cell to get competition name and TES/PCS breakdown.</p>
+			<table class="table table-condensed">
+				<thead>
+				  <tr>
+					<th>Skater</th>
+					<th>Most Recent</th>
+					<th></th>
+					<th>Least Recent</th>
+				  </tr>
+				</thead>
+				{% for competitor_compare in competitor_compares %}
+				  <tr>
+				  	<td><a href="{{ competitor_compare.competitor.skater.url }}">{{ competitor_compare.competitor.skater.view_name }}</a></td>
+				  	{% for fs in competitor_compare.scores.fs_scores %}
+				  		<td class="{% if "isu_" in fs.program.skater_result.competition.identifier %}success{% endif %}" title="{{ fs.program.skater_result.competition.name }}: {{ fs.tes }} | {{ fs.pcs }}">
+				  			{{ fs.tss }} [<a href="{{ fs.program.skater_result.url }}">{{ fs.program.rank }}</a>] <a href="{{ fs.program.skater_result.competition.url }}">{{ fs.program.skater_result.competition.start_date|date:"n-Y" }}</a>
+				  		</td>
+				  	{% endfor %}
+				  </tr>
+				{% endfor %}
+			</table>
+			<!-- tot scores -->
+			<h3>Total Scores</h3>
+			<p>Hover over any table cell to get competition name.</p>
+			<table class="table table-condensed">
+				<thead>
+				  <tr>
+					<th>Skater</th>
+					<th>Most Recent</th>
+					<th></th>
+					<th>Least Recent</th>
+				  </tr>
+				</thead>
+				{% for competitor_compare in competitor_compares %}
+				  <tr>
+				  	<td><a href="{{ competitor_compare.competitor.skater.url }}">{{ competitor_compare.competitor.skater.view_name }}</a></td>
+				  	{% for tot in competitor_compare.scores.tot_scores %}
+				  		<td class="{% if "isu_" in tot.competition.identifier %}success{% endif %}" title="{{ tot.competition.name }}">
+				  			{{ tot.total_score }} [<a href="{{ tot.url }}">{{ tot.final_rank }}</a>] <a href="{{ tot.competition.url }}">{{ tot.competition.start_date|date:"n-Y" }}</a>
+				  		</td>
+				  	{% endfor %}
+				  </tr>
+				{% endfor %}
+			</table>
+		{% endif %}
+	</div>
+</div>
+
+{% endblock %}

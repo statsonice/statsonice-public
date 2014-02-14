@@ -91,6 +91,7 @@
                   <!--<li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>-->
                   <li><a href="{% url 'element_stats' %}">Element Statistics</a></li>
                   <li><a href="{% url 'top_scores' %}">Top Scores</a></li>
+                  <li><a href="{% url 'compare' %}">Compare Skaters</a></li>
                   <!--<li><a href="{% url 'articles' %}">Articles</a></li>-->
                   <li><a href="{% url 'custom_stats' %}">Custom Statistics</a></li>
                 </ul>

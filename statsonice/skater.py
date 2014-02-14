@@ -38,11 +38,11 @@ def browse(request):
 #
 def profile(request, skater_first_name, skater_last_name):
     # Get skater
-    try:
-        skater = Skater.find_skater_by_url_name(skater_first_name, skater_last_name)
-        competitor = skater.competitor()
-    except:
-        raise Http404
+    #try:
+    skater = Skater.find_skater_by_url_name(skater_first_name, skater_last_name)
+    competitor = skater.competitor()
+    #except:
+    #    raise Http404
     skater_name_obj = skater.get_default_skater_name()
     skater_name_obj.url_name_json = json.dumps(skater_name_obj.url_name())
 

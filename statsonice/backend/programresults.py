@@ -97,9 +97,10 @@ class ProgramResults:
     def compute_element_scores(self):
         for elementscore in self.element_scores:
             elementscore.element_name = elementscore.get_element_name()
-            if elementscore.element_name[-1] in ['B','1','2','3','4'] and self.program.segment.segment != 'CD':
-                elementscore.level = elementscore.element_name[-1]
-                elementscore.element_name = elementscore.element_name[:-1]
+            if elementscore.element_name:
+                if elementscore.element_name[-1] in ['B','1','2','3','4'] and self.program.segment.segment != 'CD':
+                    elementscore.level = elementscore.element_name[-1]
+                    elementscore.element_name = elementscore.element_name[:-1]
             else:
                 elementscore.level = None
             bv = str(elementscore.base_value)

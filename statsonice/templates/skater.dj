@@ -293,11 +293,19 @@
 							{% for comp_year, skater_result in res_dictionary.items %}
 								{% if comp_year == year %}
 									{% if skater_result.0.withdrawal %}
+										{% if skater_result.0.competition.cutoff.singles and skater_result.0.final_rank > skater_result.0.competition.cutoff.singles %}
+										<td class="center">
+										<a href="{{ skater_result.1.url }}">
+										FNR
+										</a>
+										</td>
+										{% else %}
 										<td class="center">
 										<a href="{{ skater_result.1.url }}">
 										WD
 										</a>
 										</td>
+										{% endif %}
 									{% else %}
 										{% if skater_result.0.final_rank == 1 %}
 											<td class="gold center" title="{{ skater_result.0.total_score }}">

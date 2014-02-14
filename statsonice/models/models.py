@@ -267,40 +267,6 @@ class ResultIJS(models.Model):
     def __unicode__(self):
         return u'(ResultIJS #%s for Competition %s)' % (self.id, self.program.skater_result.competition)
 
-class Result60(models.Model):
-    program = models.OneToOneField(Program)
-
-class JudgeScore60(models.Model):
-    result = models.ForeignKey(Result60)
-    technical_score = models.DecimalField(max_digits=2, decimal_places=1)
-    artistic_score = models.DecimalField(max_digits=2, decimal_places=1)
-    judge_number = models.PositiveIntegerField()
-
-    ordinal = models.PositiveIntegerField(null=True, blank=True)
-    country = models.ForeignKey(Country, null=True, blank=True)
-
-    # method to calculate ordinal from scores
-    def calculate_ordinal(self):
-        segment = self.result.program.segment # object
-        category = self.result.program.skater_result.category # object
-        level = self.result.program.skater_result.level # object
-        qualifying = self.result.program.skater_result.qualifying # object
-        total = self.technical_score + self.artistic_score
-
-        judges = JudgeScore60.objects.filter(result__program__segment=segment,
-                                             result__program__skater_result__category=category,
-                                             result__program__skater_result__level=level,
-                                             result__program__skater_result__qualifying=qualifying,
-                                             judge_number=self.judge_number)
-        judges.sort(key=lambda judge:(judge.technical_score+judge.artistic_score, judge.artistic_score))
-        rank = judges.index(self)+1
-        if judges[rank-2].technical_score + judges[rank-2].artistic_score == total:
-            if judges[rank-2].artistic_score == self.artistic_score:
-                rank -= 1
-
-        self.ordinal = rank
-
-
 class ElementScore(models.Model):
     result = models.ForeignKey(ResultIJS)
     execution_order = models.PositiveIntegerField()

@@ -3,22 +3,22 @@
 Home
 {% endblock %}
 {% block header %}
-<h1 class="center">Stats On Ice</h1>
 {% endblock %}
 {% block main %}
-<br>
-<div class="row">
-  <div class="col-md-6">
-    <a href="{% url 'head_to_head_singles' skater1_first_name="Mao" skater1_last_name="Asada" skater2_first_name="Miki" skater2_last_name="Ando" %}">
-    <div class="center" id="chart">
-      <script src="{{STATIC_PREFIX }}js/index.js"></script>
-      <script src="{{ STATIC_PREFIX }}js/d3_plus_minus_bar_chart.js"></script>
-     </div>
+<div class="row jumbotron">
+  <div class="col-md-4">
+  	<br></br>
+    <h3 class="center">Figure Skating Analytics</h3>
+    <div class="center">
+      <a href="{% url 'register' %}">
+        <div class="btn btn-primary btn-lg">Register</div>
       </a>
-    <p style="color:grey" class="center">Difference in total score: Mao Asada and Miki Ando Head-to-Head Results</p>
+    </div>
+    <p class="center">or <a href="{% url 'login' %}">Login</a></p>
   </div>
-  <div class="col-md-6">
-    <h4 class="center">
+  <div class="col-md-8">
+    <h3><a href="{% url 'search_competitions' %}"><i class="glyphicon glyphicon-floppy-disk"></i></a> Results Database</h3>
+    <h4>
       <a href="{% url 'search_competitions' %}">
       {{ competition_sum }}
       </a> Competitions
@@ -31,21 +31,86 @@ Home
       {{ team_sum }}
       </a> Teams
     </h4>
-    <br></br>
-    <br></br>
-    <h3 class="center">Figure skating analytics</h3>
-    <div class="center">
-      <a href="{% url 'register' %}">
-        <div class="btn btn-primary btn-lg">Register</div>
-      </a>
-    </div>
-    <br>
-    <p class="center">or <a href="{% url 'login' %}">Login</a></p>
+    <p>We aim to have the first comprehensive database for figure skating <a href="{% url 'search_competitions' %}">results</a> and <a href="{% url 'search_skaters'%}">skater data</a>. See which competitions we have <a href="{% url 'database_completion' %}">in our database</a>.</p>
+
+    <h3><a href="{% url 'stats' %}"><i class="glyphicon glyphicon-stats"></i></a> Statistical Tools</h3>
+    <p>We provide a powerful set of <a href="{% url 'stats' %}">tools</a> for accessing our databse, including top scores by season and individual programs, element statistics for skaters, and more.</p>
+
   </div>
-</div> <!-- row -->
+</div> <!-- /row -->
+<div class="row">
+  <div class="col-md-6">
+  	{% if competitor.is_team %}
+  		<h4>Random Team</h4>
+  	{% else %}
+  		<h4>Random Skater</h4>
+  	{% endif %}
+  	<h4>
+  	  <a href="{{ competitor.get_participants.url}}">{{ competitor.get_participants.view_name }}</a>
+  	  {% if competitor.get_participants.country %}({{ competitor.get_participants.country.country_name }}){% endif %}
+  	</h4>
+  	<h5>{{ srs.0.competition.end_date | timesince}} since last competition</h5>
+	<table class="table table-condensed">
+		<thead>
+			<tr>
+				<th>Recent Results</th>
+				<th class="center">Lev</th>
+				<th class="center">Pts</th>
+				<th class="center">Rank</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for sr in srs %}
+				<tr>
+					<td><a href="{{ sr.competition.url }}">{{ sr.competition.name }}</a> ({{ sr.competition.start_date.year }})</td>
+					<td class="center">{{ sr.level.level }}</td>
+					<td class="center"><a href="{{ sr.url }}">{{ sr.total_score }}</a></td>
+					{% if sr.final_rank == 1 %}
+						<td class="gold center" title="{{ sr.total_score }}">
+					{% elif sr.final_rank == 2 %}
+						<td class="silver center" title="{{ sr.total_score }}">
+					{% elif sr.final_rank == 3 %}
+						<td class="bronze center" title="{{ sr.total_score }}">
+					{% elif sr.final_rank == 4 and 'usfs' in sr.competition.identifier %}
+						<td class="pewter center" title="{{ sr.total_score }}">
+					{% else %}
+						<td class="center" title="{{ sr.total_score }}">
+					{% endif %}
+					{{ sr.final_rank }}</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+  </div><!-- /col-md-6 -->
+  <div class="col-md-6">
+    <a href="{% url 'head_to_head_singles' skater1_first_name="Mao" skater1_last_name="Asada" skater2_first_name="Miki" skater2_last_name="Ando" %}">
+    <div class="center" id="chart">
+      <script src="{{STATIC_PREFIX }}js/index.js"></script>
+      <script src="{{ STATIC_PREFIX }}js/d3_plus_minus_bar_chart.js"></script>
+     </div>
+      </a>
+    <p style="color:grey" class="center">Difference in total score: Mao Asada and Miki Ando Head-to-Head Results</p>
+  </div>
+</div>
+<div class="row">
+	<div class="col-md-6">
+  	<h4>Recent Competition Results</h4>
+	{% for comp in recent_competitions %}
+	  <p>
+		<a href="{{ comp.url }}">{{ comp.name }}</a> {% if comp.country %}({{ comp.country.country_name }}){% endif %}
+		<span class="pull-right">
+		{% if comp.start_date.month == comp.end_date.month %}
+		  {{ comp.start_date|date:"M d" }}-{{ comp.end_date|date:"d, Y" }}
+		{% else %}
+		  {{ comp.start_date|date:"M d" }}-{{ comp.end_date|date:"M d, Y" }}
+		{% endif %}
+		</span>
+	  </p>
+	{% endfor %}
+  </div><!-- /col-md-6 -->
+</div> <!-- /row -->
 
-<br></br>
-
+<!--
 <p class="center"><a href="#learn_more">Learn more</a></p>
 
 <hr id="learn_more">
@@ -89,25 +154,20 @@ Home
     <p>Search for any element a skater or team has performed. Want to know how Shoma Uno has done with his elements over time? See <a href="/skater/Shoma/Uno/#element_stats">here</a>. Each skater's or team's profile has the element search feature.</p>
 
     <br>
-    <!--
     <h3><i class="glyphicon glyphicon-file"></i> Articles</h3>
     <p>We write <a href="{% url 'articles' %}">articles</a> exploring patterns in scoring, program strategies, risk vs. reward, and other IJS topics. We publish these articles regularly and keep a complete archive of old articles.</p>
 
     <br>
-    -->
-    <!--
     <h3><i class="glyphicon glyphicon-eye-open"></i> Competition Preview</h3>
     <p>Look at comparative data compiled for skaters entered in select upcoming competitions. The <a href="/stats/competition_preview/Skate-America/2013/">Competition Preview</a> includes head-to-head tables, summaries of most recent scores, and recent trends in skater performance.</p>
 
     <br>
-    -->
-    <!--
     <h3><i class="glyphicon glyphicon-pencil"></i> Blog</h3>
       <p>We maintain a blog where we publish recent additions or changes to the site.</p>
       <a href="{{ blog_post_url }}">{{ blog_post }}</a><br />
       {{ blog_post_date }}
-    -->
 
   </div>
 </div>
+-->
 {% endblock %}

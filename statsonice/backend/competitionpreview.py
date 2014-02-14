@@ -2,9 +2,6 @@
 Classes to create a grand prix preview page
 """
 from itertools import permutations
-
-from django.db.models import Count
-
 from statsonice.models import SkaterResult
 from includes import stats
 
@@ -16,13 +13,19 @@ from includes import stats
 class CompetitorStats(object):
     def __init__(self,competitor):
         self.competitor = competitor
+
+        # get age if singles skater
         if not self.competitor.is_team:
             self.age = self.competitor.skater.age()
         else:
             self.age = None
+
+        # get skater's results, competitions, and list of scores
         self.skater_results = self.get_skater_results()
         self.competitions = self.get_competitions()
         self.scores = self.get_scores()
+
+        # if skater has no scores on record, don't compute recent score, etc.
         if len(self.scores) == 0:
             self.recent_scores = None
             self.highest_total_score = None
@@ -90,7 +93,6 @@ class CompPreviewStats(object):
         self.ladies = self.get_competitor_stats('LADIES')
         self.pairs = self.get_competitor_stats('PAIRS')
         self.dance = self.get_competitor_stats('DANCE')
-        print self.dance
 
     def get_competitor_stats(self, category):
         return [CompetitorStats(sr.competitor) for sr in self.skater_results.filter(category__category=category)]

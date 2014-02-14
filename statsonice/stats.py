@@ -9,6 +9,7 @@ from statsonice.backend.competitionpreview import CompPreviewStats
 from statsonice.backend.elementstats import *
 from statsonice.backend.topscores import TopScores
 from statsonice.backend.scorecards import *
+from statsonice.backend.compare import *
 from statsonice.models import Skater, SkaterTeam, Competitor, Competition
 
 
@@ -171,6 +172,36 @@ def score_cards(request):
         'pcs': pcs,
         'segment': segment,
         'category': category
+    })
+
+def compare(request):
+    return render(request, 'stats/compare.dj')
+
+def compare_result(request,**names):
+    # skaters 1-6
+    # print skaters to test
+    skater1, skater2, skater3, skater4, skater5, skater6 = None, None, None, None, None, None
+    if 'EMPTY' not in names['skater1_first_name']:
+        skater1 = Skater.find_skater_by_url_name(names['skater1_first_name'], names['skater1_last_name'])
+    if 'EMPTY' not in names['skater2_first_name']:
+        skater2 = Skater.find_skater_by_url_name(names['skater2_first_name'], names['skater2_last_name'])
+    if 'EMPTY' not in names['skater3_first_name']:
+        skater3 = Skater.find_skater_by_url_name(names['skater3_first_name'], names['skater3_last_name'])
+    if 'EMPTY' not in names['skater4_first_name']:
+        skater4 = Skater.find_skater_by_url_name(names['skater4_first_name'], names['skater4_last_name'])
+    if 'EMPTY' not in names['skater5_first_name']:
+        skater5 = Skater.find_skater_by_url_name(names['skater5_first_name'], names['skater5_last_name'])
+    if 'EMPTY' not in names['skater6_first_name']:
+        skater6 = Skater.find_skater_by_url_name(names['skater6_first_name'], names['skater6_last_name'])
+    skaters = [skater for skater in [skater1,skater2,skater3,skater4,skater5,skater6] if skater != None]
+
+    compare = Compare(skaters)
+    competitor_compares = compare.competitor_compares
+    matrix = compare.matrix
+    return render(request, 'stats/compare.dj', {
+        'skaters':skaters,
+        'competitor_compares':competitor_compares,
+        'matrix':matrix
     })
 
 def custom_stats(request):

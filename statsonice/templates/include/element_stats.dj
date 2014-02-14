@@ -319,6 +319,7 @@
 				<tr>
 				  <th>Date</th>
 				  <th>Name</th>
+				  <th>Level</th>
 				  <th>Seg</th>
 				  <th>Competition</th>
 				  <th>Element</th>
@@ -331,6 +332,7 @@
 				<tr>
 				  <td>{{ es.result.program.skater_result.competition.start_date.isoformat }}</td>
 				  <td>{{ es.result.program.skater_result.competitor.get_participants.view_name }}</td>
+				  <td>{{ es.result.program.skater_result.level.level }}</td>
 				  <td>{{ es.result.program.segment.segment }}</td>
 				  <td>
 					<a href="{{ es.result.program.skater_result.competition.url }}">

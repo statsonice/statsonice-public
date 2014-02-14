@@ -1,6 +1,5 @@
-{% for lev, qual_skater_results in res.items %}
-	{% for qual, skater_results in qual_skater_results.items %}
-	  <div class="panel panel-default">
+{% for lev, qual, skater_results in res %}
+<div class="panel panel-default">
 		<div class="panel-heading">
 		  <h4 class="panel-title">
 			<a href="#collapse{{category}}{{lev}}{{qual.id}}" data-parent="collapse{{category}}{{lev}}{{qual.id}}" data-toggle="collapse" class="accordion-toggle">
@@ -71,5 +70,4 @@
 		  </div>
 		</div>
 	  </div>
-  {% endfor %}
-{% endfor %}
+{% endfor%}

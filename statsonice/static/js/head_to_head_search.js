@@ -12,6 +12,8 @@ function setup_autocomplete(){
     var names = ['#skater_name', '#matching_skater_name'];
   } else if(hth_type == "skater" || hth_type == "team"){
     var names = ['#matching_skater_name'];
+  } else if (hth_type == "compare") {
+  	var names = ['#skater_name1','#skater_name2','#skater_name3','#skater_name4','#skater_name5','#skater_name6'];
   } else {
     return;
   }
@@ -171,4 +173,48 @@ function teams_hth(){
   matching_skaterteam_names = matching_skaterteam_name + '/' + matching_skaterteam_name_partner;
   url = '/stats/hth/teams/'+skaterteam_names+'/'+matching_skaterteam_names+'/';
   document.location = url;
+}
+
+// compare skaters
+function compare(){
+
+	skater_name1 = $('#skater_name1').val();
+	if (skater_name1 != '') {
+		skater_name1 = first_last_names[skater_name1].join('/');
+	} else {
+		skater_name1 = 'EMPTY_FIRST/EMPTY_LAST';
+	}
+	skater_name2 = $('#skater_name2').val();
+	if (skater_name2 != '') {
+		skater_name2 = first_last_names[skater_name2].join('/');
+	} else {
+		skater_name2 = 'EMPTY_FIRST/EMPTY_LAST';
+	}
+	skater_name3 = $('#skater_name3').val();
+	if (skater_name3 != '') {
+		skater_name3 = first_last_names[skater_name3].join('/');
+	} else {
+		skater_name3 = 'EMPTY_FIRST/EMPTY_LAST';
+	}
+	skater_name4 = $('#skater_name4').val();
+	if (skater_name4 != '') {
+		skater_name4 = first_last_names[skater_name4].join('/');
+	} else {
+		skater_name4 = 'EMPTY_FIRST/EMPTY_LAST';
+	}
+	skater_name5 = $('#skater_name5').val();
+	if (skater_name5 != '') {
+		skater_name5 = first_last_names[skater_name5].join('/');
+	} else {
+		skater_name5 = 'EMPTY_FIRST/EMPTY_LAST';
+	}
+	skater_name6 = $('#skater_name6').val();
+	if (skater_name6 != '') {
+		skater_name6 = first_last_names[skater_name6].join('/');
+	} else {
+		skater_name6 = 'EMPTY_FIRST/EMPTY_LAST';
+	}
+
+	url = '/stats/compare/'+skater_name1+'/'+skater_name2+'/'+skater_name3+'/'+skater_name4+'/'+skater_name5+'/'+skater_name6+'/';
+	document.location = url;
 }
