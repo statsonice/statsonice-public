@@ -275,9 +275,12 @@ class ElementScore(models.Model):
     panel_score = models.DecimalField(max_digits = 10, decimal_places = 3) # total element score
     flag = models.ForeignKey(Flag, null=True, blank=True)
     goes = models.CharField(max_length = 100, null=True, blank=True)
+    element_name = models.CharField(max_length = 100, default='', blank=True)
+    element_name_modifiers = models.CharField(max_length = 100, default='', blank=True)
 
     MODIFIES_ONE = ['<','<<']
     MODIFIES_AFTER = ['SEQ','COMBO','TRANS','kpNNN','kpYNN','kpNYN','kpNNY','kpYYN','kpYNY','kpNYY','kpYYY']
+    MODIFIES_ALL = ['e','x']
 
     def calculate_flag(self):
         goes = self.get_goes()
@@ -300,6 +303,16 @@ class ElementScore(models.Model):
     @cached_function
     def get_element_name(self):
         name = ''
+        for element in self.element_set.select_related('base_element').iterator():
+            name += element.base_element + '+'
+        if name != '':
+            if name[-1] == '+':
+                name = name[:-1]
+        self.element_name = name
+        return name
+    @cached_function
+    def get_element_names(self):
+        name = ''
         modifiers = []
         for element in self.element_set.select_related('base_element').iterator():
             modifiers = element.modifiers.values_list('modifier', flat=True)
@@ -308,11 +321,24 @@ class ElementScore(models.Model):
         for m in modifiers:
             if m in ElementScore.MODIFIES_AFTER:
                 name += m + '+'
+        if 'e' in modifiers:
+            name += ' (e)'
+        if 'x' in modifiers:
+            name += ' [x]'
         if len(modifiers) != 0:
             name = name[:-1]
         if name != '':
             if name[-1] == '+':
                 name = name[:-1]
+        self.element_name_modifiers = name
+        modifiers = list(modifiers)
+        modifiers.append('<')
+        for mod in modifiers:
+            name = name.replace(mod,'')
+        if name != '':
+            if name[-1] == '+':
+                name = name[:-1]
+        self.element_name = name
         return name
     def get_goes(self):
         if self.goes == None or self.goes == '':

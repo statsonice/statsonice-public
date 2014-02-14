@@ -43,6 +43,7 @@ function search() {
             spinnerOff();
         }
     });
+    return false;
 }
 
 function range_toggle(div_id){

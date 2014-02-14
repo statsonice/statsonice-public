@@ -14,7 +14,7 @@ var search_url = '/search_competitions/';
 
 <div class="row">
 	<div class="col-md-7">
-	<div class="form-horizontal">
+	<form class="form-horizontal">
 	  <div class="control-group">
 		<label class="control-label" for="name">Name</label>
 		<div class="controls">
@@ -37,10 +37,8 @@ var search_url = '/search_competitions/';
 		  </div>
 		</div>
 	  </div>
-	</div> <!-- form-horizontal -->
-
-	<button onclick="javascript:search()" class="btn btn-primary">Search</button>
-
+	  <button onclick="return search()" class="btn btn-primary">Search</button>
+	</form> <!-- form-horizontal -->
 	</div>
 
 	<div class="col-md-5">

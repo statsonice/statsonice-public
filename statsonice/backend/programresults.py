@@ -95,8 +95,9 @@ class ProgramResults:
     # returns element scores with median/average/stddev goe, base value, and element name
     #
     def compute_element_scores(self):
+        st = datetime.now()
         for elementscore in self.element_scores:
-            elementscore.element_name = elementscore.get_element_name()
+            elementscore.element_name = elementscore.element_name_modifiers
             if elementscore.element_name:
                 if elementscore.element_name[-1] in ['B','1','2','3','4'] and self.program.segment.segment != 'CD':
                     elementscore.level = elementscore.element_name[-1]
@@ -104,17 +105,24 @@ class ProgramResults:
             else:
                 elementscore.level = None
             bv = str(elementscore.base_value)
+            '''
             element = elementscore.element_set.first()
             if element.modifiers.filter(modifier='e').count() > 0:
                 elementscore.element_name += ' (e)'
             if element != None and element.modifiers.filter(modifier='x').count() > 0:
                 bv += ' x'
+            '''
+            if '[x]' in elementscore.element_name:
+                elementscore.element_name = elementscore.element_name.replace(' [x]','')
+                bv += ' x'
             elementscore.base_value_x = bv
             elementscore.judge_scores = self.goes_by_elementscore[elementscore]
+            '''
             stats = ProgramResults.get_stats(elementscore.judge_scores)
             elementscore.median_goe = stats['median']
             elementscore.average_goe = stats['average']
             elementscore.std_dev_goe = stats['std_dev']
+            '''
         return self.element_scores
 
 

@@ -12,6 +12,9 @@
         <a href="{{ result.url }}">
           {{ result.view_name }}
         </a>
+        {% if result.country %}
+        ({{ result.country.country_name }})
+        {% endif %}
       </li>
     {% endfor %}
   </ul>

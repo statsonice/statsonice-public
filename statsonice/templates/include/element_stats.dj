@@ -339,7 +339,7 @@
 						{{ es.result.program.skater_result.competition.name }}
 					</a>
 				  </td>
-				  <td>{{ es.get_element_name }}</td>
+				  <td>{{ es.element_name_modifiers }}</td>
 				  <td>{{ es.base_value }}</td>
 				  <td>{{ es.grade_of_execution }}</td>
 				  <td>{{ es.panel_score }}</td>

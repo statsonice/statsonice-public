@@ -55,6 +55,14 @@ class Skater(models.Model):
         if len(last_name) == 1:
             skater = skater.get(skatername__last_name=last_name[0])
         else:
+            if len(last_name[0]) == 1 and len(last_name) == 2:
+                skater = skater.filter(skatername__last_name__contains="'".join(last_name))
+                if skater.count() == 1:
+                    return skater.first()
+            elif len(last_name[0]) == 1:
+                skater = skater.filter(skatername__last_name__contains="'".join(last_name[:2]))
+                skater = skater.get(skatername__last_name__contains=last_name[-1])
+                return skater
             skater = skater.filter(skatername__last_name__contains=' '.join(last_name))
             skater = skater.get(skatername__last_name__contains=last_name[-1])
         return skater

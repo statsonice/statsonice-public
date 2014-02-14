@@ -83,8 +83,10 @@ def skater_result_profile_team(request, competition_name, competition_year, \
     return skater_result_profile(request, competition, competitor)
 
 def skater_result_profile(request, competition, competitor):
+    start = datetime.now()
     skater_results = SkaterResults(competition, competitor)
     skater_results.load_program_results()
+    print 'time srp: ', datetime.now() - start
     return render(request, 'skater_result.dj', {
         'skater_results': skater_results,
         'competitor': competitor

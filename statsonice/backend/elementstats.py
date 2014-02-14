@@ -134,10 +134,13 @@ class ElementStats:
 
 	if self.element_name == '':
 	    return
+
+	'''
         self.element_names = self.get_element_names() # array of names split by '+'
         print 'element names: ', self.element_names, time() - self.start
         self.leveled = self.get_leveled_boolean() # array matching element_names to determine whether
                                                   # to check icontains or exact match for element name
+        '''
 
         self.element_scores = self.get_element_scores()
         print 'got element scores: ', len(self.element_scores), time() - self.start
@@ -148,7 +151,7 @@ class ElementStats:
         self.goe_stats = self.get_goe_stats()
         self.years = self.get_years()
         self.flatten_goe_stats()
-        self.level_stats = self.get_level_stats()
+        #self.level_stats = self.get_level_stats()
         # self.modifier_stats = self.get_modifier_stats() # NEEDS TO BE FIXED
         self.attempts_time_series = self.get_attempts_time_series()
 
@@ -221,6 +224,7 @@ class ElementStats:
     # Get the element score objects
     #-----------------------------------------
     def get_element_scores(self):
+        '''
         tot_element_scores = []
         #if len(self.element_names) > 1:
         for element in self.element_names:
@@ -267,6 +271,8 @@ class ElementStats:
                     element_scores = set(element_scores).intersection(element_scores_3)
             tot_element_scores.extend(list(element_scores))
         '''
+
+        '''
         else:
             element_name = self.element_names[0]
             if self.competitor:
@@ -284,9 +290,10 @@ class ElementStats:
             e_scores = [el.element_score for el in elements]
             element_scores = e_scores
             tot_element_scores = list(element_scores)
+
         '''
 
-        #tot_element_scores = list(tot_element_scores)
+        tot_element_scores = list(ElementScore.objects.filter(element_name__contains=self.element_name,result__program__skater_result__competitor=self.competitor))
         tot_element_scores.sort(key=lambda x:x.result.program.skater_result.competition.start_date)
         tot_element_scores.reverse()
 
