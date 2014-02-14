@@ -38,18 +38,21 @@ DATABASES = {
 
 
 if ENV == 'staging':
-    CACHE_PORT = str(11212)
     DEBUG = True
-else:
-    CACHE_PORT = str(11211)
-
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:'+CACHE_PORT,
-        'TIMEOUT': 0, # Never expire cache
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
+        }
     }
-}
+elif ENV == 'production':
+    CACHE_PORT = str(11211)
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+            'LOCATION': '127.0.0.1:'+CACHE_PORT,
+            'TIMEOUT': 0, # Never expire cache
+        }
+    }
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name

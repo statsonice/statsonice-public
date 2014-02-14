@@ -44,14 +44,8 @@ if [[ $auth == 1 ]] ; then
     cat data/db_dump_auth.*.sql | mysql --default-character-set=utf8 --user=$DB_USER --password=$DB_PASSWORD $DB_NAME
 fi
 
-# Clearing memcached
-echo 'CLEARING MEMCACHED'
+# Warming memcached
 if [[ $DB_NAME == 'statsonice' ]]; then
-    echo 'flush_all' | nc localhost 11211
-else
-    echo 'flush_all' | nc localhost 11212
+    echo 'STARTING MEMCACHED UPDATER'
+    screen -d -m python scripts/update_memcached.py
 fi
-
-# Running variable caching script
-echo 'STARTING MEMCACHED UPDATER'
-screen -d -m python scripts/update_memcached.py

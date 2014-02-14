@@ -260,7 +260,7 @@ class ResultIJS(models.Model):
         if self.override_tss:
             self.tss = self.override_tss
         else:
-            self.tss = self.tes + self.pcs - self.deductions
+            self.tss = self.tes + self.pcs - self.deductions + self.bonus
         return self.tss
     class Meta:
         app_label = 'statsonice'

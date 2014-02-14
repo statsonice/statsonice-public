@@ -2,7 +2,7 @@
 These classes encapsulate logic surrounding skater results and program results
 """
 from datetime import datetime
-from statsonice.models import SkaterResult
+from statsonice.models import SkaterResult, Program
 from includes import stats
 
 class SkaterResults:
@@ -10,12 +10,15 @@ class SkaterResults:
         self.competition = competition
         self.competitor = competitor
         self.skater_results = {}
-        for skater_result in SkaterResult.objects.filter(competition=competition, competitor=competitor):
-            self.skater_results[skater_result] = None
+        skater_programs = Program.objects.filter(skater_result__competition=competition,
+            skater_result__competitor=competitor).select_related('skater_result')
+        for program in skater_programs:
+            if program.skater_result not in self.skater_results:
+                self.skater_results[program.skater_result] = []
+            self.skater_results[program.skater_result].append(program)
 
     def load_program_results(self):
-        for skater_result in self.skater_results.keys():
-            programs = skater_result.program_set.all()
+        for skater_result, programs in self.skater_results.items():
             programs = [ProgramResults(program) for program in programs]
             [program.calculate_variables() for program in programs]
             self.skater_results[skater_result] = programs
@@ -96,6 +99,8 @@ class ProgramResults:
             elementscore.element_name = elementscore.get_element_name()
             bv = str(elementscore.base_value)
             element = elementscore.element_set.first()
+            if element.modifiers.filter(modifier='e').count() > 0:
+                elementscore.element_name += ' (e)'
             if element != None and element.modifiers.filter(modifier='x').count() > 0:
                 bv += ' x'
             elementscore.base_value_x = bv
