@@ -6,7 +6,7 @@ import random
 
 from includes.stats import *
 from includes.base_elements import BaseElement
-from statsonice.models import ElementScore, Element, Category, Skater, Competitor
+from statsonice.models import ElementScore, Element, Category, SkaterName, Skater, SkaterTeam, Competitor
 
 # TODO: completely redo element competitor stats
 
@@ -113,26 +113,27 @@ class ElementStats:
     #     the protocols for the elements (make another div under the element_stats div to show detailed skater stats table)
     #     have standard django template table with data display or maybe a d3 table is easier...
     #   - add optional skater/team second argument? (e.g. 4S, Javier Fernandez)
-    def __init__(self, element_name, skater_name, category_name):
+    def __init__(self, element_name, competitor, category_name):
         self.start = time()
         self.MODIFIERS_TO_REMOVE = ['<','+COMBO']
         self.nums = ['0','1','2','3','4','5','6','7','8','9']
         self.element_name = element_name
 
-        self.competitor = self.get_competitor(skater_name)
+        self.competitor = competitor
         self.category_name = category_name
 
         self.category = self.get_category() # returns category object
         print 'category: ', self.category, time() - self.start
+        print 'self.element_name: ', self.element_name
         if self.element_name == 'RANDOM':
             self.element_name = self.get_random_element_name()
             self.element_name = self.remove_modifiers(self.element_name)
+            print 'random element name: ', self.element_name, time() - self.start
             return
         self.element_name = self.remove_modifiers(self.element_name)
 
 	if self.element_name == '':
 	    return
-        print 'random element name: ', self.element_name, time() - self.start
         self.element_names = self.get_element_names() # array of names split by '+'
         print 'element names: ', self.element_names, time() - self.start
         self.leveled = self.get_leveled_boolean() # array matching element_names to determine whether
@@ -140,11 +141,6 @@ class ElementStats:
 
         self.element_scores = self.get_element_scores()
         print 'got element scores: ', len(self.element_scores), time() - self.start
-
-        '''
-        for es in self.element_scores:
-            print es.get_element_name()
-        '''
 
         # data to be displayed
         self.detailed_goe_stats = None # element score objects associated with goe bars
@@ -161,39 +157,6 @@ class ElementStats:
     #-----------------------------------------
     # Basic get functions. No data manipulation.
     #-----------------------------------------
-    def get_competitor(self, skater_name):
-        try:
-            if ' and ' not in skater_name and '+' not in skater_name:
-                skater_name = skater_name.split(' ')
-                first_name = skater_name[0]
-                last_name = ' '.join(skater_name[1:])
-
-                skater = Skater.find_skater_by_url_name(first_name,last_name)
-                competitor = Competitor.find_competitor(skater)
-                return competitor
-            else:
-                if ' and ' in skater_name:
-                    skaters = skater_name.split(' and ')
-                if '+' in skater_name:
-                    skaters = skater_name.split('+')
-                if not skaters:
-                    return None
-                skaters = [s.strip() for s in skaters]
-                if len(skaters) is not 2:
-                    return None
-                female_skater_names = skaters[0].split(' ')
-                female_skater = Skater.find_skater_by_url_name(female_skater_names[0],' '.join(female_skater_names[1:]))
-                male_skater_names = skaters[1].split(' ')
-                male_skater = Skater.find_skater_by_url_name(male_skater_names[0],' '.join(male_skater_names[1:]))
-                skater_team = SkaterTeam.objects.filter(female_skater=female_skater,male_skater=male_skater)
-                if not skater_team:
-                    return None
-                skater_team = skater_team[0]
-                competitor = skater_team.competitor()
-                return competitor
-        except:
-            return None
-
     def get_category(self):
         try:
             category = Category.objects.get(category=self.category_name.upper().strip())
@@ -208,6 +171,7 @@ class ElementStats:
 
     def get_random_element_name(self):
         count = ElementScore.objects.filter(result__program__skater_result__competitor=self.competitor).count()
+        print 'count: ', count
         if count == 0:
             return ''
         cut = int(random.random() * (count-1))
@@ -275,12 +239,12 @@ class ElementStats:
                         if self.leveled[ind] == 1:
                             elements = list(Element.objects.filter(base_element__icontains=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
                         else:
-                            elements = list(Element.objects.filter(base_element=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
+                            elements = list(Element.objects.filter(base_element__iexact=element_name,combination_order=combo_order,element_score__result__program__skater_result__competitor=self.competitor))
                     else:
                         if self.leveled[ind] == 1:
                             elements = list(Element.objects.filter(base_element__icontains=element_name,combination_order=combo_order))
                         else:
-                            elements = list(Element.objects.filter(base_element=element_name,combination_order=combo_order))
+                            elements = list(Element.objects.filter(base_element__iexact=element_name,combination_order=combo_order))
                     if self.category != None:
                         elements = [el for el in elements if el.element_score.result.program.skater_result.category == self.category]
                     e_scores = [el.element_score for el in elements]

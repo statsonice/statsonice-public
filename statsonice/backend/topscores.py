@@ -25,11 +25,17 @@ class TopScores:
             startdate = datetime(self.start_year,5,1)
             enddate = datetime(self.start_year+1,5,1)
         if self.segment == 'TOTAL':
-            skater_results = SkaterResult.objects.filter(category__category=self.category,
-                                                         competition__start_date__gt=startdate,
-                                                         competition__start_date__lt=enddate,
-                                                         total_score__gt = 0,
-                                                         level__level__contains = self.level)
+            if self.level != '':
+                skater_results = SkaterResult.objects.filter(category__category=self.category,
+                                                             competition__start_date__gt=startdate,
+                                                             competition__start_date__lt=enddate,
+                                                             total_score__gt = 0,
+                                                             level__level__contains = self.level)
+            else:
+                skater_results = SkaterResult.objects.filter(category__category=self.category,
+                                                             competition__start_date__gt=startdate,
+                                                             competition__start_date__lt=enddate,
+                                                             total_score__gt = 0)
             if self.competition_type == 'ISU':
                 skater_results = skater_results.filter(competition__identifier__startswith='isu')
             elif self.competition_type == 'NONISU':
@@ -47,10 +53,16 @@ class TopScores:
                 result['competition'] = skater_result.competition
                 results.append(result)
         else:
-            resultijss = ResultIJS.objects.filter(program__skater_result__category__category=self.category,
+            if self.level != '':
+                resultijss = ResultIJS.objects.filter(program__skater_result__category__category=self.category,
+                                                      program__skater_result__competition__start_date__gt=startdate,
+                                                      program__skater_result__competition__start_date__lt=enddate,
+                                                      program__skater_result__level__level = self.level,
+                                                      program__segment__segment=self.segment)
+            else:
+                resultijss = ResultIJS.objects.filter(program__skater_result__category__category=self.category,
                                                   program__skater_result__competition__start_date__gt=startdate,
                                                   program__skater_result__competition__start_date__lt=enddate,
-                                                  program__skater_result__level__level = self.level,
                                                   program__segment__segment=self.segment)
             if self.competition_type == 'ISU':
                 resultijss = resultijss.filter(program__skater_result__competition__identifier__startswith='isu')

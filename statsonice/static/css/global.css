@@ -115,6 +115,33 @@ td.account-bottom {
     color:#E7A503;
 }
 
+/* level themes: B, 1, 2, 3, 4 */
+.levelB {
+	font-size: 15px;
+	font-weight:bold;
+	color:#F16600;
+}
+.level1 {
+	font-size: 15px;
+	font-weight:bold;
+	color:#E69900;
+}
+.level2 {
+	font-size: 15px;
+	font-weight:bold;
+	color:#C3D800;
+}
+.level3 {
+	font-size: 15px;
+	font-weight:bold;
+	color:#7EC100;
+}
+.level4 {
+	font-size: 15px;
+	font-weight:bold;
+	color:#49BB01;
+}
+
 /* plot colors for profiles */
 .sp {
     color:rgb(192,42,42);

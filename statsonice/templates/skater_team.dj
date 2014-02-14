@@ -273,4 +273,9 @@
   </div>
   {% endif %}
 
+<!-- Element Stats -->
+<div id="element_stats">
+{% include "include/element_stats.dj"%}
+</div>
+
 {% endblock %}

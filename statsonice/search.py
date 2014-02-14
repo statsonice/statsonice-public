@@ -20,12 +20,14 @@ def skaters(request):
     if request.method == 'POST':
         search_params = request.POST.copy()
         # Actually do a search
-        all_skaters = Skater.objects.order_by('skatername__last_name').distinct('skatername')
+        all_skaters = Skater.objects.all()
         search = search_backend.GeneralSearch(all_skaters)
         results = search.general_search(search_params, search_backend.SKATER_FIELD_TYPES)
         if type(results) == str or type(results) == unicode:
             return search_error(results)
         total = results.count()
+        if total > 1000:
+            results = results.order_by('?')
         results = results[:25]
         # Render response
         response = render_to_response('include/search_result.dj', {

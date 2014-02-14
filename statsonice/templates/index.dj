@@ -69,18 +69,24 @@ Home
     <br>
 
     <h3><i class="glyphicon glyphicon-user"></i><i class="glyphicon glyphicon-user"></i> Head-to-Head Statistics</h3>
-    <p>Track all <a href="{% url 'head_to_head_singles' skater1_first_name="Mao" skater1_last_name="Asada" skater2_first_name="Miki" skater2_last_name="Ando" %}">rivalries</a>, big or small. We provide detailed analytics about past matchups, win margins over time, and highest personal scores.</p>
+    <p>Track all <a href="{% url 'head_to_head' %}">rivalries</a>, big or small. We provide detailed analytics about past matchups, win margins over time, and highest personal scores.</p>
 
     <br>
 
-    <h3><i class="glyphicon glyphicon-stats"></i> Element Statistics</h3>
-    <p>Search for any element and data for all time is at your fingertips within seconds. Want to know how many 3Lo-3Lo combinations have been called rotated? Our <a href="{% url 'element_stats' %}">Element Stats</a> page can tell you.</p>
+    <h3><i class="glyphicon glyphicon-stats"></i> Top Scores</h3>
+    <p>Search across years and levels, and other parameters to find the <a href="{% url 'top_scores' %}">top short program, free skate, or total scores</a>.</p>
 
     <br>
+
   </div>
   <div class="col-md-5">
     <h3><i class="glyphicon glyphicon-flag"></i> Protocol Flags</h3>
-    <p>Our <a href="/competition/World-Junior-Championships/2013/Yasmin/Siraj/">detailed protocols</a> use flags to highlight judging patterns so protocols can be read and interpreted more quickly. Flag definitions can be found here.</p>
+    <p>Our <a href="/competition/US-Figure-Skating-Championships/2013/Courtney/Hicks/">detailed protocols</a> use flags to highlight judging patterns so protocols can be read and interpreted more quickly.</p>
+
+    <br>
+
+       <h3><i class="glyphicon glyphicon-stats"></i> Element Statistics</h3>
+    <p>Search for any element a skater or team has performed. Want to know how Shoma Uno has done with his elements over time? See <a href="/skater/Shoma/Uno/#element_stats">here</a>. Each skater's or team's profile has the element search feature.</p>
 
     <br>
     <!--
@@ -95,10 +101,12 @@ Home
 
     <br>
     -->
+    <!--
     <h3><i class="glyphicon glyphicon-pencil"></i> Blog</h3>
       <p>We maintain a blog where we publish recent additions or changes to the site.</p>
       <a href="{{ blog_post_url }}">{{ blog_post }}</a><br />
       {{ blog_post_date }}
+    -->
 
   </div>
 </div>

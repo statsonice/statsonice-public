@@ -118,70 +118,8 @@ def stats_competition_preview_detailed(request, competition_name, competition_ye
 
 @ensure_csrf_cookie
 def stats_element_stats(request):
-    # TODO: add dynamic if POST code to allow query from page
-    # TODO: make element stats classes MUCH less expensive
-        # - look to db_cleaning_script for some ideas/a start
-    # what follows is only example code
-    if request.method == 'POST':
-        open_detailed = False
-        elem_skater = request.POST.get('elementName')
-        if ',' in elem_skater:
-            temp = elem_skater.split(',')
-            element_name = temp[0].strip()
-            skater_name = temp[1].strip()
-        else:
-            element_name = elem_skater
-            skater_name = ''
-        category = request.POST.get('group1')
-        category_name = category.strip().upper()
-        element_cat_stats = ElementStats(element_name,skater_name,category)
-        if element_name == '':
-            element_name = 'None'
-            category_name = 'None'
-            skater_name = ''
-            goes = [0]
-            years = [0]
-            time_series = [0]
-            element_scores = None
-        else:
-            goes = element_cat_stats.goe_stats
-            years = element_cat_stats.years
-            time_series = element_cat_stats.attempts_time_series
-            element_scores = element_cat_stats.element_scores
-            if len(element_scores) > 300:
-                element_scores = element_scores[len(element_scores)-300:]
-
-            goes = json.dumps(goes)
-            years = json.dumps(years)
-            time_series = json.dumps(time_series)
-    else:
-        element_name = '4S+2T'
-        category_name = 'MEN'
-        skater_name = 'Max Aaron'
-        element_cat_stats = ElementStats(element_name,skater_name,category_name)
-        goes = element_cat_stats.goe_stats
-        years = element_cat_stats.years
-        time_series = element_cat_stats.attempts_time_series
-        element_scores = element_cat_stats.element_scores
-        if len(element_scores) > 300:
-            element_scores = element_scores[len(element_scores)-300:]
-
-        goes = json.dumps(goes)
-        years = json.dumps(years)
-        time_series = json.dumps(time_series)
-        open_detailed = True
-
-    print 'goes: ', goes
     return render(request, 'stats/element.dj', {
         'subscription_required': True,
-        'element_name': element_name,
-        'category_name': category_name,
-        'skater_name': skater_name,
-        'goes': goes,
-        'years': years,
-        'time_series': time_series,
-        'element_scores': element_scores,
-        'open_detailed': open_detailed
     })
 
 @ensure_csrf_cookie

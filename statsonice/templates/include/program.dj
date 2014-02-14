@@ -48,6 +48,7 @@
 			  Ded: {{ programresult.program.resultijs.deductions }}
 			|
 			<a href="{{ programresult.program.skater_result.competition.url }}">{{ programresult.program.skater_result.competition.name }}</a>
+			{{ programresult.program.skater_result.competition.start_date.year }}
 			</h4>
 		</div>
 		<div class="well well-small">
@@ -60,9 +61,15 @@
 						<th>Base Value</th>
 						<th>GOE</th>
 						<th>Flag</th>
-            {% for num in programresult.elementscores.0.get_goes %}
-              <th>J{{ forloop.counter }}</th>
-            {% endfor %}
+						{% if programresult.elementscores.0.get_goes %}
+							{% for num in programresult.elementscores.0.get_goes %}
+							  <th>J{{ forloop.counter }}</th>
+							{% endfor %}
+						{% else %}
+							{% for num in programresult.elementscores.1.get_goes %}
+							  <th>J{{ forloop.counter }}</th>
+							{% endfor %}
+						{% endif %}
 						<th>Panel Score</th>
 					</tr>
 				</thead>
@@ -70,15 +77,29 @@
 				{% for element in programresult.elementscores %}
 				  <tr>
 					<td>{{ forloop.counter }}</td>
-					<td>{{ element.element_name }}</td>
+					<td>
+						{{ element.element_name }}{% if element.level %}<span class="level{{ element.level }}">{{ element.level }}</span>{% endif %}
+					</td>
 					<td>{{ element.base_value_x }}</td>
 					<td>{{ element.grade_of_execution }}</td>
 					<td>
 				      {% include 'include/flag.dj' with flag=element.flag.flag %}
 					</td>
+					{% if element.judge_scores %}
 					  {% for goe in element.judge_scores %}
-					<td>{{ goe }}</td>
+					  	<td>{{ goe }}</td>
 					  {% endfor %}
+					{% else %}
+					  {% if programresult.elementscores.0.get_goes %}
+						{% for num in programresult.elementscores.0.get_goes %}
+						  <th>-</th>
+						{% endfor %}
+					  {% else %}
+					  	{% for num in programresult.elementscores.1.get_goes %}
+						  <th>-</th>
+						{% endfor %}
+					  {% endif %}
+					{% endif %}
 					<td>{{ element.panel_score }}</td>
 				  </tr>
 				{% endfor %}

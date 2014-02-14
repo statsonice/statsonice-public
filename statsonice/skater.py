@@ -1,6 +1,6 @@
 from django.core.cache import cache
 from django.http import Http404
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, render_to_response
 from time import time
 from datetime import datetime
 import json
@@ -40,6 +40,7 @@ def profile(request, skater_first_name, skater_last_name):
     # Get skater
     try:
         skater = Skater.find_skater_by_url_name(skater_first_name, skater_last_name)
+        competitor = skater.competitor()
     except:
         raise Http404
     skater_name_obj = skater.get_default_skater_name()
@@ -81,16 +82,19 @@ def profile(request, skater_first_name, skater_last_name):
 
     # category
     skater_results = SkaterResult.objects.filter(competitor__skater=skater)
-    if skater_results.count() > 0:
+    element_scores = ElementScore.objects.filter(result__program__skater_result__competitor__skater=skater)
+    if element_scores.count() > 0:
         category = skater_results[0].category.category
         category_name = category
+
+        print 'request method: ', request.method
 
         # element stats
 
         if request.method == 'POST':
             open_detailed = False
             element_name = request.POST.get('elementName')
-            element_cat_stats = ElementStats(element_name,skater_name,category)
+            element_cat_stats = ElementStats(element_name,competitor,category)
             if element_name == '':
                 element_name = 'None'
                 category_name = 'None'
@@ -112,7 +116,7 @@ def profile(request, skater_first_name, skater_last_name):
                 time_series = json.dumps(time_series)
         else:
             element_name = 'RANDOM'
-            element_cat_stats = ElementStats(element_name,skater_name,category_name)
+            element_cat_stats = ElementStats(element_name,competitor,category_name)
             goes = None
             years = None
             time_series = None
@@ -135,7 +139,7 @@ def profile(request, skater_first_name, skater_last_name):
             'subscription_required': True,
             'element_name': element_name,
             'category_name': category_name,
-            'skater_name': skater_name,
+            'competitor': competitor,
             'goes': goes,
             'years': years,
             'time_series': time_series,
@@ -166,6 +170,8 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
     skater_team.url_name_json = json.dumps(first_skater.url_name()+second_skater.url_name())
 
     # skater heights
+    first_skater.first_name, first_skater.last_name = first_skater_first_name, first_skater_last_name
+    second_skater.first_name, second_skater.last_name = second_skater_first_name, second_skater_last_name
     first_skater.height_feet, first_skater.height_inches = unitconversion.metric_to_imperial(first_skater.height)
     second_skater.height_feet, second_skater.height_inches = unitconversion.metric_to_imperial(second_skater.height)
 
@@ -207,7 +213,76 @@ def team_profile(request, first_skater_first_name, first_skater_last_name, secon
     result_dic = result_dic.items()
     result_dic.sort(key=lambda x:-x[0])
 
-    return render(request, 'skater_team.dj', {
+    # category
+    skater_results = SkaterResult.objects.filter(competitor__skater_team=skater_team)
+    element_scores = ElementScore.objects.filter(result__program__skater_result__competitor__skater_team=skater_team)
+    if element_scores.count() > 0:
+        category = skater_results[0].category.category
+        category_name = category
+
+        # element stats
+
+        if request.method == 'POST':
+            open_detailed = False
+            element_name = request.POST.get('elementName')
+            element_cat_stats = ElementStats(element_name,competitor,category)
+            if element_name == '':
+                element_name = 'None'
+                category_name = 'None'
+                skater_name = ''
+                goes = [0]
+                years = [0]
+                time_series = [0]
+                element_scores = None
+            else:
+                goes = element_cat_stats.goe_stats
+                years = element_cat_stats.years
+                time_series = element_cat_stats.attempts_time_series
+                element_scores = element_cat_stats.element_scores
+                if len(element_scores) > 300:
+                    element_scores = element_scores[len(element_scores)-300:]
+
+                goes = json.dumps(goes)
+                years = json.dumps(years)
+                time_series = json.dumps(time_series)
+        else:
+            element_name = 'RANDOM'
+            element_cat_stats = ElementStats(element_name,competitor,category_name)
+            goes = None
+            years = None
+            time_series = None
+            element_scores = None
+            element_name = element_cat_stats.element_name
+
+            goes = json.dumps(goes)
+            years = json.dumps(years)
+            time_series = json.dumps(time_series)
+            open_detailed = True
+
+        return render(request, 'skater_team.dj', {
+            'first_skater': first_skater,
+            'second_skater': second_skater,
+            'height_gap': height_gap,
+            'category': category,
+            'skater_team': skater_team,
+            'program': program,
+            'isu_results_matrix': isu_results_matrix,
+            'isu_years': isu_years,
+            'personal_records': personal_records,
+            'best_total': best_total,
+            'results': result_dic,
+            'subscription_required': True,
+            'element_name': element_name,
+            'category_name': category_name,
+            'competitor': competitor,
+            'goes': goes,
+            'years': years,
+            'time_series': time_series,
+            'element_scores': element_scores,
+            'open_detailed': open_detailed
+        })
+    else:
+        return render(request, 'skater_team.dj', {
             'first_skater': first_skater,
             'second_skater': second_skater,
             'height_gap': height_gap,

@@ -95,9 +95,11 @@
                   <li><a href="{% url 'custom_stats' %}">Custom Statistics</a></li>
                 </ul>
               </li>
+              <!--
               <li>
                 <a href="//blog.statsonice.com/">Blog</a></li>
               </li>
+              -->
             </ul>
             <ul class="nav navbar-nav pull-right">
               {% if user.is_authenticated %}

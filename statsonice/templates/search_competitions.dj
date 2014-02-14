@@ -37,12 +37,6 @@ var search_url = '/search_competitions/';
 		  </div>
 		</div>
 	  </div>
-	  <div class="control-group">
-		<label class="control-label" for="identifier">Identifier</label>
-		<div class="controls">
-		  {% include "search/text.dj" with input_id="identifier"%}
-		</div>
-	  </div>
 	</div> <!-- form-horizontal -->
 
 	<button onclick="javascript:search()" class="btn btn-primary">Search</button>

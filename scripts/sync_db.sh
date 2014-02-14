@@ -45,7 +45,7 @@ if [[ $auth == 1 ]] ; then
 fi
 
 # Warming memcached
-if [[ $DB_NAME == 'statsonice' ]]; then
+if [[ $DB_NAME == 'statsonice_prod' ]]; then
     echo 'STARTING MEMCACHED UPDATER'
     screen -d -m python scripts/update_memcached.py
 fi

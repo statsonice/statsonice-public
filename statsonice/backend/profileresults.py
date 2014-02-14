@@ -45,6 +45,8 @@ class ProfileResults:
                 best_program = segment_programs[0]
                 best_programs.append([best_program.skater_result.competition, best_program.resultijs])
 
+        best_programs.sort(key=lambda x:x[1].tss)
+
         # Get isu skater result with max total score
         skater_results = self.skater_results.filter(competition__identifier__contains = 'isu_')
         skater_results = skater_results.order_by('total_score').reverse()

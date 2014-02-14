@@ -55,8 +55,7 @@ class Skater(models.Model):
         if len(last_name) == 1:
             skater = skater.get(skatername__last_name=last_name[0])
         else:
-            for name in last_name[0:-1]:
-                skater = skater.filter(skatername__last_name__contains=name)
+            skater = skater.filter(skatername__last_name__contains=' '.join(last_name))
             skater = skater.get(skatername__last_name__contains=last_name[-1])
         return skater
     def get_default_skater_name(self):

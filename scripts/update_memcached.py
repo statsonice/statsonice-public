@@ -59,7 +59,8 @@ try:
         skaterteam.is_dance()
         progress_indicator.next()
 except:
-    log_file_location = '/home/albertyw/memcached_log'
-    log_file = open(log_file_location,'w')
-    traceback.print_exc(file=log_file)
-    log_file.close()
+    subject = 'Update Memcached Script Failure'
+    message = traceback.format_exc()
+    from_email = 'bot@statsonice.com'
+    recipient_list = ['team@statsonice.com']
+    send_mail(subject, message, from_email, recipient_list)
