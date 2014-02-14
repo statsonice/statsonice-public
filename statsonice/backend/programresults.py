@@ -25,8 +25,8 @@ class ProgramResults:
     #
     def __init__(self, program):
         self.program = program
-        self.element_scores = self.program.resultijs.elementscore_set.all().select_related()
-        self.pc_scores = self.program.resultijs.programcomponentscore_set.all().select_related()
+        self.element_scores = self.program.resultijs.elementscore_set.all()
+        self.pc_scores = self.program.resultijs.programcomponentscore_set.all().select_related('component')
         self.goes_by_elementscore = {}
         self.goes = []
         self.programcomponentscores = []

@@ -87,10 +87,7 @@ var search_url = '/search_skaters/';
 	
 	<div class="col-md-5">
 
-		<div class="row">
-			<div class="col-md-8">
-				<h3>Results</h3>
-			</div>
+		<div class="row" id="spinnerContainer">
 			<div class="col-md-4">
 				{% include "include/spinner.dj" %}
 			</div>

@@ -6,7 +6,24 @@ class ProfileResults:
 
     def __init__(self,skater):
         self.SEGMENTS = [choice[0] for choice in Segment.SEGMENT_CHOICES][1:]
-        self.ORDERED_COMPETITIONS = ['Olympic Games','World Championships','European Championships','Four Continents Championships','World Junior Championships','GPF','JGPF', 'GP ', 'JGP ']
+        self.ORDERED_COMPETITIONS = ['Olympic Games',
+                                     'World Championships',
+                                     'European Championships',
+                                     'Four Continents Championships',
+                                     'World Junior Championships',
+                                     'Grand Prix Final',
+                                     'Skate America',
+                                     'Skate Canada',
+                                     'Cup of China',
+                                     'NHK Trophy',
+                                     'Trophee Eric Bompard',
+                                     'Cup of Russia',
+                                     'Junior Grand Prix Final',
+                                     'Junior Grand Prix ',
+                                     'US Figure Skating Championships',
+                                     ' Sectional',
+                                     ' Regional',
+                                     ' Championships']
         self.skater = skater
         self.competitor = Competitor.find_competitor(skater)
         self.skater_results = SkaterResult.objects.filter(competitor = self.competitor)
@@ -41,8 +58,8 @@ class ProfileResults:
     # method to get isu results for a skater or team
     def get_isu_results_matrix(self):
         isu_results_matrix = []
-        min_yr, max_yr = 2013, 0
         now = date.today()
+        min_yr, max_yr = now.year, 0
         skater_results = self.skater_results.order_by('competition__name')
         skater_results = skater_results.filter(qualifying = Qualifying.objects.get(name=''),
                                                competition__end_date__lte = now,
@@ -54,14 +71,14 @@ class ProfileResults:
                 comp = skater_result.competition
                 name = comp.name
                 if ordered_competition in name:
+                    if ordered_competition == 'Grand Prix Final' and 'Junior' in name:
+                        continue
                     # adjust min and max years for matrix
                     year = comp.start_date.year
-                    if comp.identifier:
-                        if 'isu_' in comp.identifier:
-                            if year < min_yr:
-                                min_yr = year
-                            if year > max_yr:
-                                max_yr = year
+                    if year < min_yr:
+                        min_yr = year
+                    if year > max_yr:
+                        max_yr = year
 
                     # add results to matrix
                     if name in used_competitions:
@@ -81,12 +98,10 @@ class ProfileResults:
 
             # adjust min and max years for matrix
             year = comp.start_date.year
-            if comp.identifier:
-                if 'isu_' in comp.identifier:
-                    if year < min_yr:
-                        min_yr = year
-                    if year > max_yr:
-                        max_yr = year
+            if year < min_yr:
+                min_yr = year
+            if year > max_yr:
+                max_yr = year
 
             # add results to matrix
             if name in used_competitions:

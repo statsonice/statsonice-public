@@ -18,7 +18,7 @@ num_comps = 1
 comps = Competition.objects.all()
 comps = comps[len(comps)-num_comps:]
 
-#comps = Competition.objects.filter(name__contains='Warsaw',start_date__year=2010)
+#comps = Competition.objects.filter(name__contains="Eastern Sectional",start_date__year=2005)
 skater_results = [c.skaterresult_set.all() for c in comps]
 skater_results = [sr for skater_result in skater_results for sr in skater_result]
 programs = [sr.program_set.all() for sr in skater_results]

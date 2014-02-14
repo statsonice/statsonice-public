@@ -1,12 +1,8 @@
-import datetime
-import os.path
-from django.shortcuts import render_to_response, redirect, render
-from django.core.urlresolvers import reverse
+from django.shortcuts import render_to_response, render
 from django.http import HttpResponse
 from django.views.decorators.csrf import ensure_csrf_cookie
 
-from util.settings import STATIC_ROOT, STATIC_URL
-from statsonice.models import *
+from statsonice.models import Skater, Competition, Country, Coach, SkaterTeam
 import statsonice.backend.search as search_backend
 
 
@@ -24,14 +20,17 @@ def skaters(request):
     if request.method == 'POST':
         search_params = request.POST.copy()
         # Actually do a search
-        all_skaters = Skater.objects.all()
+        all_skaters = Skater.objects.order_by('skatername__last_name').distinct('skatername')
         search = search_backend.GeneralSearch(all_skaters)
         results = search.general_search(search_params, search_backend.SKATER_FIELD_TYPES)
         if type(results) == str or type(results) == unicode:
             return search_error(results)
+        total = results.count()
+        results = results[:25]
         # Render response
         response = render_to_response('include/search_result.dj', {
-            'results' : results,
+            'results': results,
+            'total': total,
         })
         return response
     return render(request, 'search_skaters.dj', {
@@ -52,8 +51,12 @@ def competitions(request):
         results = search.general_search(search_params, search_backend.COMPETITION_FIELD_TYPES)
         if type(results) == str or type(results) == unicode:
             return search_error(results)
+        total = results.count()
+        results = results[:25]
+        # Render response
         response = render_to_response('include/search_result.dj', {
             'results' : results,
+            'total': total,
         })
         return response
     return render(request, 'search_competitions.dj', {

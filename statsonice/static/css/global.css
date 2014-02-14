@@ -76,6 +76,11 @@ ul.nav-white a:hover {
 td.account-bottom {
     height:110px;
 }
+.black-link {
+	color:black;
+	font-size:12px;
+	text-decoration:none;
+}
 
 
 /* title bar for homepage and program page */
@@ -98,7 +103,7 @@ td.account-bottom {
 /* ladies, men, pairs dance themes */
 
 .ladies {
-    color:#C12267;
+	color:#C12267;
 }
 .men {
     color:#357EC7;
@@ -143,15 +148,27 @@ td.title-block {
 
 /* td medal background colors */
 td.gold {
+	border-width: 0 1px 0 1px;
+	border-style:solid;
+	border-color:white;
 	background-color:#FFD700;
 }
 td.silver {
+	border-width: 0 1px 0 1px;
+	border-style:solid;
+	border-color:white;
 	background-color:#C0C0C0;
 }
 td.bronze {
+	border-width: 0 1px 0 1px;
+	border-style:solid;
+	border-color:white;
 	background-color:#CD7F32;
 }
 td.pewter {
+	border-width: 0 1px 0 1px;
+	border-style:solid;
+	border-color:white;
 	background-color:#a9aeb6;
 }
 

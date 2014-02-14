@@ -7,6 +7,7 @@ import json
 
 from statsonice.models import Skater, SkaterTeam, Competitor, Program, SkaterResult
 from statsonice.backend.profileresults import ProfileResults
+from statsonice.backend.elementstats import *
 from includes import unitconversion
 
 
@@ -41,8 +42,10 @@ def profile(request, skater_first_name, skater_last_name):
         skater = Skater.find_skater_by_url_name(skater_first_name, skater_last_name)
     except:
         raise Http404
-    skater_name = skater.get_default_skater_name()
-    skater_name.url_name_json = json.dumps(skater_name.url_name())
+    skater_name_obj = skater.get_default_skater_name()
+    skater_name_obj.url_name_json = json.dumps(skater_name_obj.url_name())
+
+    skater_name = skater_name_obj.view_name()
 
     # Redirect to canonical name (and url) if not default skater name
     if skater.url_name() != (skater_first_name, skater_last_name):
@@ -51,7 +54,7 @@ def profile(request, skater_first_name, skater_last_name):
     # Compute skater information
     skater.height_feet, skater.height_inches = unitconversion.metric_to_imperial(skater.height)
     skater.other_names = list(skater.skatername_set.all())
-    skater.other_names.remove(skater_name)
+    skater.other_names.remove(skater_name_obj)
 
     # get results matrices
     profile_results = ProfileResults(skater)
@@ -76,15 +79,79 @@ def profile(request, skater_first_name, skater_last_name):
     result_dic.sort(key=lambda x:-x[0])
 
 
-    return render(request, 'skater.dj', {
-        'skater_name': skater_name,
-        'skater': skater,
-        'isu_results_matrix': isu_results_matrix,
-        'isu_years': isu_years,
-        'personal_records': personal_records,
-        'best_total': best_total,
-        'results': result_dic
-    })
+    # category
+    skater_results = SkaterResult.objects.filter(competitor__skater=skater)
+    if skater_results.count() > 0:
+        category = skater_results[0].category.category
+        category_name = category
+
+        # element stats
+
+        if request.method == 'POST':
+            open_detailed = False
+            element_name = request.POST.get('elementName')
+            element_cat_stats = ElementStats(element_name,skater_name,category)
+            if element_name == '':
+                element_name = 'None'
+                category_name = 'None'
+                skater_name = ''
+                goes = [0]
+                years = [0]
+                time_series = [0]
+                element_scores = None
+            else:
+                goes = element_cat_stats.goe_stats
+                years = element_cat_stats.years
+                time_series = element_cat_stats.attempts_time_series
+                element_scores = element_cat_stats.element_scores
+                if len(element_scores) > 300:
+                    element_scores = element_scores[len(element_scores)-300:]
+
+                goes = json.dumps(goes)
+                years = json.dumps(years)
+                time_series = json.dumps(time_series)
+        else:
+            element_name = 'RANDOM'
+            element_cat_stats = ElementStats(element_name,skater_name,category_name)
+            goes = None
+            years = None
+            time_series = None
+            element_scores = None
+            element_name = element_cat_stats.element_name
+
+            goes = json.dumps(goes)
+            years = json.dumps(years)
+            time_series = json.dumps(time_series)
+            open_detailed = True
+
+        return render(request, 'skater.dj', {
+            'skater_name_obj': skater_name_obj,
+            'skater': skater,
+            'isu_results_matrix': isu_results_matrix,
+            'isu_years': isu_years,
+            'personal_records': personal_records,
+            'best_total': best_total,
+            'results': result_dic,
+            'subscription_required': True,
+            'element_name': element_name,
+            'category_name': category_name,
+            'skater_name': skater_name,
+            'goes': goes,
+            'years': years,
+            'time_series': time_series,
+            'element_scores': element_scores,
+            'open_detailed': open_detailed
+        })
+    else:
+        return render(request, 'skater.dj', {
+            'skater_name_obj': skater_name_obj,
+            'skater': skater,
+            'isu_results_matrix': isu_results_matrix,
+            'isu_years': isu_years,
+            'personal_records': personal_records,
+            'best_total': best_total,
+            'results': result_dic
+        })
 
 # View to display information about a skater team
 #

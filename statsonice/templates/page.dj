@@ -60,6 +60,7 @@
 
           <div class="collapse navbar-collapse" id="navbar-collapse-top">
             <ul class="nav navbar-nav">
+              <!--
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>
                 <ul class="dropdown-menu">
@@ -67,21 +68,30 @@
                   <li><a href="{% url 'search_competitions' %}">Competitions</a></li>
                 </ul>
               </li>
+              -->
+              <!--
               <li>
                 <a href="{% url 'skater_browse' %}">Skaters</a>
               </li>
               <li>
                 <a href="{% url 'competition_browse' %}">Competitions</a>
               </li>
+              -->
+              <li>
+                <a href="{% url 'search_skaters' %}">Skaters</a>
+              </li>
+              <li>
+                <a href="{% url 'search_competitions' %}">Competitions</a>
+              </li>
               <li class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Statistics <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                   <li><a href="{% url 'stats' %}">Overview</a></li>
                   <li><a href="{% url 'head_to_head' %}">Head-to-Head</a></li>
-                  <li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>
+                  <!--<li><a href="{% url 'competition_preview' %}">Competition Preview</a></li>-->
                   <li><a href="{% url 'element_stats' %}">Element Statistics</a></li>
                   <li><a href="{% url 'top_scores' %}">Top Scores</a></li>
-                  <li><a href="{% url 'articles' %}">Articles</a></li>
+                  <!--<li><a href="{% url 'articles' %}">Articles</a></li>-->
                   <li><a href="{% url 'custom_stats' %}">Custom Statistics</a></li>
                 </ul>
               </li>

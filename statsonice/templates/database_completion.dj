@@ -6,7 +6,7 @@
 <h1>
   Database Completion Status
 </h1>
-<p>Page last updated 12/13/13</p>
+<p>Page last updated 1/5/2014</p>
 {% endblock %}
 
 {% block main %}
@@ -74,8 +74,8 @@
 			</tr>
 			<tr>
 				<td>World Championships</td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -86,7 +86,7 @@
 			</tr>
 			<tr>
 				<td>World Junior Championships</td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -478,12 +478,12 @@
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Golden Spin</td>
 				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="not-in-db"></td>
@@ -539,7 +539,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -551,7 +551,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -563,7 +563,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -579,7 +579,7 @@
 				<td class="not-in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -591,7 +591,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -603,7 +603,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -615,7 +615,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -627,7 +627,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -639,7 +639,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -651,7 +651,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -663,7 +663,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -675,7 +675,7 @@
 				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
@@ -816,19 +816,19 @@
 				<td class="in-db"></td>
 				<td class="not-in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Japanese Championships</td>
 				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Swedish Championships</td>
@@ -840,7 +840,7 @@
 				<td class="in-db"></td>
 				<td class="in-db"></td>
 				<td class="in-db"></td>
-				<td class="not-in-db"></td>
+				<td class="in-db"></td>
 			</tr>
 			<tr>
 				<td>Three Nationals Championships</td>

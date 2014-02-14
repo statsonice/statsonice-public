@@ -121,9 +121,15 @@ class SkaterResult(models.Model):
                 total = 0
                 # rules for qual rounds at worlds change year by year
                 # sometimes no qual rounds, other times do not count towards total score, etc.
-                programs = self.program_set.all().select_related('resultijs')
+                if self.competition.name == 'World Championships' and self.competition.start_date.year in [2005,2006]:
+                    if self.qualifying.name == '':
+                        programs = Program.objects.filter(skater_result__competitor=self.competitor,skater_result__competition = self.competition).select_related('resultijs')
+                    else:
+                        programs = self.program_set.all().select_related('resultijs')
+                else:
+                    programs = self.program_set.all().select_related('resultijs')
                 for program in programs:
-                    total += program.resultijs.tss * program.resultijs.multiplier
+                    total += (program.resultijs.tss * Decimal(str(program.resultijs.multiplier)+'001')).quantize(Decimal('0.01'))
                 self.total_score = total
             return self.total_score
     def calculate_final_rank(self):
@@ -218,7 +224,8 @@ class Program(models.Model):
 
 class ResultIJS(models.Model):
     program = models.OneToOneField(Program)
-    deductions = models.PositiveIntegerField()
+    deductions = models.DecimalField(max_digits = 4, decimal_places = 2)
+    bonus = models.DecimalField(max_digits = 3, decimal_places = 1, default = 0.0)
     # Don't save into tes, pcs, tss
     tes = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank = True, db_index=True)
     pcs = models.DecimalField(max_digits = 5, decimal_places = 2, null = True, blank = True)
@@ -243,11 +250,8 @@ class ResultIJS(models.Model):
             total = Decimal(0)
             scores = self.programcomponentscore_set.values_list('factor', 'panel_score')
             for factor, panel_score in scores:
-                if str(factor)[-1] == '5' or str(factor) == '0.90':
-                    factor = Decimal(str(factor)+'001')
-                    total += (factor*panel_score).quantize(Decimal('0.01'))
-                else:
-                    total += (factor*panel_score).quantize(Decimal('0.01'))
+                factor = Decimal(str(factor)+'001')
+                total += (factor*panel_score).quantize(Decimal('0.01'))
             self.pcs = total
         return self.pcs
     def calculate_tss(self):

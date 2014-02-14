@@ -133,59 +133,27 @@
 			</div>
 		  {% endif %}
   	</div>
+  	<div class="col-md-5">
+      <script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
+		<div class="row">
+		  <div class="col-md-10">
+			<h4>Head to Head</h4>
+			<div id="search_error" class="alert" style="display:none"></div>
+			<div class="input-group">
+				<input type="hidden" id="hth_type" value="skater" />
+				<input type="hidden" id="skaterteam_names" value="{{ skater_team.url_name_json }}" />
+				<input type="text" class="form-control" id="matching_skater_name" size="50" />
+				<span class="input-group-btn">
+					<button class="btn btn-primary" onclick="javascript:teams_hth()">Compare</button>
+				</span>
+			</div>
+			<select id="matching_skater_name_partner" disabled="true">
+				  <option value="">Select A Skater</option>
+				</select>
+		  </div>
+		</div>
+  	</div>
   </div>
-
-{% comment %}
-  <hr>
-
-  <div class="row">
-    <div class="col-md-12">
-      <h4>Progression of Scores (Example Data)</h4>
-      <p><b class="sp">SP</b>, <b class="fs">FS</b>, <b class="sp-fs-total">TOTAL</b></p>
-
-      <canvas id="canvas" height="400" width="800"></canvas>
-
-
-      <script>
-
-        var lineChartData = {
-          labels : ["January","February","March","April","May","June","July","August","September"],
-          datasets : [
-            // short program scores
-            {
-              fillColor : "rgba(192,42,42,0.05)",
-              strokeColor : "rgba(192,42,42,1)",
-              pointColor : "rgba(192,42,42,1)",
-              pointStrokeColor : "#fff",
-              // var data = sp_scores|jsonify
-              data : [65,59,71,73,64,55,80,72,75]
-            },
-            // free skating scores
-            {
-              fillColor : "rgba(0,102,51,0.05)",
-              strokeColor : "rgba(0,102,51,1)",
-              pointColor : "rgba(0,102,51,1)",
-              pointStrokeColor : "#fff",
-              data : [128,148,140,119,146,127,160,155,143]
-            },
-            // total scores
-            {
-              fillColor : "rgba(51,187,205,0.05)",
-              strokeColor : "rgba(51,187,205,1)",
-              pointColor : "rgba(51,187,205,1)",
-              pointStrokeColor : "#fff",
-              data : [193,207,211,192,210,182,240,227,218]
-            }
-          ]
-
-        }
-
-      var myLine = new Chart(document.getElementById("canvas").getContext("2d")).Line(lineChartData);
-
-      </script>
-    </div>
-  </div>
-{% endcomment %}
 
   {% if personal_records %}
   <hr>
@@ -244,12 +212,14 @@
   <hr>
   <div class="row">
   	<div class="col-md-12">
+  	{% if isu_years.0 %}
+  	<h2>Results</h2>
   	<table class="table table-condensed">
   		<thead>
   			<tr>
-  				<th>ISU Competitions</th>
+  				<th>Competition</th>
   				{% for year in isu_years%}
-  				<th>{{ year }}</th>
+  				<th class="center">{{ year }}</th>
   				{% endfor %}
   			</tr>
   		</thead>
@@ -264,37 +234,31 @@
 							{% for comp_year, skater_result in res_dictionary.items %}
 								{% if comp_year == year %}
 									{% if skater_result.0.withdrawal %}
-										<td>
+										<td class="center">
 										<a href="{{ skater_result.1.url }}">
 										WD
 										</a>
 										</td>
 									{% else %}
 										{% if skater_result.0.final_rank == 1 %}
-											<td>
-											<a href="{{ skater_result.1.url }}">
-												<img class="medal" style="float:left" src="{{ STATIC_PREFIX }}img/gold.png">
-											</a>
-											</td>
+											<td class="gold center" title="{{ skater_result.0.total_score }}">
 										{% elif skater_result.0.final_rank == 2 %}
-											<td>
-											<a href="{{ skater_result.1.url }}">
-												<img class="medal" style="float:left" src="{{ STATIC_PREFIX }}img/silver.png">
-											</a>
-											</td>
+											<td class="silver center" title="{{ skater_result.0.total_score }}">
 										{% elif skater_result.0.final_rank == 3 %}
-											<td>
-											<a href="{{ skater_result.1.url }}">
-												<img class="medal" style="float:left" src="{{ STATIC_PREFIX }}img/bronze.png">
-											</a>
-											</td>
+											<td class="bronze center" title="{{ skater_result.0.total_score }}">
+										{% elif skater_result.0.final_rank == 4 and 'usfs' in sr.competition.identifier %}
+											<td class="pewter center" title="{{ skater_result.0.total_score }}">
 										{% else %}
-											<td>
-											<a href="{{ skater_result.1.url }}">
-												<span style="padding-left:8px">{{ skater_result.0.final_rank }}</span>
-											</a>
-											</td>
+											<td class="center" title="{{ skater_result.0.total_score }}">
 										{% endif %}
+											  <a href="{{ skater_result.1.url }}">
+											    <span>{{ skater_result.0.final_rank }}</span>
+											  {% if not skater_result.0.level.level == "SR" %}
+											    <span class="black-link">{{ skater_result.0.level.level }}</span>
+											  {% endif %}
+											  </a>
+											</td>
+
 									{% endif%}
 								{% endif %}
 							{% endfor %}
@@ -304,95 +268,9 @@
   			{% endfor %}
 		</tbody>
   	</table>
+  	{% endif %}
   	</div>
   </div>
-
-  <hr>
   {% endif %}
-
-<br>
-
-<h4>Results</h4>
-
-<table class="table table-condensed">
-{% for year, skater_results in results %}
-  <tbody>
-    <tr>
-      <td colspan=4>{{ year }}</td>
-    </tr>
-  {% for sr in skater_results %}
-  	{% if 'GROUP' not in sr.qualifying.name or sr.qualifying.name == None %}
-  	<tr>
-  	  <td>
-  	  	<a href="{{ sr.competition.url }}">
-  	  	{{ sr.competition.name }} {{ sr.qualifying.name }}
-  	    </a>
-  	  </td>
-  	  <td>{{ sr.level.level }} {{ sr.category.category }}</td>
-  	  <td>{{ sr.final_rank }}</td>
-  	  <td>{{ sr.total_score }}</td>
-  	  <td>{{ sr.competition.start_date.month }}-{{ sr.competition.start_date.year }}</td>
-  	</tr>
-  	{% endif %}
-  {% endfor %}
-  </tbody>
-{% endfor %}
-</table>
-
-<!-- Make this into a matrix
-  <div class="row">
-    <div class="col-md-12">
-      <h4>Top Lists</h4>
-      <table class="table table-bordered">
-        <tr>
-          <td>Highest SP score of 2012-2013</td>
-          <td>7th</td>
-        </tr>
-        <tr>
-          <td>Highest FS score of 2012-2013</td>
-          <td>3rd</td>
-        </tr>
-        <tr>
-          <td>Highest SS of 2012-2013</td>
-          <td>17th</td>
-        </tr>
-        <tr>
-          <td>Highest TR of 2012-2013</td>
-          <td>13th</td>
-        </tr>
-        <tr>
-          <td>Highest PE of 2012-2013</td>
-          <td>44th</td>
-        </tr>
-        <tr>
-          <td>Highest CH of 2012-2013</td>
-          <td>15th</td>
-        </tr>
-        <tr>
-          <td>Highest IN of 2012-2013</td>
-          <td>9th</td>
-        </tr>
-      </table>
-    </div>
-  </div>
--->
-
-
-
-<hr>
-<script type="text/javascript" src="{{ STATIC_PREFIX }}js/head_to_head_search.js"></script>
-<div class="row">
-  <div class="col-md-12">
-    <h2>Head to Head</h2>
-    <div id="search_error" class="alert" style="display:none"></div>
-    <input type="hidden" id="hth_type" value="skater" />
-    <input type="hidden" id="skaterteam_names" value="{{ skater_team.url_name_json }}" />
-    <input type="text" id="matching_skater_name" size="50" />
-    <select id="matching_skater_name_partner" disabled="true">
-      <option value="">Select A Skater</option>
-    </select>
-    <button class="btn btn-primary" onclick="javascript:teams_hth()">Compare</button>
-  </div>
-</div>
 
 {% endblock %}

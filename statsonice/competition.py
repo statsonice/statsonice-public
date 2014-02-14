@@ -84,6 +84,7 @@ def skater_result_profile(request, competition, competitor):
     skater_results.load_program_results()
     return render(request, 'skater_result.dj', {
         'skater_results': skater_results,
+        'competitor': competitor
     })
 
 def segment_summary(request, competition_name, competition_year, category, qualifying, level, segment):

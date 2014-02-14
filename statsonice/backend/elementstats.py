@@ -2,6 +2,7 @@
 # TODO: modify classes to return data in format that the d3 file uses
 from time import time
 import math
+import random
 
 from includes.stats import *
 from includes.base_elements import BaseElement
@@ -116,16 +117,22 @@ class ElementStats:
         self.start = time()
         self.MODIFIERS_TO_REMOVE = ['<','+COMBO']
         self.nums = ['0','1','2','3','4','5','6','7','8','9']
-
-        self.element_name = self.remove_modifiers(element_name)
-
-	if self.element_name == '':
-	    return
+        self.element_name = element_name
 
         self.competitor = self.get_competitor(skater_name)
         self.category_name = category_name
 
         self.category = self.get_category() # returns category object
+        print 'category: ', self.category, time() - self.start
+        if self.element_name == 'RANDOM':
+            self.element_name = self.get_random_element_name()
+            self.element_name = self.remove_modifiers(self.element_name)
+            return
+        self.element_name = self.remove_modifiers(self.element_name)
+
+	if self.element_name == '':
+	    return
+        print 'random element name: ', self.element_name, time() - self.start
         self.element_names = self.get_element_names() # array of names split by '+'
         print 'element names: ', self.element_names, time() - self.start
         self.leveled = self.get_leveled_boolean() # array matching element_names to determine whether
@@ -198,6 +205,15 @@ class ElementStats:
         for modifier in self.MODIFIERS_TO_REMOVE:
             element_name = element_name.replace(modifier,'')
         return element_name
+
+    def get_random_element_name(self):
+        count = ElementScore.objects.filter(result__program__skater_result__competitor=self.competitor).count()
+        if count == 0:
+            return ''
+        cut = int(random.random() * (count-1))
+        es = ElementScore.objects.filter(result__program__skater_result__competitor=self.competitor)[cut]
+        return es.get_element_name()
+
 
     def get_element_names(self):
         new_names = []
@@ -276,6 +292,8 @@ class ElementStats:
                 else:
                     element_scores = set(e_scores).intersection(element_scores)
 
+                print 'sub element: ', element_name, time() - self.start
+
             # take intersection or difference with set of elements with combo order 3
             if len(self.element_names) > 1:
                 element_scores_3 = [es.element_score for es in Element.objects.filter(combination_order=3)]
@@ -316,6 +334,8 @@ class ElementStats:
     def calculate_goe(self, elementscore):
         goes = elementscore.get_goes()
         goes = goes[1:-1]
+        if len(goes) == 0:
+            return None
         return average(goes)
 
     def get_goe_stats(self):
@@ -378,7 +398,11 @@ class ElementStats:
 
     def get_level_stats(self):
         # condition: solo element
-        if len(self.element_names) > 1 or not self.leveled[0]:
+        if len(self.element_names) > 1:
+            return None
+        elif not self.leveled:
+            return None
+        elif not self.leveled[0]:
             return None
         else:
             level_stats = {}

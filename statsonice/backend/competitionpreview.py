@@ -2,12 +2,10 @@
 Classes to create a grand prix preview page
 """
 from itertools import permutations
-from datetime import date
 
 from django.db.models import Count
 
-from statsonice.models import Skater, Competitor, Competition, SkaterResult
-from statsonice.backend.stats import determine_win_probability
+from statsonice.models import SkaterResult
 from includes import stats
 
 #-----------------------
@@ -130,25 +128,12 @@ class CompPreviewStats(object):
     #
     def get_hth_records(self):
         for skater_stats in [self.men, self.ladies, self.pairs, self.dance]:
-            normalization_total = 0.0
             for skater_stat1 in skater_stats:
-                product = 1.0
                 for skater_stat2 in skater_stats:
                     if skater_stat1 == skater_stat2:
                         continue
                     if skater_stat1 not in skater_stat2.hth_record:
                         self.get_hth(skater_stat1,skater_stat2)
-
-                        #prob1_win, prob2_win = determine_win_probability(skater_stat1.recent_scores,skater_stat2.recent_scores,len(skater_stats))
-                        #skater_stat1.hth_probabilities[skater_stat2.competitor] = prob1_win
-                        #skater_stat2.hth_probabilities[skater_stat1.competitor] = prob2_win
-
-                    #product *= skater_stat1.hth_probabilities[skater_stat2.competitor]/100.0
-                #skater_stat1.chance_win = product
-                #normalization_total += product
-            #for skater_stat1 in skater_stats:
-                #skater_stat1.chance_win /= normalization_total
-                #skater_stat1.chance_win = round(100.0*skater_stat1.chance_win,1)
 
     #-------------------------
     # Summary Stats Methods

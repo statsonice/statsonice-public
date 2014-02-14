@@ -4,19 +4,19 @@ This is a class for computing the top scores within specified filters
 from statsonice.models import SkaterResult, ResultIJS
 from datetime import datetime
 
-# TODO: maybe flatten so each skater only listed once?
-
 class TopScores:
 
-    def __init__(self, segment, category, start_year):
+    def __init__(self, segment, category, start_year,level,competition_type):
         self.segment = segment
         self.category = category
         self.start_year = start_year
+        self.level = level
+        self.competition_type = competition_type
         self.now_year = datetime.now().year
 
         self.scores = self.get_top_scores()
 
-    def get_top_scores(self):
+    def get_top_scores(self, unique = False):
         # Past year
         if self.start_year == 0:
             startdate = datetime(1900,1,1)
@@ -26,10 +26,18 @@ class TopScores:
             enddate = datetime(self.start_year+1,5,1)
         if self.segment == 'TOTAL':
             skater_results = SkaterResult.objects.filter(category__category=self.category,
-                                                  competition__start_date__gt=startdate,
-                                                  competition__start_date__lt=enddate,
-                                                  total_score__gt = 0,
-                                                  competition__identifier__startswith='isu').order_by('-total_score')[:100]
+                                                         competition__start_date__gt=startdate,
+                                                         competition__start_date__lt=enddate,
+                                                         total_score__gt = 0,
+                                                         level__level__contains = self.level)
+            if self.competition_type == 'ISU':
+                skater_results = skater_results.filter(competition__identifier__startswith='isu')
+            elif self.competition_type == 'NONISU':
+                skater_results = skater_results.exclude(competition__identifier__startswith='isu')
+            skater_results = skater_results.order_by('-total_score')
+            if unique:
+                skater_results = skater_results.distinct('competitor')
+            skater_results = skater_results[:100]
             results = []
             for skater_result in skater_results:
                 result = {}
@@ -40,10 +48,18 @@ class TopScores:
                 results.append(result)
         else:
             resultijss = ResultIJS.objects.filter(program__skater_result__category__category=self.category,
-                                               program__skater_result__competition__start_date__gt=startdate,
-                                               program__skater_result__competition__start_date__lt=enddate,
-                                               program__skater_result__competition__identifier__startswith='isu',
-                                               program__segment__segment=self.segment).order_by('-tss')[:100]
+                                                  program__skater_result__competition__start_date__gt=startdate,
+                                                  program__skater_result__competition__start_date__lt=enddate,
+                                                  program__skater_result__level__level = self.level,
+                                                  program__segment__segment=self.segment)
+            if self.competition_type == 'ISU':
+                resultijss = resultijss.filter(program__skater_result__competition__identifier__startswith='isu')
+            elif self.competition_type == 'NONISU':
+                resultijss = resultijss.exclude(program__skater_result__competition__identifier__startswith='isu')
+            resultijss = resultijss.order_by('-tss')
+            if unique:
+                resultijss = resultijss.distinct('program__skater_result__competitor')
+            resultijss = resultijss[:100]
             results = []
             for resultijs in resultijss:
                 result = {}

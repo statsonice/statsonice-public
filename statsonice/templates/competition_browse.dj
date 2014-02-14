@@ -9,10 +9,6 @@ Past Competitions
 {% endblock %}
 
 {% block main %}
-  <div>
-    For future competitions, see <a href="{% url "competition_preview" %}">Competition Previews</a>.
-  </div>
-  <br />
   <div>Number of competitions:
     {{ total_competitions }}
   </div>

@@ -28,12 +28,27 @@
 
 <!-- Raw Data !-->
 <div class="row">
-	<div class="col-12">
+	<div class="col-md-12">
 		<div class="title-bar title-bar-black">
-			<h4>{{ programresult.program.rank }} | {{ programresult.program.skater_result.competitor.get_participants.view_name }} ({{ programresult.program.skater_result.competitor.get_participants.country.country_name }})</h4>
-			<h4>{{ programresult.program.skater_result.level.level }} {{ programresult.program.skater_result.category.category }} {{ programresult.program.segment.segment }} <a href="{{ programresult.program.skater_result.competition.url }}">{{ programresult.program.skater_result.competition.name }}</a></h4>
-			<h4>{{ programresult.program.resultijs.tss }} | TES: {{ programresult.program.resultijs.tes }} | PCS: {{ programresult.program.resultijs.pcs }}</h4>
-			<h4>Ded: {{ programresult.program.resultijs.deductions }}.00</h4>
+			<h4>{{ programresult.program.rank }}
+			|
+			{{ programresult.program.skater_result.level.level }}
+			{{ programresult.program.skater_result.category.category }}
+			{{ programresult.program.segment.segment }}
+			{% if programresult.program.skater_result.qualifying.name != '' %}
+			  {{ programresult.program.skater_result.qualifying.name }}
+			{% endif %}
+			|
+			  {{ programresult.program.resultijs.tss }}
+			  &nbsp;
+			  {{ programresult.program.resultijs.tes }}
+			  &nbsp;
+			  {{ programresult.program.resultijs.pcs }}
+			  &nbsp;
+			  Ded: {{ programresult.program.resultijs.deductions }}
+			|
+			<a href="{{ programresult.program.skater_result.competition.url }}">{{ programresult.program.skater_result.competition.name }}</a>
+			</h4>
 		</div>
 		<div class="well well-small">
 			<h4>Element Scores</h4>
@@ -94,15 +109,23 @@
 				</thead>
 				<tbody>
 					{% for pc in programresult.programcomponentscores %}
-            <tr>
-              <td>{{ pc.component.component }}</td>
-              <td>{{ pc.factor }}</td>
-              {% for goe in pc.goes %}
-                <td>{{ goe }}</td>
-              {% endfor %}
-              <td>{{ pc.panel_score }}</td>
-            </tr>
+						<tr>
+						  <td>{{ pc.component.component }}</td>
+						  <td>{{ pc.factor }}</td>
+						  {% for goe in pc.goes %}
+							<td>{{ goe }}</td>
+						  {% endfor %}
+						  <td>{{ pc.panel_score }}</td>
+						</tr>
 					{% endfor %}
+					<tr>
+						<td><!-- component !--></td>
+						<td><!-- factor !--></td>
+						{% for num in programresult.programcomponentscores.0.goes %}
+						  <td></td>
+						{% endfor %}
+						<td>{{ programresult.program.resultijs.pcs }}</td>
+					</tr>
 				</tbody>
 			</table>
 		</div>

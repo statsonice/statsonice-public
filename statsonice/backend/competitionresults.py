@@ -138,10 +138,10 @@ class CompResults:
 class SortedSkaterResult:
     def __init__(self,skater_result):
         self.skater_result = skater_result
-        self.programs = list(self.skater_result.program_set.all())
-        self.sort()
+        self.get_programs()
 
-    def sort(self):
+    def get_programs(self):
+        self.programs = list(self.skater_result.program_set.all())
         program_heirarchy = {'SP':0,
                              'SD':1,
                              'CD':2,
@@ -154,10 +154,7 @@ class SegmentResults:
     def __init__(self, program):
         self.program = program
         self.competitor = self.program.skater_result.competitor
-        if self.competitor.is_team:
-            self.participant = self.competitor.skater_team
-        else:
-            self.participant = self.competitor.skater
+        self.participant = self.competitor.get_participants()
         self.resultijs = self.program.resultijs
         self.pcs = self.resultijs.programcomponentscore_set.all()
 

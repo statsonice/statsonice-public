@@ -190,17 +190,23 @@ def stats_top_scores(request):
         category = request.POST.get('category')
         segment = request.POST.get('segment')
         start_year = int(request.POST.get('season'))
+        level = request.POST.get('level')
+        competition_type = request.POST.get('competition_type')
     else:
         category = 'MEN'
         segment = 'TOTAL'
         start_year = 0
-    top_scores = TopScores(segment,category,start_year)
+        level = ''
+        competition_type = 'ISU'
+    top_scores = TopScores(segment,category,start_year,level,competition_type)
     return render(request, 'stats/top_scores.dj', {
         'subscription_required': True,
         'top_scores': top_scores,
         'segment': segment,
         'category': category,
-        'start_year': start_year
+        'start_year': start_year,
+        'level': level,
+        'competition_type': competition_type
     })
 
 def articles(request, article_name=None):

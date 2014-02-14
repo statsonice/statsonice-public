@@ -10,10 +10,18 @@ Skater Results
 
 {% block main %}
 
+<h3>
+  <a href="{{ competitor.get_participants.url }}">
+    {{ competitor.get_participants.view_name }}
+  </a>
+  {% if competitor.get_participants.country %}
+    ({{ competitor.get_participants.country.country_name }})
+  {% endif %}
+</h3>
+
 {% for skater_result, programs in skater_results.skater_results.items %}
   {% for programresult in programs %}
     {% include "include/program.dj" with programresult=programresult %}
-    <br />
     <br />
   {% endfor %}
 {% endfor %}

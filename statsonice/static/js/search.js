@@ -10,6 +10,13 @@ $(function() {
     search();
 });
 
+function spinnerOn(){
+  $("#spinnerContainer").show();
+}
+function spinnerOff(){
+  $("#spinner").hide();
+}
+
 function search() {
     spinnerOn();
     var searchHash = {};

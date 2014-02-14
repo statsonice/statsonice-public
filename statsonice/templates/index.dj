@@ -83,17 +83,18 @@ Home
     <p>Our <a href="/competition/World-Junior-Championships/2013/Yasmin/Siraj/">detailed protocols</a> use flags to highlight judging patterns so protocols can be read and interpreted more quickly. Flag definitions can be found here.</p>
 
     <br>
-
+    <!--
     <h3><i class="glyphicon glyphicon-file"></i> Articles</h3>
     <p>We write <a href="{% url 'articles' %}">articles</a> exploring patterns in scoring, program strategies, risk vs. reward, and other IJS topics. We publish these articles regularly and keep a complete archive of old articles.</p>
 
     <br>
-
+    -->
+    <!--
     <h3><i class="glyphicon glyphicon-eye-open"></i> Competition Preview</h3>
     <p>Look at comparative data compiled for skaters entered in select upcoming competitions. The <a href="/stats/competition_preview/Skate-America/2013/">Competition Preview</a> includes head-to-head tables, summaries of most recent scores, and recent trends in skater performance.</p>
 
     <br>
-
+    -->
     <h3><i class="glyphicon glyphicon-pencil"></i> Blog</h3>
       <p>We maintain a blog where we publish recent additions or changes to the site.</p>
       <a href="{{ blog_post_url }}">{{ blog_post }}</a><br />

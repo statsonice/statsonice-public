@@ -9,6 +9,7 @@ if [ ! -f `pwd`/manage.py ]; then
 fi
 
 # Get Settings
+auth=0
 for i in "$*" ; do
     if [ "$i" = "--auth" ]; then
         echo 'LOADING AUTH TABLES'

@@ -39,9 +39,15 @@ Head To Head Comparisons
 <table class="table table-condensed table-bordered">
 	<thead>
 		<tr>
+			<th class="center" colspan=2>{{ hth.competitor1.get_participants.view_name }}</th>
+			<th colspan=2></th>
+			<th class="center" colspan=2>{{ hth.competitor2.get_participants.view_name }}</th>
+		</tr>
+		<tr>
 			<th>Rank</th>
 			<th>Score</th>
 			<th>Competition</th>
+			<th>Level</th>
 			<th>Score</th>
 			<th>Rank</th>
 		</tr>
@@ -49,30 +55,19 @@ Head To Head Comparisons
 	<tbody>
 		{% for competition, s1_res, s2_res, diff in hth_results %}
 			<tr>
-				{% if s1_res.total_score > s2_res.total_score %}
-					<td class="success">{{s1_res.final_rank}}</td>
-					<td>{{ s1_res.total_score }} <span class="pairs">(+ {{ diff }})</span></td>
-					<td>
-					<a href="{{ competition.url }}">
-					{{ competition.name }}
-					</a>
-					({{ competition.start_date.year }})
-					</td>
-					<td>{{ s2_res.total_score }} <span class="ladies">(- {{ diff }})</span></td>
-					<td>{{s2_res.final_rank}}</td>
-				{% else %}
-					<td>{{s1_res.final_rank}}</td>
-					<td>{{ s1_res.total_score }} <span class="ladies">(- {{ diff }})</span></td>
-					<td>
-					<a href="{{ competition.url }}">
-					{{ competition.name }}
-					</a>
-					({{ competition.start_date.year }})
-					</td>
-					<td>{{ s2_res.total_score }} <span class="pairs">(+ {{ diff }})</span></td>
-					<td class="success">{{s2_res.final_rank}}</td>
-				{% endif %}
-
+				<td {% if s1_res.total_score > s2_res.total_score %}class="success"{% endif %}>{{s1_res.final_rank}}</td>
+				<td>{{ s1_res.total_score }} {% if s1_res.total_score > s2_res.total_score %}<span class="pairs">(+{% else %}<span class="ladies">(-{% endif %} {{ diff }})</span></td>
+				<td>
+				<a href="{{ competition.url }}">
+				{{ competition.name }}
+				</a>
+				({{ competition.start_date.year }})
+				</td>
+				<td>
+					{{ s1_res.level.level }}
+				</td>
+				<td>{{ s2_res.total_score }} {% if s2_res.total_score > s1_res.total_score %}<span class="pairs">(+{% else %}<span class="ladies">(-{% endif %} {{ diff }})</span></td>
+				<td {% if s2_res.total_score > s1_res.total_score %}class="success"{% endif %}>{{s2_res.final_rank}}</td>
 			</tr>
 		{% endfor %}
 	</tbody>
@@ -80,19 +75,6 @@ Head To Head Comparisons
 {% else %}
 <b>No head to head statistics available.</b>
 {% endif %}
-
-<hr>
-<div class="center" id="chart">
-	<script>
-	// initialize variables for the bar chart
-	var chart_id = "#chart";
-	var dataset = {{ diff_scores }};
-	var years = {{ num }};
-	var headlineGraphic = 0;
-
-	</script>
-	<script src="{{ STATIC_PREFIX }}js/d3_plus_minus_bar_chart.js"></script>
-</div>
 
 {% comment %}
 <hr>
